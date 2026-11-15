@@ -691,7 +691,7 @@
         let directActiveVoucher = null;
         let driveNavHistory = [];
         let activeComboProduct = null;
-        let activeComboSubCode = null;
+        let viewingComboSubItem = false;
         // Trạng thái trình chiếu Tài Liệu Mới Nhất
         let newCarouselIndex = 0;
         let newCarouselTimer = null;
@@ -1129,13 +1129,13 @@
                 const cleanName = cleanProductTitle(p.title || p.rawTitle);
                 const comboList = p.category === "CB" ? resolveComboItems(p.comboItems) : [];
                 const comboHtml = comboList.length > 0 ? `
-                    <div class="mt-4 pt-3.5 border-t border-slate-200 space-y-2">
-                        <div class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-900">Bao gồm các tài liệu:</div>
-                        <ul class="space-y-2 text-sm sm:text-[15px] font-bold text-slate-900 leading-snug">
+                    <div class="mt-3.5 p-3 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-1.5">
+                        <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Bao gồm ${comboList.length} tài liệu:</div>
+                        <ul class="space-y-1.5 text-xs sm:text-[13px] text-slate-800 leading-snug">
                             ${comboList.map(item => `
-                                <li class="flex items-start gap-2 text-slate-900">
-                                    <i class="fa-solid fa-circle-check text-slate-900 mt-1 shrink-0"></i>
-                                    <span class="text-slate-900 font-bold">[${item.code}] ${item.title}</span>
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-check text-blue-600 text-[11px] mt-1 shrink-0"></i>
+                                    <span class="text-slate-800"><strong class="font-bold text-slate-900">[${item.code}]</strong> <span class="font-medium">${item.title}</span></span>
                                 </li>
                             `).join("")}
                         </ul>
@@ -1210,15 +1210,13 @@
 
             driveNavHistory = [];
             activeComboProduct = null;
-            activeComboSubCode = null;
+            viewingComboSubItem = false;
 
             if (product.category === "CB") {
                 const comboList = resolveComboItems(product.comboItems);
                 if (comboList.length > 0) {
                     activeComboProduct = product;
-                    const firstWithUrl = comboList.find(i => i.previewUrl) || comboList[0];
-                    activeComboSubCode = firstWithUrl.code;
-                    renderComboPreviewLayout(product, firstWithUrl.previewUrl, firstWithUrl.title);
+                    renderComboListScreen(product);
                 } else {
                     renderDrivePreviewInBody(product.previewUrl, cleanName);
                 }
@@ -1231,49 +1229,56 @@
             document.body.classList.add("overflow-hidden");
         }
 
-        function getComboHeaderHtml(product) {
+        function renderComboListScreen(product) {
+            viewingComboSubItem = false;
+            driveNavHistory = [];
+            const body = document.getElementById("preview-body");
             const comboList = resolveComboItems(product.comboItems);
-            return `
-                <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+            body.innerHTML = `
+                <div class="space-y-3">
                     <div class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-900">
-                        Danh sách tài liệu trong Combo (bấm để chuyển xem trực tiếp):
+                        Combo bao gồm ${comboList.length} tài liệu (bấm vào từng mục để xem thử):
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        ${comboList.map(item => {
-                            const isSelected = item.code === activeComboSubCode;
-                            return `
-                                <button type="button" onclick="selectComboSubItem('${item.code}')" class="p-3 rounded-xl border text-left transition-all flex items-center justify-between gap-2.5 ${isSelected ? "bg-blue-600 border-blue-600 text-white shadow-sm" : "bg-white hover:bg-slate-100 border-slate-200 text-slate-900"}">
-                                    <div class="min-w-0">
-                                        <div class="text-xs sm:text-sm font-extrabold truncate ${isSelected ? "text-white" : "text-slate-900"}">[${item.code}] ${item.title}</div>
+                    <div class="space-y-2.5">
+                        ${comboList.map(item => `
+                            <button type="button" onclick="openComboSubItem('${item.code}')" class="w-full p-4 rounded-2xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-left transition-all flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                                        <i class="fa-solid fa-folder-open"></i>
                                     </div>
-                                    <span class="shrink-0 text-xs font-bold px-2.5 py-1 rounded-lg ${isSelected ? "bg-white/20 text-white" : "bg-slate-100 text-slate-900"}">
-                                        ${isSelected ? "Đang xem" : "Xem thử"}
-                                    </span>
-                                </button>
-                            `;
-                        }).join("")}
+                                    <div class="min-w-0">
+                                        <span class="text-xs font-extrabold text-blue-600 block">${item.code}</span>
+                                        <span class="text-sm sm:text-base font-extrabold text-slate-900 block leading-snug break-words">${item.title}</span>
+                                    </div>
+                                </div>
+                                <span class="shrink-0 px-3.5 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold shadow-sm">
+                                    Xem thử <i class="fa-solid fa-chevron-right ml-1"></i>
+                                </span>
+                            </button>
+                        `).join("")}
                     </div>
                 </div>
             `;
         }
 
-        function selectComboSubItem(subCode) {
+        function openComboSubItem(subCode) {
             if (!activeComboProduct) return;
             const comboList = resolveComboItems(activeComboProduct.comboItems);
             const found = comboList.find(i => i.code === subCode);
             if (!found) return;
-            activeComboSubCode = found.code;
+            viewingComboSubItem = true;
             driveNavHistory = [];
-            renderComboPreviewLayout(activeComboProduct, found.previewUrl, found.title);
+            renderDrivePreviewInBody(found.previewUrl, `[${found.code}] ${found.title}`);
         }
 
-        function renderComboPreviewLayout(product, subUrl, subTitle) {
-            const body = document.getElementById("preview-body");
-            body.innerHTML = `
-                ${getComboHeaderHtml(product)}
-                <div id="combo-drive-viewer" class="space-y-3 pt-1"></div>
+        function getBackToComboBtnHtml() {
+            if (!activeComboProduct || !viewingComboSubItem) return "";
+            return `
+                <button type="button" onclick="renderComboListScreen(activeComboProduct)" class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11px] sm:text-xs font-bold shadow-sm transition-colors">
+                    <i class="fa-solid fa-list-ul"></i>
+                    <span>Danh sách Combo</span>
+                </button>
             `;
-            renderDrivePreviewIntoContainer(document.getElementById("combo-drive-viewer"), subUrl, subTitle);
         }
 
         function renderDrivePreviewInBody(url, title) {
@@ -1287,6 +1292,7 @@
 
             if (!driveInfo) {
                 container.innerHTML = `
+                    ${getBackToComboBtnHtml() ? `<div class="pb-3 border-b border-slate-100 flex justify-end">${getBackToComboBtnHtml()}</div>` : ""}
                     <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-slate-800 text-sm">
                         ${url ? url : `Liên hệ Zalo <strong>0843 589 647</strong> để xem thử trích đoạn chi tiết bộ tài liệu này.`}
                     </div>
@@ -1305,63 +1311,32 @@
 
         function buildFileViewerHtml(fileId, fileName, showBackBtn) {
             const standardUrl = `https://drive.google.com/file/d/${fileId}/preview`;
-            const liteUrl = `https://docs.google.com/viewer?srcid=${fileId}&pid=explorer&efh=false&a=v&chrome=false&embedded=true`;
-            const directViewUrl = `https://drive.google.com/file/d/${fileId}/view`;
 
             return `
                 <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
-                    <div class="text-xs font-bold text-slate-700 truncate max-w-full sm:max-w-[45%]">
+                    <div class="text-xs font-bold text-slate-700 truncate max-w-full sm:max-w-[55%]">
                         <i class="fa-solid fa-file-lines text-blue-600 mr-1.5"></i>${fileName}
                     </div>
                     <div class="flex flex-wrap items-center gap-1.5">
-                        <button type="button" id="btn-viewer-lite-${fileId}" onclick="toggleLiteDriveViewer('${fileId}', '${standardUrl}', '${liteUrl}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-[11px] font-bold transition-colors" title="Dùng khi mạng 4G yếu hoặc lỗi tải trang">
-                            <i class="fa-solid fa-bolt"></i>
-                            <span>Chế độ nhẹ (4G)</span>
-                        </button>
                         <button type="button" onclick="reloadDriveIframe('${fileId}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition-colors">
                             <i class="fa-solid fa-rotate-right"></i>
                             <span>Tải lại</span>
                         </button>
-                        <a href="${directViewUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 text-[11px] font-bold transition-colors">
-                            <i class="fa-solid fa-up-right-from-square"></i>
-                            <span>Mở tab mới</span>
-                        </a>
                         ${showBackBtn ? `
                             <button type="button" onclick="reloadCurrentDriveFolder()" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 text-white text-[11px] font-bold transition-colors">
                                 <i class="fa-solid fa-arrow-left"></i>
-                                <span>Thư mục</span>
+                                <span>Danh sách tài liệu</span>
                             </button>
                         ` : ""}
                     </div>
                 </div>
                 <div class="flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] text-slate-600 mt-2">
-                    <span><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>Nếu mạng 4G chậm hoặc báo sự cố tải trang, thầy/cô bấm <strong>Chế độ nhẹ (4G)</strong> hoặc <strong>Mở tab mới</strong> nhé!</span>
+                    <span><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>Nếu mạng 4G chậm hoặc báo sự cố tải trang, thầy/cô bấm nút <strong>Tải lại</strong> nhiều lần nhé!</span>
                 </div>
                 <div class="w-full h-[54vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 mt-2 relative">
-                    <iframe id="drive-preview-iframe-${fileId}" data-mode="standard" src="${standardUrl}" class="w-full h-full border-0" allow="autoplay"></iframe>
+                    <iframe id="drive-preview-iframe-${fileId}" src="${standardUrl}" class="w-full h-full border-0" allow="autoplay"></iframe>
                 </div>
             `;
-        }
-
-        function toggleLiteDriveViewer(fileId, standardUrl, liteUrl) {
-            const iframe = document.getElementById(`drive-preview-iframe-${fileId}`);
-            const btn = document.getElementById(`btn-viewer-lite-${fileId}`);
-            if (!iframe || !btn) return;
-
-            const isLite = iframe.getAttribute("data-mode") === "lite";
-            if (isLite) {
-                iframe.setAttribute("data-mode", "standard");
-                iframe.src = standardUrl;
-                btn.className = "inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-[11px] font-bold transition-colors";
-                btn.innerHTML = `<i class="fa-solid fa-bolt"></i><span>Chế độ nhẹ (4G)</span>`;
-                showToast("Đã chuyển về chế độ xem tiêu chuẩn");
-            } else {
-                iframe.setAttribute("data-mode", "lite");
-                iframe.src = liteUrl;
-                btn.className = "inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white text-[11px] font-bold transition-colors";
-                btn.innerHTML = `<i class="fa-solid fa-check"></i><span>Đang dùng chế độ nhẹ</span>`;
-                showToast("Đã bật chế độ nhẹ tối ưu cho 4G/iPhone!");
-            }
         }
 
         function reloadDriveIframe(fileId) {
@@ -1376,17 +1351,23 @@
         }
 
         function getDriveTargetContainer() {
-            return document.getElementById("combo-drive-viewer") || document.getElementById("preview-body");
+            return document.getElementById("preview-body");
         }
 
         async function loadDriveFolderContents(folderId) {
             const body = getDriveTargetContainer();
             if (!body) return;
-            const backBtnHtml = driveNavHistory.length > 1 ? `
-                <button type="button" onclick="goBackDriveFolder()" class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors">
+            const folderBackBtn = driveNavHistory.length > 1 ? `
+                <button type="button" onclick="goBackDriveFolder()" class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] sm:text-xs font-bold transition-colors">
                     <i class="fa-solid fa-arrow-left"></i>
-                    <span>Quay lại thư mục trước</span>
+                    <span>Thư mục trước</span>
                 </button>
+            ` : "";
+            const backBtnHtml = (getBackToComboBtnHtml() || folderBackBtn) ? `
+                <div class="flex items-center gap-1.5 shrink-0">
+                    ${getBackToComboBtnHtml()}
+                    ${folderBackBtn}
+                </div>
             ` : "";
 
             const currentFolderName = driveNavHistory[driveNavHistory.length - 1]?.name || "Thư mục tài liệu";
@@ -1505,7 +1486,7 @@
             document.getElementById("preview-modal").classList.add("hidden");
             document.getElementById("preview-body").innerHTML = "";
             activeComboProduct = null;
-            activeComboSubCode = null;
+            viewingComboSubItem = false;
             driveNavHistory = [];
             document.body.classList.remove("overflow-hidden");
             toggleFloatingContactButtons(false);
