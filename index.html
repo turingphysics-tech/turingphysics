@@ -1295,16 +1295,84 @@
             }
 
             if (driveInfo.type === "file") {
-                container.innerHTML = `
-                    <div class="w-full h-[58vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
-                        <iframe src="https://drive.google.com/file/d/${driveInfo.id}/preview" class="w-full h-full border-0" allow="autoplay"></iframe>
-                    </div>
-                `;
+                container.innerHTML = buildFileViewerHtml(driveInfo.id, title || "Tài liệu xem thử", false);
                 return;
             }
 
             driveNavHistory = [{ id: driveInfo.id, name: title || "Thư mục gốc" }];
             loadDriveFolderContents(driveInfo.id);
+        }
+
+        function buildFileViewerHtml(fileId, fileName, showBackBtn) {
+            const standardUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+            const liteUrl = `https://docs.google.com/viewer?srcid=${fileId}&pid=explorer&efh=false&a=v&chrome=false&embedded=true`;
+            const directViewUrl = `https://drive.google.com/file/d/${fileId}/view`;
+
+            return `
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                    <div class="text-xs font-bold text-slate-700 truncate max-w-full sm:max-w-[45%]">
+                        <i class="fa-solid fa-file-lines text-blue-600 mr-1.5"></i>${fileName}
+                    </div>
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <button type="button" id="btn-viewer-lite-${fileId}" onclick="toggleLiteDriveViewer('${fileId}', '${standardUrl}', '${liteUrl}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-[11px] font-bold transition-colors" title="Dùng khi mạng 4G yếu hoặc lỗi tải trang">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span>Chế độ nhẹ (4G)</span>
+                        </button>
+                        <button type="button" onclick="reloadDriveIframe('${fileId}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition-colors">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>Tải lại</span>
+                        </button>
+                        <a href="${directViewUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 text-[11px] font-bold transition-colors">
+                            <i class="fa-solid fa-up-right-from-square"></i>
+                            <span>Mở tab mới</span>
+                        </a>
+                        ${showBackBtn ? `
+                            <button type="button" onclick="reloadCurrentDriveFolder()" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 text-white text-[11px] font-bold transition-colors">
+                                <i class="fa-solid fa-arrow-left"></i>
+                                <span>Thư mục</span>
+                            </button>
+                        ` : ""}
+                    </div>
+                </div>
+                <div class="flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] text-slate-600 mt-2">
+                    <span><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>Nếu mạng 4G chậm hoặc báo sự cố tải trang, thầy/cô bấm <strong>Chế độ nhẹ (4G)</strong> hoặc <strong>Mở tab mới</strong> nhé!</span>
+                </div>
+                <div class="w-full h-[54vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 mt-2 relative">
+                    <iframe id="drive-preview-iframe-${fileId}" data-mode="standard" src="${standardUrl}" class="w-full h-full border-0" allow="autoplay"></iframe>
+                </div>
+            `;
+        }
+
+        function toggleLiteDriveViewer(fileId, standardUrl, liteUrl) {
+            const iframe = document.getElementById(`drive-preview-iframe-${fileId}`);
+            const btn = document.getElementById(`btn-viewer-lite-${fileId}`);
+            if (!iframe || !btn) return;
+
+            const isLite = iframe.getAttribute("data-mode") === "lite";
+            if (isLite) {
+                iframe.setAttribute("data-mode", "standard");
+                iframe.src = standardUrl;
+                btn.className = "inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-[11px] font-bold transition-colors";
+                btn.innerHTML = `<i class="fa-solid fa-bolt"></i><span>Chế độ nhẹ (4G)</span>`;
+                showToast("Đã chuyển về chế độ xem tiêu chuẩn");
+            } else {
+                iframe.setAttribute("data-mode", "lite");
+                iframe.src = liteUrl;
+                btn.className = "inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white text-[11px] font-bold transition-colors";
+                btn.innerHTML = `<i class="fa-solid fa-check"></i><span>Đang dùng chế độ nhẹ</span>`;
+                showToast("Đã bật chế độ nhẹ tối ưu cho 4G/iPhone!");
+            }
+        }
+
+        function reloadDriveIframe(fileId) {
+            const iframe = document.getElementById(`drive-preview-iframe-${fileId}`);
+            if (!iframe) return;
+            const currentSrc = iframe.src;
+            iframe.src = "about:blank";
+            setTimeout(() => {
+                iframe.src = currentSrc;
+            }, 120);
+            showToast("Đang tải lại trang xem thử...");
         }
 
         function getDriveTargetContainer() {
@@ -1423,20 +1491,7 @@
             const body = getDriveTargetContainer();
             if (!body) return;
             const fileName = stripFileExtension(decodeURIComponent(encodedName));
-            body.innerHTML = `
-                <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
-                    <div class="text-xs font-bold text-slate-700 truncate">
-                        <i class="fa-solid fa-file-lines text-blue-600 mr-1.5"></i>${fileName}
-                    </div>
-                    <button type="button" onclick="reloadCurrentDriveFolder()" class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors">
-                        <i class="fa-solid fa-arrow-left"></i>
-                        <span>Quay lại thư mục</span>
-                    </button>
-                </div>
-                <div class="w-full h-[56vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 mt-2">
-                    <iframe src="https://drive.google.com/file/d/${fileId}/preview" class="w-full h-full border-0" allow="autoplay"></iframe>
-                </div>
-            `;
+            body.innerHTML = buildFileViewerHtml(fileId, fileName, true);
         }
 
         function reloadCurrentDriveFolder() {
