@@ -10,9 +10,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body {
+        html, body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
+            overflow-x: hidden;
+            max-width: 100%;
         }
         .physics-grid-bg {
             background-color: #f8fafc;
@@ -39,15 +41,15 @@
 
     <!-- ==================== HEADER / NAVBAR ==================== -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
             <!-- Logo Turing Physics -->
-            <button type="button" onclick="switchTab('gioi-thieu')" class="flex items-center gap-2.5 group text-left">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center shadow-md shadow-blue-600/20 group-hover:scale-105 transition-transform">
-                    <i class="fa-solid fa-atom text-lg"></i>
+            <button type="button" onclick="switchTab('gioi-thieu')" class="flex items-center gap-2 sm:gap-2.5 group text-left min-w-0">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center shadow-md shadow-blue-600/20 group-hover:scale-105 transition-transform shrink-0">
+                    <i class="fa-solid fa-atom text-base sm:text-lg"></i>
                 </div>
-                <div>
-                    <span class="font-extrabold text-lg tracking-tight text-slate-900 block leading-none">Turing <span class="text-blue-600">Physics</span></span>
-                    <span class="text-[11px] font-medium text-slate-500">Học liệu chuẩn GDPT 2018</span>
+                <div class="truncate">
+                    <span class="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 block leading-none truncate">Turing <span class="text-blue-600">Physics</span></span>
+                    <span class="text-[10px] sm:text-[11px] font-medium text-slate-500 block truncate">Học liệu chuẩn GDPT 2018</span>
                 </div>
             </button>
 
@@ -60,8 +62,8 @@
             </nav>
 
             <!-- Giỏ tài liệu -->
-            <div class="flex items-center gap-2.5">
-                <button type="button" onclick="showCartView()" class="relative inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white text-sm font-semibold transition-all shadow-sm">
+            <div class="flex items-center gap-2 shrink-0">
+                <button type="button" onclick="showCartView()" class="relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white text-xs sm:text-sm font-semibold transition-all shadow-sm">
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span class="hidden sm:inline">Giỏ tài liệu</span>
                     <span id="cart-badge" class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold bg-amber-400 text-slate-950 rounded-full">0</span>
@@ -70,76 +72,76 @@
         </div>
 
         <!-- Navigation Tabs (Mobile) -->
-        <div class="md:hidden border-t border-slate-100 bg-white px-3 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-            <button type="button" onclick="switchTab('gioi-thieu')" data-tab="gioi-thieu" class="main-nav-tab shrink-0 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold transition-all">Giới thiệu</button>
-            <button type="button" onclick="switchTab('danh-muc')" data-tab="danh-muc" class="main-nav-tab shrink-0 px-3 py-1.5 rounded-lg text-slate-600 text-xs font-semibold transition-all">Kho Tài Liệu</button>
-            <button type="button" onclick="switchTab('quy-trinh')" data-tab="quy-trinh" class="main-nav-tab shrink-0 px-3 py-1.5 rounded-lg text-slate-600 text-xs font-semibold transition-all">Quy Trình Nhận File</button>
-            <button type="button" onclick="switchTab('hoi-dap')" data-tab="hoi-dap" class="main-nav-tab shrink-0 px-3 py-1.5 rounded-lg text-slate-600 text-xs font-semibold transition-all">Hỏi Đáp</button>
+        <div class="md:hidden border-t border-slate-100 bg-white px-2.5 py-2 flex items-center justify-between sm:justify-start gap-1 overflow-x-auto no-scrollbar">
+            <button type="button" onclick="switchTab('gioi-thieu')" data-tab="gioi-thieu" class="main-nav-tab shrink-0 px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-[11px] font-bold transition-all">Giới thiệu</button>
+            <button type="button" onclick="switchTab('danh-muc')" data-tab="danh-muc" class="main-nav-tab shrink-0 px-2.5 py-1.5 rounded-lg text-slate-600 text-[11px] font-semibold transition-all">Kho Tài Liệu</button>
+            <button type="button" onclick="switchTab('quy-trinh')" data-tab="quy-trinh" class="main-nav-tab shrink-0 px-2.5 py-1.5 rounded-lg text-slate-600 text-[11px] font-semibold transition-all">Quy Trình</button>
+            <button type="button" onclick="switchTab('hoi-dap')" data-tab="hoi-dap" class="main-nav-tab shrink-0 px-2.5 py-1.5 rounded-lg text-slate-600 text-[11px] font-semibold transition-all">Hỏi Đáp</button>
         </div>
     </header>
 
     <!-- ==================== TRANG CHÍNH ==================== -->
-    <main id="main-store-view" class="min-h-[calc(100vh-140px)]">
+    <main id="main-store-view" class="min-h-[calc(100vh-140px)] overflow-x-hidden">
 
         <!-- ==================== MỤC 1: GIỚI THIỆU (2 CỘT + AUTO CAROUSEL TÀI LIỆU MỚI NHẤT) ==================== -->
-        <section id="gioi-thieu" class="tab-page-section animate-fade-in relative overflow-hidden physics-grid-bg pt-10 pb-16 sm:pt-14 sm:pb-24 min-h-[calc(100vh-140px)] flex items-center">
+        <section id="gioi-thieu" class="tab-page-section animate-fade-in relative overflow-hidden physics-grid-bg pt-7 pb-12 sm:pt-14 sm:pb-24 min-h-[calc(100vh-140px)] flex items-center">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                <div class="grid lg:grid-cols-12 gap-10 items-center">
+                <div class="grid lg:grid-cols-12 gap-7 lg:gap-10 items-center">
                     <!-- Cột trái: Giới thiệu Turing Physics -->
-                    <div class="lg:col-span-7 space-y-6">
-                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold">
-                            <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
-                            Cập nhật mới nhất năm học 2026 – 2027 (GDPT 2018 &amp; Luyện thi TNTHPT 2027)
+                    <div class="lg:col-span-7 space-y-5 sm:space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-[11px] sm:text-xs font-bold leading-snug">
+                            <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse shrink-0"></span>
+                            <span>Cập nhật mới nhất năm học 2026 – 2027 (GDPT 2018 &amp; Luyện thi TNTHPT 2027)</span>
                         </div>
 
-                        <h1 class="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-slate-900 tracking-tight leading-tight">
+                        <h1 class="text-2xl sm:text-4xl lg:text-[44px] font-extrabold text-slate-900 tracking-tight leading-tight">
                             <span class="block">Kho Tài Liệu Vật Lý THPT</span>
-                            <span class="block text-blue-600 leading-normal pb-1 mt-1">Turing Physics</span>
+                            <span class="block text-blue-600 leading-tight pb-1 mt-1">Turing Physics</span>
                         </h1>
 
-                        <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
+                        <p class="text-sm sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
                             Hệ thống giáo án CV 5512, bài giảng PowerPoint hiệu ứng trực quan và bộ chuyên đề luyện thi TNTHPT 2027 biên soạn công phu. <strong class="text-slate-800">100% file Word/PPT gốc</strong> dễ dàng chỉnh sửa, gõ công thức MathType/Equation chuẩn đẹp.
                         </p>
 
-                        <div class="flex flex-wrap items-center gap-3 pt-1">
-                            <button type="button" onclick="switchTab('danh-muc')" class="px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-600/25 transition-all flex items-center gap-2">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-1">
+                            <button type="button" onclick="switchTab('danh-muc')" class="px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-600/25 transition-all flex items-center justify-center gap-2">
                                 <span>Khám phá Kho Tài Liệu</span>
                                 <i class="fa-solid fa-arrow-right"></i>
                             </button>
-                            <button type="button" onclick="switchTab('quy-trinh')" class="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 font-bold text-sm sm:text-base transition-all">
+                            <button type="button" onclick="switchTab('quy-trinh')" class="px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 font-bold text-sm sm:text-base transition-all text-center">
                                 Xem quy trình nhận file
                             </button>
                         </div>
 
                         <!-- 3 chỉ số nổi bật -->
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-5 border-t border-slate-200/80 max-w-2xl">
-                            <div class="bg-white/80 rounded-2xl p-3.5 border border-slate-200/70">
-                                <div class="text-lg sm:text-xl font-extrabold text-slate-900">100%</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-4 sm:pt-5 border-t border-slate-200/80 max-w-2xl">
+                            <div class="bg-white/85 rounded-2xl p-3 sm:p-3.5 border border-slate-200/70">
+                                <div class="text-base sm:text-xl font-extrabold text-slate-900">100%</div>
                                 <div class="text-xs font-medium text-slate-500 mt-0.5">File Word/PPT gốc</div>
                             </div>
-                            <div class="bg-white/80 rounded-2xl p-3.5 border border-slate-200/70">
+                            <div class="bg-white/85 rounded-2xl p-3 sm:p-3.5 border border-slate-200/70">
                                 <div class="text-sm sm:text-base font-extrabold text-blue-600 leading-snug">Chuẩn bộ sách SGK</div>
                                 <div class="text-xs font-medium text-slate-500 mt-0.5">mới nhất của BGD</div>
                             </div>
-                            <div class="bg-white/80 rounded-2xl p-3.5 border border-slate-200/70">
-                                <div class="text-lg sm:text-xl font-extrabold text-indigo-600">Google Drive</div>
+                            <div class="bg-white/85 rounded-2xl p-3 sm:p-3.5 border border-slate-200/70">
+                                <div class="text-base sm:text-xl font-extrabold text-indigo-600">Google Drive</div>
                                 <div class="text-xs font-medium text-slate-500 mt-0.5">Cấp quyền qua Gmail</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Cột phải: Khung trình chiếu tự động lướt TÀI LIỆU MỚI NHẤT -->
-                    <div class="lg:col-span-5">
-                        <div id="new-docs-carousel-box" onmouseenter="pauseNewCarousel()" onmouseleave="resumeNewCarousel()" class="bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 p-6 sm:p-7 space-y-5">
-                            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-                                <div class="flex items-center gap-2.5">
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-600 text-xs font-extrabold">
+                    <div class="lg:col-span-5 w-full min-w-0">
+                        <div id="new-docs-carousel-box" onmouseenter="pauseNewCarousel()" onmouseleave="resumeNewCarousel()" class="bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 p-4 sm:p-7 space-y-4 sm:space-y-5">
+                            <div class="flex items-center justify-between gap-2 border-b border-slate-100 pb-3.5">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-600 text-[11px] font-extrabold">
                                         <i class="fa-solid fa-fire-flame-curved"></i>
-                                        <span>CẬP NHẬT MỚI</span>
+                                        <span>MỚI</span>
                                     </span>
-                                    <h2 class="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight">TÀI LIỆU MỚI NHẤT</h2>
+                                    <h2 class="font-extrabold text-sm sm:text-lg text-slate-900 tracking-tight truncate">TÀI LIỆU MỚI NHẤT</h2>
                                 </div>
-                                <div class="flex items-center gap-1.5">
+                                <div class="flex items-center gap-1.5 shrink-0">
                                     <button type="button" onclick="prevNewSlide()" aria-label="Tài liệu trước" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-600 flex items-center justify-center text-xs transition-colors">
                                         <i class="fa-solid fa-chevron-left"></i>
                                     </button>
@@ -150,14 +152,14 @@
                             </div>
 
                             <!-- Nội dung thẻ tài liệu mới tự động chuyển -->
-                            <div id="new-carousel-slide" class="min-h-[220px] flex flex-col justify-between">
-                                <div class="py-12 text-center text-slate-400 text-sm">
+                            <div id="new-carousel-slide" class="flex flex-col justify-between">
+                                <div class="py-10 text-center text-slate-400 text-sm">
                                     <i class="fa-solid fa-circle-notch fa-spin text-blue-600 mr-1.5"></i>Đang tải danh sách tài liệu mới...
                                 </div>
                             </div>
 
                             <!-- Chấm chỉ báo slide -->
-                            <div id="new-carousel-dots" class="flex items-center justify-center gap-1.5 pt-1"></div>
+                            <div id="new-carousel-dots" class="flex items-center justify-center gap-1.5 pt-0.5"></div>
                         </div>
                     </div>
                 </div>
@@ -491,23 +493,23 @@
     <!-- ==================== MODAL THANH TOÁN VIETQR ==================== -->
     <div id="checkout-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
         <div class="fixed inset-0 bg-slate-900/65 backdrop-blur-sm" onclick="closeCheckoutModal()"></div>
-        <div class="relative min-h-screen flex items-center justify-center p-4">
-            <div class="relative bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-3xl p-6 sm:p-8 space-y-6 z-10">
-                <button type="button" onclick="closeCheckoutModal()" class="absolute top-5 right-5 w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors">
+        <div class="relative min-h-screen flex items-start sm:items-center justify-center p-3 sm:p-4">
+            <div class="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 w-full max-w-3xl p-4 sm:p-7 space-y-4 sm:space-y-5 z-10 my-auto">
+                <button type="button" onclick="closeCheckoutModal()" aria-label="Đóng cửa sổ thanh toán" class="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
 
                 <!-- Tiêu đề -->
-                <div class="text-center border-b border-slate-100 pb-4">
-                    <h3 class="text-xl sm:text-2xl font-extrabold text-blue-700 uppercase tracking-tight">Đặt Mua Tài Liệu</h3>
-                    <p id="qr-order-subtitle" class="text-sm sm:text-base font-bold text-slate-700 mt-1"></p>
+                <div class="text-center border-b border-slate-100 pb-3 pr-7 sm:pr-0">
+                    <h3 class="text-lg sm:text-2xl font-extrabold text-blue-700 uppercase tracking-tight">Đặt Mua Tài Liệu</h3>
+                    <p id="qr-order-subtitle" class="text-xs sm:text-base font-bold text-slate-700 mt-1 line-clamp-2"></p>
                 </div>
 
                 <!-- Form nhập nhanh thông tin giáo viên (Khi bấm Đặt Mua Ngay) -->
-                <div id="direct-buy-form" class="hidden bg-slate-50 rounded-2xl border border-slate-200 p-4 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Thông tin giáo viên nhận file Google Drive</span>
-                        <span class="text-[11px] text-rose-500 font-semibold">* Bắt buộc</span>
+                <div id="direct-buy-form" class="hidden bg-slate-50 rounded-2xl border border-slate-200 p-3.5 sm:p-4 space-y-2.5 sm:space-y-3">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-700">Thông tin giáo viên nhận Drive</span>
+                        <span class="text-[11px] text-rose-500 font-semibold shrink-0">* Bắt buộc</span>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         <div>
@@ -529,64 +531,69 @@
                     </div>
                     <!-- Ô nhập mã ưu đãi -->
                     <div class="flex gap-2">
-                        <input type="text" id="direct-voucher-input" placeholder="Nhập mã ưu đãi (nếu có)..." class="flex-1 px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs sm:text-sm uppercase font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <button type="button" onclick="applyDirectVoucher()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition-colors">
+                        <input type="text" id="direct-voucher-input" placeholder="Nhập mã ưu đãi (nếu có)..." class="flex-1 min-w-0 px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs sm:text-sm uppercase font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button type="button" onclick="applyDirectVoucher()" class="shrink-0 px-3.5 sm:px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition-colors">
                             Áp dụng mã
                         </button>
                     </div>
                     <p id="direct-voucher-msg" class="hidden text-xs font-semibold"></p>
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
-                        <p class="text-[11px] text-amber-800"><i class="fa-solid fa-circle-info text-amber-600 mr-1"></i>Vui lòng điền đúng Gmail để cấp quyền Drive tự động.</p>
-                        <button type="button" onclick="confirmDirectOrder()" id="direct-submit-btn" class="shrink-0 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-colors">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-1">
+                        <p class="text-[11px] text-amber-800 leading-snug"><i class="fa-solid fa-circle-info text-amber-600 mr-1"></i>Vui lòng điền đúng Gmail để cấp quyền Drive tự động.</p>
+                        <button type="button" onclick="confirmDirectOrder()" id="direct-submit-btn" class="w-full sm:w-auto shrink-0 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-colors flex items-center justify-center">
                             <i class="fa-solid fa-qrcode mr-1.5"></i>Xác nhận thông tin &amp; Hiện mã QR
                         </button>
                     </div>
                 </div>
 
-                <!-- Nội dung 2 cột: Trái QR lớn + Thông tin TK | Phải 3 Bước Hướng Dẫn -->
-                <div id="qr-payment-panel" class="relative grid md:grid-cols-12 gap-6 items-center">
-                    <!-- Lớp phủ hướng dẫn thân thiện trước khi hiện mã QR -->
-                    <div id="qr-lock-overlay" class="hidden absolute inset-0 z-20 bg-white/95 backdrop-blur-md rounded-2xl border-2 border-dashed border-blue-200 flex flex-col items-center justify-center p-6 text-center">
-                        <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-3 shadow-sm">
-                            <i class="fa-solid fa-qrcode"></i>
-                        </div>
-                        <p class="font-extrabold text-base sm:text-lg text-slate-900">Sẵn sàng tạo mã QR thanh toán</p>
-                        <p class="text-xs sm:text-sm text-slate-600 mt-1.5 max-w-md leading-relaxed">
-                            Sau khi thầy/cô điền đầy đủ thông tin nhận tài liệu ở trên và bấm <strong class="text-blue-600">"Xác nhận thông tin &amp; Hiện mã QR"</strong>, hệ thống sẽ tự động hiển thị mã QR kèm sẵn số tiền và nội dung chuyển khoản ạ!
-                        </p>
+                <!-- Trạng thái chờ gọn gàng (Chỉ hiện khi CHƯA xác nhận thông tin — chiều cao tự nhiên, không dài ngoằng) -->
+                <div id="qr-lock-overlay" class="hidden rounded-2xl bg-blue-50/60 border border-dashed border-blue-200 px-4 py-4 sm:px-6 sm:py-5 text-center">
+                    <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white text-blue-600 text-lg mb-2 shadow-sm border border-blue-100">
+                        <i class="fa-solid fa-qrcode"></i>
                     </div>
+                    <p class="font-bold text-sm sm:text-base text-slate-900">Sẵn sàng tạo mã QR thanh toán</p>
+                    <p class="text-xs sm:text-sm text-slate-600 mt-1 max-w-lg mx-auto leading-relaxed">
+                        Sau khi thầy/cô điền đầy đủ thông tin nhận tài liệu ở trên và bấm <strong class="text-blue-600">"Xác nhận thông tin &amp; Hiện mã QR"</strong>, hệ thống sẽ tự động hiển thị mã QR kèm sẵn số tiền và nội dung chuyển khoản ạ!
+                    </p>
+                </div>
 
-                    <!-- Cột trái: Khung mã QR vuông phóng to (280x280px) & Số tiền -->
-                    <div class="md:col-span-6 flex flex-col items-center justify-center bg-slate-50/80 rounded-2xl border-2 border-dashed border-slate-300 p-5">
-                        <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200">
-                            <img id="vietqr-img" src="" alt="Mã VietQR thanh toán MB Bank" onerror="this.src='https://placehold.co/300x300/eff6ff/1d4ed8?text=Ma+QR+MB+Bank'" class="w-[260px] h-[260px] sm:w-[280px] sm:h-[280px] object-contain mx-auto">
+                <!-- Khung thanh toán 2 cột (Chỉ bung to ra SAU KHI đã xác nhận thông tin) -->
+                <div id="qr-payment-panel" class="hidden grid md:grid-cols-12 gap-5 sm:gap-6 items-center animate-fade-in">
+                    <!-- Cột trái: Khung mã QR vuông phóng to & Thông tin chuyển khoản -->
+                    <div class="md:col-span-6 flex flex-col items-center justify-center bg-slate-50/90 rounded-2xl border-2 border-dashed border-blue-200 p-4 sm:p-5">
+                        <div class="bg-white p-2.5 sm:p-3 rounded-2xl shadow-sm border border-slate-200">
+                            <img id="vietqr-img" src="" alt="Mã VietQR thanh toán MB Bank" onerror="this.src='https://placehold.co/300x300/eff6ff/1d4ed8?text=Ma+QR+MB+Bank'" class="w-56 h-56 sm:w-64 sm:h-64 object-contain mx-auto">
                         </div>
-                        <div class="mt-3.5 px-5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80">
-                            <span id="qr-amount" class="text-xl sm:text-2xl font-extrabold text-emerald-600">0đ</span>
+                        <div class="mt-3 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80">
+                            <span id="qr-amount" class="text-lg sm:text-2xl font-extrabold text-emerald-600">0đ</span>
                         </div>
-                        <div class="mt-2.5 text-center text-xs text-slate-600 space-y-0.5">
-                            <div>Ngân hàng: <strong class="text-slate-900">MB Bank</strong> • STK: <strong class="text-blue-700">0338844985</strong></div>
-                            <div>Chủ tài khoản: <strong class="text-slate-900">TRAN GIA BAO</strong></div>
+                        <div class="mt-2.5 text-center text-xs text-slate-600 space-y-1 w-full">
+                            <div>Ngân hàng: <strong class="text-slate-900">MB Bank</strong> • Chủ TK: <strong class="text-slate-900">TRAN GIA BAO</strong></div>
+                            <div class="flex items-center justify-center gap-2 flex-wrap">
+                                <span>STK: <strong class="text-blue-700 text-sm">0338844985</strong></span>
+                                <button type="button" onclick="copyTextValue('0338844985', 'Đã sao chép số tài khoản MB Bank')" class="px-2 py-0.5 rounded-md bg-white hover:bg-blue-50 border border-slate-200 text-blue-600 font-bold text-[11px] transition-colors">
+                                    <i class="fa-regular fa-copy mr-1"></i>Sao chép STK
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Cột phải: 3 Bước hướng dẫn -->
-                    <div class="md:col-span-6 space-y-4">
+                    <div class="md:col-span-6 space-y-3.5 sm:space-y-4">
                         <div class="space-y-1">
-                            <div class="font-extrabold text-base text-slate-900">Bước 1: Quét mã thanh toán</div>
-                            <p class="text-sm text-slate-600 leading-relaxed">Mở ứng dụng ngân hàng và quét mã QR bên cạnh.</p>
+                            <div class="font-extrabold text-sm sm:text-base text-slate-900">Bước 1: Quét mã thanh toán</div>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">Mở ứng dụng ngân hàng và quét mã QR bên cạnh (hoặc lưu ảnh mã QR về máy để quét).</p>
                         </div>
 
                         <div class="space-y-1">
-                            <div class="font-extrabold text-base text-slate-900">Bước 2: Xác nhận chuyển khoản</div>
-                            <p class="text-sm text-slate-600 leading-relaxed">
+                            <div class="font-extrabold text-sm sm:text-base text-slate-900">Bước 2: Xác nhận chuyển khoản</div>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                                 Hệ thống đã tự động ghi nội dung chuyển khoản và số tiền mua tài liệu. Quý thầy/cô chỉ cần kiểm tra và xác nhận chuyển khoản trên ứng dụng ngân hàng là được!
                             </p>
                         </div>
 
                         <div class="space-y-1">
-                            <div class="font-extrabold text-base text-slate-900">Bước 3: Nhận tài liệu</div>
-                            <p class="text-sm text-slate-600 leading-relaxed">
+                            <div class="font-extrabold text-sm sm:text-base text-slate-900">Bước 3: Nhận tài liệu</div>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                                 Tài liệu sẽ được gửi qua Gmail thầy/cô đã đăng ký. Sau lâu nhất <strong>2 tiếng</strong> nếu chưa nhận được, vui lòng nhắn qua Zalo <a href="https://zalo.me/0843589647" target="_blank" rel="noopener noreferrer" class="font-extrabold text-blue-600 hover:underline">0843 589 647</a> để được hỗ trợ nhanh nhất.
                             </p>
                         </div>
@@ -595,7 +602,7 @@
 
                 <div id="webhook-status-box" class="hidden text-center text-xs font-semibold px-3 py-2 rounded-xl bg-blue-50 text-blue-700 border border-blue-200"></div>
 
-                <button type="button" onclick="completeOrder()" class="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-bold text-sm sm:text-base transition-colors">
+                <button type="button" onclick="completeOrder()" class="w-full py-3 sm:py-3.5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-bold text-sm sm:text-base transition-colors">
                     Đã chuyển khoản xong / Đóng
                 </button>
             </div>
@@ -603,13 +610,13 @@
     </div>
 
     <!-- ==================== CỤM 2 NÚT LIÊN HỆ NỔI GÓC DƯỚI PHẢI ==================== -->
-    <div class="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-2.5">
-        <a href="tel:0843589647" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-rose-500/30 transition-transform hover:scale-105">
+    <div class="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-40 flex flex-col items-end gap-2">
+        <a href="tel:0843589647" class="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-extrabold text-[11px] sm:text-sm shadow-lg shadow-rose-500/30 transition-transform hover:scale-105">
             <i class="fa-solid fa-phone-volume"></i>
             <span>0843 589 647</span>
         </a>
-        <a href="https://zalo.me/0843589647" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-blue-600/30 transition-transform hover:scale-105">
-            <span class="w-6 h-6 rounded-full bg-white text-blue-600 font-black text-[10px] flex items-center justify-center">Zalo</span>
+        <a href="https://zalo.me/0843589647" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] sm:text-sm shadow-lg shadow-blue-600/30 transition-transform hover:scale-105">
+            <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white text-blue-600 font-black text-[9px] sm:text-[10px] flex items-center justify-center">Zalo</span>
             <span>Liên hệ mua ngay</span>
         </a>
     </div>
@@ -688,6 +695,16 @@
             if (addInfo) params.set("addInfo", String(addInfo).trim());
             if (SELLER_CONFIG.accountName) params.set("accountName", SELLER_CONFIG.accountName);
             return `https://img.vietqr.io/image/${SELLER_CONFIG.bankId}-${SELLER_CONFIG.accountNo}-qr_only.png?${params.toString()}`;
+        }
+
+        function copyTextValue(text, successMsg) {
+            const tempInput = document.createElement("input");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            showToast(successMsg || "Đã sao chép!");
         }
 
         function showToast(message) {
@@ -1623,8 +1640,9 @@
             if (savedEmail) document.getElementById("direct-email").value = savedEmail;
 
             document.getElementById("qr-amount").textContent = formatCurrency(product.price);
-            document.getElementById("vietqr-img").src = "https://placehold.co/300x300/eff6ff/1d4ed8?text=Ma+QR+Thanh+Toan";
+            document.getElementById("vietqr-img").src = "";
             document.getElementById("qr-lock-overlay").classList.remove("hidden");
+            document.getElementById("qr-payment-panel").classList.add("hidden");
 
             document.getElementById("checkout-modal").classList.remove("hidden");
             document.body.classList.add("overflow-hidden");
@@ -1745,8 +1763,14 @@
             submitBtn.innerHTML = `<i class="fa-solid fa-check mr-1.5"></i>Đã xác nhận thông tin`;
 
             document.getElementById("qr-lock-overlay").classList.add("hidden");
+            const qrPanel = document.getElementById("qr-payment-panel");
+            qrPanel.classList.remove("hidden");
             document.getElementById("qr-amount").textContent = formatCurrency(finalPrice);
             document.getElementById("vietqr-img").src = buildVietQrUrl(finalPrice, zalo);
+
+            setTimeout(() => {
+                qrPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }, 100);
 
             const orderCode = "TP" + Math.floor(100000 + Math.random() * 900000);
             await sendOrderToGoogleSheets({
@@ -1777,6 +1801,7 @@
             directBuyProduct = null;
             document.getElementById("direct-buy-form").classList.add("hidden");
             document.getElementById("qr-lock-overlay").classList.add("hidden");
+            document.getElementById("qr-payment-panel").classList.remove("hidden");
 
             const subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
             let discount = 0;
