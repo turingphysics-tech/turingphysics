@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turing Physics — Kho Giáo Án, Slide &amp; Chuyên Đề Vật Lý THPT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .physics-grid-bg {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.25s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-blue-600 selection:text-white">
+
+    <!-- ==================== HEADER / NAVBAR ==================== -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            <!-- Logo Turing Physics -->
+            <button type="button" onclick="switchTab('gioi-thieu')" class="flex items-center gap-2.5 group text-left">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center shadow-md shadow-blue-600/20 group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-atom text-lg"></i>
+                </div>
+                <div>
+                    <span class="font-extrabold text-lg tracking-tight text-slate-900 block leading-none">Turing <span class="text-blue-600">Physics</span></span>
+                    <span class="text-[11px] font-medium text-slate-500">Học liệu chuẩn GDPT 2018</span>
+                </div>
+            </button>
+
+            <!-- Navigation Tabs (Desktop) -->
+            <nav class="hidden md:flex items-center gap-2 text-sm font-semibold">
+                <button type="button" onclick="switchTab('gioi-thieu')" data-tab="gioi-thieu" class="main-nav-tab px-4 py-2 rounded-xl bg-blue-50 text-blue-700 font-bold transition-all">Giới thiệu</button>
+                <button type="button" onclick="switchTab('danh-muc')" data-tab="danh-muc" class="main-nav-tab px-4 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-slate-100/80 transition-all">Kho Tài Liệu</button>
+                <button type="button" onclick="switchTab('quy-trinh')" data-tab="quy-trinh" class="main-nav-tab px-4 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-slate-100/80 transition-all">Quy Trình Nhận File</button>
+                <button type="button" onclick="switchTab('hoi-dap')" data-tab="hoi-dap" class="main-nav-tab px-4 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-slate-100/80 transition-all">Hỏi Đáp</button>
+            </nav>
+
+            <!-- Giỏ tài liệu -->
+            <div class="flex items-center gap-2.5">
+                <button type="button" onclick="showCartView()" class="relative inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white text-sm font-semibold transition-all shadow-sm">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="hidden sm:inline">Giỏ tài liệu</span>
+                    <span id="cart-badge" class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold bg-amber-400 text-slate-950 rounded-full">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs (Mobile) -->
+        <div class="md:hidden border-t border-slate-100 bg-white px-3 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <button type="button" onclick="switchTab('gioi-thieu')" data-tab="gioi-thieu" class="main-nav-tab shrink-0 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold transition-all">Giới thiệu</button>
+            <button type="button" onclick="switchTab('danh-muc')" data-tab="danh-muc" class="main-nav-tab shrink-0 px-3 py-1.5 rounded-lg text-slate-600 text-xs font-semibold transition-all">Kho Tài Liệu</button>
+            <button type="button" onclick="switchTab('quy-trinh')" data-tab="quy-trinh" class="main-nav-tab shrink-0 px-3 py-1.5 rounded-lg text-slate-600 text-xs font-semibold transition-all">Quy Trình Nhận File</button>
+            <button type="button" onclick="switchTab('hoi-dap')" data-tab="hoi-dap" class="main-nav-tab shrink-0 px-3 py-1.5 rounded-lg text-slate-600 text-xs font-semibold transition-all">Hỏi Đáp</button>
+        </div>
+    </header>
+
+    <!-- ==================== TRANG CHÍNH ==================== -->
+    <main id="main-store-view" class="min-h-[calc(100vh-140px)]">
+
+        <!-- ==================== MỤC 1: GIỚI THIỆU (2 CỘT + AUTO CAROUSEL TÀI LIỆU MỚI NHẤT) ==================== -->
+        <section id="gioi-thieu" class="tab-page-section animate-fade-in relative overflow-hidden physics-grid-bg pt-10 pb-16 sm:pt-14 sm:pb-24 min-h-[calc(100vh-140px)] flex items-center">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                <div class="grid lg:grid-cols-12 gap-10 items-center">
+                    <!-- Cột trái: Giới thiệu Turing Physics -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold">
+                            <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                            Cập nhật mới nhất năm học 2026 – 2027 (GDPT 2018 &amp; Luyện thi TNTHPT 2027)
+                        </div>
+
+                        <h1 class="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-slate-900 tracking-tight leading-tight">
+                            <span class="block">Kho Tài Liệu Vật Lý THPT</span>
+                            <span class="block text-blue-600 leading-normal pb-1 mt-1">Turing Physics</span>
+                        </h1>
+
+                        <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl">
+                            Hệ thống giáo án CV 5512, bài giảng PowerPoint hiệu ứng trực quan và bộ chuyên đề luyện thi TNTHPT 2027 biên soạn công phu. <strong class="text-slate-800">100% file Word/PPT gốc</strong> dễ dàng chỉnh sửa, gõ công thức MathType/Equation chuẩn đẹp.
+                        </p>
+
+                        <div class="flex flex-wrap items-center gap-3 pt-1">
+                            <button type="button" onclick="switchTab('danh-muc')" class="px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-600/25 transition-all flex items-center gap-2">
+                                <span>Khám phá Kho Tài Liệu</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                            <button type="button" onclick="switchTab('quy-trinh')" class="px-6 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 font-bold text-sm sm:text-base transition-all">
+                                Xem quy trình nhận file
+                            </button>
+                        </div>
+
+                        <!-- 3 chỉ số nổi bật -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-5 border-t border-slate-200/80 max-w-2xl">
+                            <div class="bg-white/80 rounded-2xl p-3.5 border border-slate-200/70">
+                                <div class="text-lg sm:text-xl font-extrabold text-slate-900">100%</div>
+                                <div class="text-xs font-medium text-slate-500 mt-0.5">File Word/PPT gốc</div>
+                            </div>
+                            <div class="bg-white/80 rounded-2xl p-3.5 border border-slate-200/70">
+                                <div class="text-sm sm:text-base font-extrabold text-blue-600 leading-snug">Chuẩn bộ sách SGK</div>
+                                <div class="text-xs font-medium text-slate-500 mt-0.5">mới nhất của BGD</div>
+                            </div>
+                            <div class="bg-white/80 rounded-2xl p-3.5 border border-slate-200/70">
+                                <div class="text-lg sm:text-xl font-extrabold text-indigo-600">Google Drive</div>
+                                <div class="text-xs font-medium text-slate-500 mt-0.5">Cấp quyền qua Gmail</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cột phải: Khung trình chiếu tự động lướt TÀI LIỆU MỚI NHẤT -->
+                    <div class="lg:col-span-5">
+                        <div id="new-docs-carousel-box" onmouseenter="pauseNewCarousel()" onmouseleave="resumeNewCarousel()" class="bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 p-6 sm:p-7 space-y-5">
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 border border-rose-200 text-rose-600 text-xs font-extrabold">
+                                        <i class="fa-solid fa-fire-flame-curved"></i>
+                                        <span>CẬP NHẬT MỚI</span>
+                                    </span>
+                                    <h2 class="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight">TÀI LIỆU MỚI NHẤT</h2>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <button type="button" onclick="prevNewSlide()" aria-label="Tài liệu trước" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-600 flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </button>
+                                    <button type="button" onclick="nextNewSlide()" aria-label="Tài liệu tiếp theo" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-blue-600 hover:text-white text-slate-600 flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Nội dung thẻ tài liệu mới tự động chuyển -->
+                            <div id="new-carousel-slide" class="min-h-[220px] flex flex-col justify-between">
+                                <div class="py-12 text-center text-slate-400 text-sm">
+                                    <i class="fa-solid fa-circle-notch fa-spin text-blue-600 mr-1.5"></i>Đang tải danh sách tài liệu mới...
+                                </div>
+                            </div>
+
+                            <!-- Chấm chỉ báo slide -->
+                            <div id="new-carousel-dots" class="flex items-center justify-center gap-1.5 pt-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== MỤC 2: KHO TÀI LIỆU ==================== -->
+        <section id="danh-muc" style="min-height: calc(100vh + 160px);" class="tab-page-section hidden animate-fade-in pt-8 pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Thanh tìm kiếm nhanh (Sẽ tự động cuộn khuất lên trên khi bấm chọn chuyên mục bên dưới) -->
+            <div id="search-bar-container" class="max-w-xl mx-auto mb-6">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="search-input" oninput="filterProducts()" placeholder="Tìm nhanh theo mã hoặc tên tài liệu..." class="w-full pl-10 pr-4 py-3 rounded-2xl bg-white border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+                </div>
+            </div>
+
+            <!-- Thanh lọc 7 nhóm chuyên mục (Mục tiêu cuộn sát dưới Header khi bấm) -->
+            <div id="category-bar-wrapper" class="py-2 mb-6">
+                <div id="category-pills-scroll" class="flex items-center lg:justify-center gap-2.5 overflow-x-auto no-scrollbar py-1 px-1">
+                    <button type="button" onclick="setCategory('K10')" data-cat="K10" class="cat-btn shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold bg-blue-600 text-white shadow-lg shadow-blue-600/30 transition-all">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span>Khối 10</span>
+                    </button>
+                    <button type="button" onclick="setCategory('K11')" data-cat="K11" class="cat-btn shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-white text-slate-700 border border-slate-200/90 hover:border-blue-400 hover:text-blue-600 shadow-sm transition-all">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span>Khối 11</span>
+                    </button>
+                    <button type="button" onclick="setCategory('K12')" data-cat="K12" class="cat-btn shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-white text-slate-700 border border-slate-200/90 hover:border-blue-400 hover:text-blue-600 shadow-sm transition-all">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span>Khối 12</span>
+                    </button>
+                    <button type="button" onclick="setCategory('TN')" data-cat="TN" class="cat-btn shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-white text-slate-700 border border-slate-200/90 hover:border-blue-400 hover:text-blue-600 shadow-sm transition-all">
+                        <i class="fa-solid fa-award"></i>
+                        <span>Luyện Thi TNTHPT</span>
+                    </button>
+                    <button type="button" onclick="setCategory('CB')" data-cat="CB" class="cat-btn shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-white text-slate-700 border border-slate-200/90 hover:border-blue-400 hover:text-blue-600 shadow-sm transition-all">
+                        <i class="fa-solid fa-tags"></i>
+                        <span>Combo</span>
+                    </button>
+                    <button type="button" onclick="setCategory('GA')" data-cat="GA" class="cat-btn shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-white text-slate-700 border border-slate-200/90 hover:border-blue-400 hover:text-blue-600 shadow-sm transition-all">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                        <span>PPT &amp; Giáo Án</span>
+                    </button>
+                    <button type="button" onclick="setCategory('LT')" data-cat="LT" class="cat-btn shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-white text-slate-700 border border-slate-200/90 hover:border-blue-400 hover:text-blue-600 shadow-sm transition-all">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span>Chuyên Luyện Lý Thuyết</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tiêu đề chuyên mục nổi bật căn giữa -->
+            <div class="text-center mb-8 pt-2 border-t border-slate-200/70">
+                <h3 id="category-display-title" class="text-2xl sm:text-3xl font-extrabold text-blue-900 uppercase tracking-tight mt-5">
+                    DẠY THÊM KHỐI 10
+                </h3>
+                <div class="w-16 h-1 bg-blue-500 rounded-full mx-auto mt-2.5 mb-2.5"></div>
+                <p class="text-sm sm:text-base text-slate-500 font-medium">Danh sách các kho tài liệu chất lượng cao đã chọn lọc</p>
+            </div>
+
+            <!-- Trạng thái đang tải -->
+            <div id="loading-state" class="hidden py-12 text-center">
+                <i class="fa-solid fa-circle-notch fa-spin text-2xl text-blue-600 mb-2"></i>
+                <p class="text-sm font-medium text-slate-500">Đang đồng bộ danh sách tài liệu mới nhất...</p>
+            </div>
+
+            <!-- Lưới thẻ tài liệu (3 cột trên máy tính) -->
+            <div id="products-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Render tự động bằng JS -->
+            </div>
+        </section>
+
+        <!-- ==================== MỤC 3: QUY TRÌNH NHẬN TÀI LIỆU ==================== -->
+        <section id="quy-trinh" class="tab-page-section hidden animate-fade-in py-12 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Quy Trình Nhận File Nhanh Chóng</h2>
+                <p class="text-slate-600 text-sm sm:text-base mt-2">Đơn giản, minh bạch, thầy/cô tải trực tiếp về máy tính để chỉnh sửa ngay</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-600 font-extrabold flex items-center justify-center text-lg">1</div>
+                    <h3 class="font-bold text-lg text-slate-900">Xem thử &amp; Chọn tài liệu</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">Thầy/cô bấm <strong>"Xem Thử"</strong> để kiểm tra trực tiếp thư mục tài liệu, sau đó bấm <strong>"Đặt Mua Ngay"</strong> hoặc thêm nhiều bộ vào giỏ.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="w-11 h-11 rounded-xl bg-indigo-100 text-indigo-600 font-extrabold flex items-center justify-center text-lg">2</div>
+                    <h3 class="font-bold text-lg text-slate-900">Quét mã QR thanh toán</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">Điền thông tin nhận Drive để mở mã QR. Hệ thống tự động điền sẵn số tiền và nội dung chuyển khoản, thầy/cô chỉ cần xác nhận trên ứng dụng ngân hàng.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-600 font-extrabold flex items-center justify-center text-lg">3</div>
+                    <h3 class="font-bold text-lg text-slate-900">Nhận link Google Drive</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">Hệ thống cấp quyền thư mục Google Drive qua Gmail đã đăng ký. Sau tối đa 2 tiếng chưa nhận được, thầy/cô nhắn <strong>Zalo 0843 589 647</strong> để được hỗ trợ ngay.</p>
+                </div>
+            </div>
+
+            <div class="mt-10 text-center">
+                <button type="button" onclick="switchTab('danh-muc')" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-600/20 transition-all">
+                    <span>Chuyển sang Kho Tài Liệu</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== MỤC 4: HỎI ĐÁP THƯỜNG GẶP (ĐÓNG MẶC ĐỊNH) ==================== -->
+        <section id="hoi-dap" class="tab-page-section hidden animate-fade-in py-12 sm:py-16">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+                <div class="text-center space-y-2 mb-6">
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Câu Hỏi Thường Gặp Của Thầy/Cô</h2>
+                    <p class="text-sm sm:text-base text-slate-600">Giải đáp chi tiết về bản quyền, định dạng file, công thức và quyền truy cập Google Drive</p>
+                </div>
+
+                <div class="space-y-3">
+                    <!-- Câu 1: Bản quyền & Không chia sẻ/bán lại -->
+                    <details class="group bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                        <summary class="flex items-center justify-between font-bold text-slate-900 cursor-pointer list-none gap-4">
+                            <span>1. Tôi có quyền chia sẻ hay bán lại tài liệu không?</span>
+                            <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform shrink-0"></i>
+                        </summary>
+                        <p class="text-sm text-slate-600 mt-3 leading-relaxed">
+                            Quý thầy cô vui lòng dùng tài liệu cá nhân và không chia sẻ cũng như buôn bán lại vì tài liệu có gán mã ID nên hệ thống có thể phát hiện chia sẻ. Đã có rất nhiều trường hợp bị phát hiện chia sẻ, buôn bán lại và bị cắt cập nhật!
+                        </p>
+                    </details>
+
+                    <!-- Câu 2: Lỗi font công thức MathType/Equation -->
+                    <details class="group bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                        <summary class="flex items-center justify-between font-bold text-slate-900 cursor-pointer list-none gap-4">
+                            <span>2. Công thức Vật Lý và hình vẽ có bị lỗi font khi tải về máy không?</span>
+                            <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform shrink-0"></i>
+                        </summary>
+                        <p class="text-sm text-slate-600 mt-3 leading-relaxed">
+                            Toàn bộ công thức được gõ chuẩn bằng MathType / Equation Unicode phổ thông, mở trên Word 2016, 2019, 2021 hay Office 365 đều hiển thị chuẩn đẹp.
+                        </p>
+                    </details>
+
+                    <!-- Câu 3: Thời hạn truy cập Google Drive -->
+                    <details class="group bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                        <summary class="flex items-center justify-between font-bold text-slate-900 cursor-pointer list-none gap-4">
+                            <span>3. Thời hạn truy cập Google Drive bao lâu?</span>
+                            <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform shrink-0"></i>
+                        </summary>
+                        <p class="text-sm text-slate-600 mt-3 leading-relaxed">
+                            Thầy/cô được cấp quyền truy cập vĩnh viễn vào thư mục Drive của bộ tài liệu đã đặt, có thể tải trọn bộ về máy tính để lưu trữ sử dụng.
+                        </p>
+                    </details>
+
+                    <!-- Câu 4: File Word (.docx) và PowerPoint (.pptx) gốc -->
+                    <details class="group bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                        <summary class="flex items-center justify-between font-bold text-slate-900 cursor-pointer list-none gap-4">
+                            <span>4. Tài liệu nhận được có phải là file Word/PowerPoint gốc chỉnh sửa được không?</span>
+                            <i class="fa-solid fa-chevron-down text-slate-400 group-open:rotate-180 transition-transform shrink-0"></i>
+                        </summary>
+                        <p class="text-sm text-slate-600 mt-3 leading-relaxed">
+                            Dạ đúng ạ! 100% tài liệu gửi qua Google Drive đều là file Word (.docx) và PowerPoint (.pptx) gốc, không khóa mật khẩu. Thầy/cô thoải mái chỉnh sửa, thêm tên trường/tổ chuyên môn của mình.
+                        </p>
+                    </details>
+                </div>
+
+                <div class="pt-4 text-center">
+                    <button type="button" onclick="switchTab('danh-muc')" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all">
+                        <span>Xem Kho Tài Liệu</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== TRANG RIÊNG: GIỎ TÀI LIỆU & THANH TOÁN ==================== -->
+    <section id="cart-page-view" class="hidden animate-fade-in min-h-[calc(100vh-140px)] py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-slate-200">
+            <div>
+                <button type="button" onclick="switchTab('danh-muc')" class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-800 mb-2 transition-colors">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Quay lại Kho Tài Liệu</span>
+                </button>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 flex items-center gap-2.5">
+                    <i class="fa-solid fa-bag-shopping text-blue-600"></i>
+                    <span>Giỏ Tài Liệu &amp; Thanh Toán</span>
+                </h1>
+            </div>
+            <div class="text-xs sm:text-sm text-slate-500 bg-white px-4 py-2.5 rounded-xl border border-slate-200 shadow-sm">
+                <i class="fa-solid fa-shield-halved text-blue-600 mr-1.5"></i>
+                File Word/PPT gốc • Cấp quyền Google Drive qua Gmail
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+            <!-- Cột trái: Danh sách tài liệu đã chọn -->
+            <div class="lg:col-span-7 space-y-4">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-5 py-4 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
+                        <span class="font-bold text-sm text-slate-800">Danh sách tài liệu thầy/cô đã chọn (<span id="cart-page-count">0</span>)</span>
+                        <button type="button" onclick="clearCart()" id="clear-cart-btn" class="hidden text-xs font-semibold text-red-500 hover:text-red-700">
+                            <i class="fa-solid fa-trash-can mr-1"></i>Xóa tất cả
+                        </button>
+                    </div>
+
+                    <div id="cart-items-container" class="p-5 space-y-3">
+                        <!-- Render tự động bằng JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột phải: Mã giảm giá & Thông tin giáo viên nhận file -->
+            <div class="lg:col-span-5">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-md p-5 sm:p-6 space-y-5 sticky top-24">
+                    <h2 class="font-extrabold text-lg text-slate-900 border-b border-slate-100 pb-3">Chi Tiết Thanh Toán</h2>
+
+                    <!-- Ô nhập mã giảm giá -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Mã ưu đãi (Nếu có)</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="voucher-input" placeholder="Nhập mã ưu đãi..." class="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-sm uppercase font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <button type="button" onclick="applyVoucher()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition-colors">
+                                Áp dụng
+                            </button>
+                        </div>
+                        <p id="voucher-message" class="text-xs font-medium hidden"></p>
+                    </div>
+
+                    <!-- Bảng tính tiền -->
+                    <div class="space-y-2.5 text-sm border-t border-slate-100 pt-4">
+                        <div class="flex justify-between text-slate-600">
+                            <span>Tạm tính:</span>
+                            <span id="cart-subtotal" class="font-semibold text-slate-900">0đ</span>
+                        </div>
+                        <div id="voucher-discount-row" class="hidden flex justify-between text-blue-600 font-medium">
+                            <span id="voucher-discount-label">Mã ưu đãi:</span>
+                            <span id="voucher-discount-amount">-0đ</span>
+                        </div>
+                        <div class="flex justify-between items-baseline pt-3 border-t border-slate-200">
+                            <span class="font-bold text-slate-900 text-base">Tổng thanh toán:</span>
+                            <span id="cart-total" class="text-2xl font-extrabold text-blue-600">0đ</span>
+                        </div>
+                    </div>
+
+                    <!-- Form thông tin giáo viên nhận file -->
+                    <div class="space-y-3 pt-3 border-t border-slate-100">
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Thông tin giáo viên nhận file</label>
+                            <span class="text-[11px] text-rose-500 font-semibold">* Bắt buộc</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <div>
+                                <label for="customer-name" class="block text-xs font-semibold text-slate-600 mb-1">Họ và tên thầy cô <span class="text-rose-500">*</span></label>
+                                <input type="text" id="customer-name" placeholder="VD: Nguyễn Văn An" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="customer-zalo" class="block text-xs font-semibold text-slate-600 mb-1">Số điện thoại / Zalo <span class="text-rose-500">*</span></label>
+                                <input type="tel" id="customer-zalo" maxlength="10" oninput="handlePhoneInput(this)" placeholder="VD: 0912345678" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <p id="phone-error-msg" class="hidden text-[11px] text-rose-600 font-medium mt-1">Vui lòng nhập đúng SĐT 10 số (VD: 0912345678).</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <div>
+                                <label for="customer-school" class="block text-xs font-semibold text-slate-600 mb-1">Trường thầy cô đang dạy <span class="text-rose-500">*</span></label>
+                                <input type="text" id="customer-school" placeholder="VD: THPT Chuyên..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label for="customer-email" class="block text-xs font-semibold text-slate-600 mb-1">Gmail nhận Drive <span class="text-rose-500">*</span></label>
+                                <input type="email" id="customer-email" oninput="handleEmailInput(this)" placeholder="VD: thayangv@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <p id="email-error-msg" class="hidden text-[11px] text-rose-600 font-medium mt-1">Vui lòng nhập đúng định dạng Email (VD: ten@gmail.com).</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-2 p-2.5 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-900 text-xs leading-relaxed">
+                            <i class="fa-solid fa-circle-exclamation text-amber-600 mt-0.5 shrink-0"></i>
+                            <span><strong>Lưu ý:</strong> Thầy/cô vui lòng nhập <strong>chính xác địa chỉ Gmail</strong> để hệ thống cấp quyền truy cập thư mục Google Drive tự động.</span>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="openCheckoutModal()" id="checkout-btn" disabled class="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-base shadow-lg shadow-blue-600/20 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-qrcode"></i>
+                        <span>Tạo mã QR thanh toán &amp; Nhận file</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER (CĂN GIỮA CHUẨN MẪU) ==================== -->
+    <footer class="bg-slate-950 text-slate-400 py-10 pb-28 sm:pb-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-1.5">
+            <p class="text-sm sm:text-base text-slate-300">
+                &copy; 2026 <strong class="text-white font-extrabold tracking-wide">TURING PHYSICS</strong>. All rights reserved.
+            </p>
+            <p class="text-xs sm:text-sm text-slate-400">
+                Hệ thống chia sẻ &amp; lưu trữ tài liệu Vật Lý chất lượng cao.
+            </p>
+        </div>
+    </footer>
+
+    <!-- ==================== MODAL XEM THỬ TÀI LIỆU / DRIVE ==================== -->
+    <div id="preview-modal" class="fixed inset-0 z-50 hidden">
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closePreviewModal()"></div>
+        <div class="fixed inset-x-4 top-[4%] bottom-[4%] md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-4xl bg-white rounded-3xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden z-10">
+            <!-- Header -->
+            <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-4">
+                <div>
+                    <span id="preview-tag" class="text-[11px] font-bold uppercase tracking-wider text-blue-600 block"></span>
+                    <h3 id="preview-title" class="font-extrabold text-base sm:text-lg text-slate-900 leading-snug"></h3>
+                </div>
+                <button type="button" onclick="closePreviewModal()" class="w-9 h-9 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div id="preview-body" class="p-4 sm:p-6 overflow-y-auto space-y-4 flex-1 bg-white">
+                <!-- Nội dung xem thử / trình duyệt Google Drive render bằng JS -->
+            </div>
+
+            <!-- Footer -->
+            <div class="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-3">
+                <div class="text-xs text-slate-500">
+                    Giá trọn bộ file gốc: <strong id="preview-price" class="text-blue-600 text-base font-extrabold ml-1"></strong>
+                </div>
+                <button type="button" onclick="closePreviewModal()" class="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-xmark"></i>
+                    <span>Đóng</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL THANH TOÁN VIETQR ==================== -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="fixed inset-0 bg-slate-900/65 backdrop-blur-sm" onclick="closeCheckoutModal()"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+            <div class="relative bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-3xl p-6 sm:p-8 space-y-6 z-10">
+                <button type="button" onclick="closeCheckoutModal()" class="absolute top-5 right-5 w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <!-- Tiêu đề -->
+                <div class="text-center border-b border-slate-100 pb-4">
+                    <h3 class="text-xl sm:text-2xl font-extrabold text-blue-700 uppercase tracking-tight">Đặt Mua Tài Liệu</h3>
+                    <p id="qr-order-subtitle" class="text-sm sm:text-base font-bold text-slate-700 mt-1"></p>
+                </div>
+
+                <!-- Form nhập nhanh thông tin giáo viên (Khi bấm Đặt Mua Ngay) -->
+                <div id="direct-buy-form" class="hidden bg-slate-50 rounded-2xl border border-slate-200 p-4 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Thông tin giáo viên nhận file Google Drive</span>
+                        <span class="text-[11px] text-rose-500 font-semibold">* Bắt buộc</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                            <input type="text" id="direct-name" placeholder="Họ và tên thầy cô *" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <input type="tel" id="direct-zalo" maxlength="10" oninput="handleDirectPhoneInput(this)" placeholder="Số điện thoại / Zalo (10 số) *" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p id="direct-phone-err" class="hidden text-[11px] text-rose-600 font-medium mt-1">SĐT chưa đúng định dạng 10 số.</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                            <input type="text" id="direct-school" placeholder="Trường thầy cô đang dạy *" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <input type="email" id="direct-email" oninput="handleDirectEmailInput(this)" placeholder="Gmail nhận Google Drive *" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <p id="direct-email-err" class="hidden text-[11px] text-rose-600 font-medium mt-1">Gmail chưa đúng định dạng.</p>
+                        </div>
+                    </div>
+                    <!-- Ô nhập mã ưu đãi -->
+                    <div class="flex gap-2">
+                        <input type="text" id="direct-voucher-input" placeholder="Nhập mã ưu đãi (nếu có)..." class="flex-1 px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs sm:text-sm uppercase font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button type="button" onclick="applyDirectVoucher()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition-colors">
+                            Áp dụng mã
+                        </button>
+                    </div>
+                    <p id="direct-voucher-msg" class="hidden text-xs font-semibold"></p>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
+                        <p class="text-[11px] text-amber-800"><i class="fa-solid fa-circle-info text-amber-600 mr-1"></i>Vui lòng điền đúng Gmail để cấp quyền Drive tự động.</p>
+                        <button type="button" onclick="confirmDirectOrder()" id="direct-submit-btn" class="shrink-0 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-colors">
+                            <i class="fa-solid fa-qrcode mr-1.5"></i>Xác nhận thông tin &amp; Hiện mã QR
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Nội dung 2 cột: Trái QR lớn + Thông tin TK | Phải 3 Bước Hướng Dẫn -->
+                <div id="qr-payment-panel" class="relative grid md:grid-cols-12 gap-6 items-center">
+                    <!-- Lớp phủ hướng dẫn thân thiện trước khi hiện mã QR -->
+                    <div id="qr-lock-overlay" class="hidden absolute inset-0 z-20 bg-white/95 backdrop-blur-md rounded-2xl border-2 border-dashed border-blue-200 flex flex-col items-center justify-center p-6 text-center">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-3 shadow-sm">
+                            <i class="fa-solid fa-qrcode"></i>
+                        </div>
+                        <p class="font-extrabold text-base sm:text-lg text-slate-900">Sẵn sàng tạo mã QR thanh toán</p>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1.5 max-w-md leading-relaxed">
+                            Sau khi thầy/cô điền đầy đủ thông tin nhận tài liệu ở trên và bấm <strong class="text-blue-600">"Xác nhận thông tin &amp; Hiện mã QR"</strong>, hệ thống sẽ tự động hiển thị mã QR kèm sẵn số tiền và nội dung chuyển khoản ạ!
+                        </p>
+                    </div>
+
+                    <!-- Cột trái: Khung mã QR vuông phóng to (280x280px) & Số tiền -->
+                    <div class="md:col-span-6 flex flex-col items-center justify-center bg-slate-50/80 rounded-2xl border-2 border-dashed border-slate-300 p-5">
+                        <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200">
+                            <img id="vietqr-img" src="" alt="Mã VietQR thanh toán MB Bank" onerror="this.src='https://placehold.co/300x300/eff6ff/1d4ed8?text=Ma+QR+MB+Bank'" class="w-[260px] h-[260px] sm:w-[280px] sm:h-[280px] object-contain mx-auto">
+                        </div>
+                        <div class="mt-3.5 px-5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80">
+                            <span id="qr-amount" class="text-xl sm:text-2xl font-extrabold text-emerald-600">0đ</span>
+                        </div>
+                        <div class="mt-2.5 text-center text-xs text-slate-600 space-y-0.5">
+                            <div>Ngân hàng: <strong class="text-slate-900">MB Bank</strong> • STK: <strong class="text-blue-700">0338844985</strong></div>
+                            <div>Chủ tài khoản: <strong class="text-slate-900">TRAN GIA BAO</strong></div>
+                        </div>
+                    </div>
+
+                    <!-- Cột phải: 3 Bước hướng dẫn -->
+                    <div class="md:col-span-6 space-y-4">
+                        <div class="space-y-1">
+                            <div class="font-extrabold text-base text-slate-900">Bước 1: Quét mã thanh toán</div>
+                            <p class="text-sm text-slate-600 leading-relaxed">Mở ứng dụng ngân hàng và quét mã QR bên cạnh.</p>
+                        </div>
+
+                        <div class="space-y-1">
+                            <div class="font-extrabold text-base text-slate-900">Bước 2: Xác nhận chuyển khoản</div>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Hệ thống đã tự động ghi nội dung chuyển khoản và số tiền mua tài liệu. Quý thầy/cô chỉ cần kiểm tra và xác nhận chuyển khoản trên ứng dụng ngân hàng là được!
+                            </p>
+                        </div>
+
+                        <div class="space-y-1">
+                            <div class="font-extrabold text-base text-slate-900">Bước 3: Nhận tài liệu</div>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                Tài liệu sẽ được gửi qua Gmail thầy/cô đã đăng ký. Sau lâu nhất <strong>2 tiếng</strong> nếu chưa nhận được, vui lòng nhắn qua Zalo <a href="https://zalo.me/0843589647" target="_blank" rel="noopener noreferrer" class="font-extrabold text-blue-600 hover:underline">0843 589 647</a> để được hỗ trợ nhanh nhất.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="webhook-status-box" class="hidden text-center text-xs font-semibold px-3 py-2 rounded-xl bg-blue-50 text-blue-700 border border-blue-200"></div>
+
+                <button type="button" onclick="completeOrder()" class="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-bold text-sm sm:text-base transition-colors">
+                    Đã chuyển khoản xong / Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== CỤM 2 NÚT LIÊN HỆ NỔI GÓC DƯỚI PHẢI ==================== -->
+    <div class="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-2.5">
+        <a href="tel:0843589647" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-rose-500 hover:bg-rose-600 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-rose-500/30 transition-transform hover:scale-105">
+            <i class="fa-solid fa-phone-volume"></i>
+            <span>0843 589 647</span>
+        </a>
+        <a href="https://zalo.me/0843589647" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-blue-600/30 transition-transform hover:scale-105">
+            <span class="w-6 h-6 rounded-full bg-white text-blue-600 font-black text-[10px] flex items-center justify-center">Zalo</span>
+            <span>Liên hệ mua ngay</span>
+        </a>
+    </div>
+
+    <!-- ==================== TOAST NOTIFICATION ==================== -->
+    <div id="toast-box" class="fixed bottom-28 right-4 z-50 pointer-events-none transition-all duration-300 opacity-0 translate-y-3">
+        <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl text-xs sm:text-sm font-semibold flex items-center gap-2.5 border border-slate-700">
+            <i class="fa-solid fa-circle-check text-blue-400"></i>
+            <span id="toast-message">Thông báo</span>
+        </div>
+    </div>
+
+    <!-- ==================== CENTER POPUP KHI THÊM VÀO GIỎ HÀNG ==================== -->
+    <div id="center-cart-popup" class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none transition-all duration-200 opacity-0 scale-95">
+        <div class="bg-slate-900/85 backdrop-blur-sm text-white px-8 py-7 rounded-2xl shadow-2xl flex flex-col items-center justify-center text-center max-w-xs sm:max-w-sm mx-4">
+            <div id="center-popup-icon" class="w-16 h-16 rounded-full bg-emerald-500 text-white flex items-center justify-center text-3xl mb-4 shadow-lg shadow-emerald-500/30">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <p id="center-popup-text" class="text-base sm:text-lg font-semibold leading-snug">
+                Sản phẩm đã được thêm vào Giỏ hàng
+            </p>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        // =========================================================================
+        // CẤU HÌNH THÔNG TIN THANH TOÁN & GOOGLE SHEETS
+        // =========================================================================
+        const SELLER_CONFIG = {
+            bankId: "MB",
+            accountNo: "0338844985",
+            accountName: "TRAN GIA BAO",
+            zaloPhone: "0843589647",
+            googleSheetWebhookUrl: "https://script.google.com/macros/s/AKfycbwIfIdYbrZ_IRcHAa5Yfs1oLnvc3oYcGWnpZ6XVocsgTCGVJospnp10GOgpDqIWQ7pp/exec"
+        };
+
+        const PRODUCTS_CACHE_KEY = "turingphysics_products_cache_v4";
+        const VOUCHERS_CACHE_KEY = "turingphysics_vouchers_cache_v4";
+        const CART_STORAGE_KEY = "turingphysics_cart_v4";
+
+        let products = [];
+        let globalVouchers = [];
+        let cart = [];
+        let currentCategory = "K10";
+        let activeVoucher = null;
+
+        let directBuyProduct = null;
+        let directActiveVoucher = null;
+        let driveNavHistory = [];
+
+        // Trạng thái trình chiếu Tài Liệu Mới Nhất
+        let newCarouselIndex = 0;
+        let newCarouselTimer = null;
+        let isNewCarouselPaused = false;
+
+        // =========================================================================
+        // HÀM LÀM SẠCH NHÃN (new) & TIỆN ÍCH ĐỊNH DẠNG
+        // =========================================================================
+        function hasNewTag(rawTitle) {
+            return /\(\s*new\s*\)/i.test(String(rawTitle || ""));
+        }
+
+        function cleanProductTitle(rawTitle) {
+            return String(rawTitle || "").replace(/\s*\(\s*new\s*\)\s*/gi, " ").replace(/\s+/g, " ").trim();
+        }
+
+        function formatCurrency(amount) {
+            const num = Number(amount) || 0;
+            return num.toLocaleString("vi-VN") + "đ";
+        }
+
+        function buildVietQrUrl(amount, addInfo) {
+            const params = new URLSearchParams();
+            params.set("amount", String(Math.max(0, Math.round(Number(amount) || 0))));
+            if (addInfo) params.set("addInfo", String(addInfo).trim());
+            if (SELLER_CONFIG.accountName) params.set("accountName", SELLER_CONFIG.accountName);
+            return `https://img.vietqr.io/image/${SELLER_CONFIG.bankId}-${SELLER_CONFIG.accountNo}-qr_only.png?${params.toString()}`;
+        }
+
+        function showToast(message) {
+            const box = document.getElementById("toast-box");
+            const msg = document.getElementById("toast-message");
+            if (!box || !msg) return;
+            msg.textContent = message;
+            box.classList.remove("opacity-0", "translate-y-3");
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => {
+                box.classList.add("opacity-0", "translate-y-3");
+            }, 2600);
+        }
+
+        function showCenterCartPopup(message, isAlreadyAdded = false) {
+            const popup = document.getElementById("center-cart-popup");
+            const textEl = document.getElementById("center-popup-text");
+            const iconEl = document.getElementById("center-popup-icon");
+            if (!popup || !textEl || !iconEl) return;
+
+            textEl.textContent = message;
+            if (isAlreadyAdded) {
+                iconEl.className = "w-16 h-16 rounded-full bg-blue-500 text-white flex items-center justify-center text-3xl mb-4 shadow-lg shadow-blue-500/30";
+                iconEl.innerHTML = '<i class="fa-solid fa-cart-shopping"></i>';
+            } else {
+                iconEl.className = "w-16 h-16 rounded-full bg-emerald-500 text-white flex items-center justify-center text-3xl mb-4 shadow-lg shadow-emerald-500/30";
+                iconEl.innerHTML = '<i class="fa-solid fa-check"></i>';
+            }
+
+            popup.classList.remove("opacity-0", "scale-95");
+            popup.classList.add("opacity-100", "scale-100");
+
+            clearTimeout(window._centerPopupTimer);
+            window._centerPopupTimer = setTimeout(() => {
+                popup.classList.remove("opacity-100", "scale-100");
+                popup.classList.add("opacity-0", "scale-95");
+            }, 1500);
+        }
+
+        function switchTab(tabId) {
+            document.getElementById("cart-page-view").classList.add("hidden");
+            document.getElementById("main-store-view").classList.remove("hidden");
+
+            document.querySelectorAll(".tab-page-section").forEach(sec => {
+                sec.classList.add("hidden");
+            });
+
+            const target = document.getElementById(tabId);
+            if (target) {
+                target.classList.remove("hidden");
+            }
+
+            document.querySelectorAll(".main-nav-tab").forEach(btn => {
+                if (btn.dataset.tab === tabId) {
+                    btn.classList.remove("text-slate-600", "hover:text-blue-600", "hover:bg-slate-100/80", "font-semibold");
+                    btn.classList.add("bg-blue-50", "text-blue-700", "font-bold");
+                } else {
+                    btn.classList.remove("bg-blue-50", "text-blue-700", "font-bold");
+                    btn.classList.add("text-slate-600", "hover:text-blue-600", "hover:bg-slate-100/80", "font-semibold");
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function showCartView() {
+            document.getElementById("main-store-view").classList.add("hidden");
+            document.getElementById("cart-page-view").classList.remove("hidden");
+            document.querySelectorAll(".main-nav-tab").forEach(btn => {
+                btn.classList.remove("bg-blue-50", "text-blue-700", "font-bold");
+                btn.classList.add("text-slate-600", "font-semibold");
+            });
+            updateCartUI();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        // =========================================================================
+        // CHUẨN HÓA NHÓM & TẢI DỮ LIỆU TỪ GOOGLE SHEETS
+        // =========================================================================
+        function normalizeCategory(rawCat) {
+            const val = String(rawCat || "")
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .trim()
+                .toUpperCase();
+
+            if (val.includes("10")) return "K10";
+            if (val.includes("11")) return "K11";
+            if (val.includes("12")) return "K12";
+            if (val === "TN" || val.includes("TNTHPT") || val.includes("LUYEN THI")) return "TN";
+            if (val === "CB" || val.includes("COMBO")) return "CB";
+            if (val === "GA" || val.includes("PPT") || val.includes("GIAO AN")) return "GA";
+            if (val === "LT" || val.includes("LY THUYET")) return "LT";
+            return "K10";
+        }
+
+        function getCategoryLabel(catCode) {
+            const map = {
+                "K10": "Khối 10",
+                "K11": "Khối 11",
+                "K12": "Khối 12",
+                "TN": "Luyện Thi TNTHPT",
+                "CB": "Combo",
+                "GA": "PPT & Giáo Án",
+                "LT": "Chuyên Luyện Lý Thuyết"
+            };
+            return map[catCode] || "Tài Liệu Vật Lý";
+        }
+
+        function getCategoryBannerTitle(catCode) {
+            const titles = {
+                "K10": "DẠY THÊM KHỐI 10",
+                "K11": "DẠY THÊM KHỐI 11",
+                "K12": "DẠY THÊM KHỐI 12",
+                "TN": "LUYỆN THI TNTHPT",
+                "CB": "COMBO TÀI LIỆU TIẾT KIỆM",
+                "GA": "PPT & GIÁO ÁN CHUẨN",
+                "LT": "CHUYÊN LUYỆN LÝ THUYẾT"
+            };
+            return titles[catCode] || "KHO TÀI LIỆU VẬT LÝ";
+        }
+
+        function loadCachedData() {
+            try {
+                const cachedP = localStorage.getItem(PRODUCTS_CACHE_KEY);
+                const cachedV = localStorage.getItem(VOUCHERS_CACHE_KEY);
+                if (cachedP) products = JSON.parse(cachedP) || [];
+                if (cachedV) globalVouchers = JSON.parse(cachedV) || [];
+            } catch (e) {
+                products = [];
+                globalVouchers = [];
+            }
+        }
+
+        async function fetchSheetData() {
+            const loadingEl = document.getElementById("loading-state");
+            if (products.length === 0 && loadingEl) {
+                loadingEl.classList.remove("hidden");
+            }
+
+            try {
+                const res = await fetch(SELLER_CONFIG.googleSheetWebhookUrl);
+                const data = await res.json();
+                if (data && data.status === "success" && Array.isArray(data.products)) {
+                    products = data.products.map((item, idx) => {
+                        const rawTitle = String(item.title || "").trim();
+                        return {
+                            id: item.code || ("DOC-" + (idx + 1)),
+                            code: String(item.code || ("DOC-" + (idx + 1))).trim(),
+                            category: normalizeCategory(item.category),
+                            rawTitle: rawTitle,
+                            title: cleanProductTitle(rawTitle),
+                            isNew: hasNewTag(rawTitle),
+                            previewUrl: String(item.previewUrl || item.sampleContent || "").trim(),
+                            price: Number(item.price) || 0,
+                            comboItems: String(item.comboItems || "").trim(),
+                            voucherCode: String(item.voucherCode || "").trim().toUpperCase(),
+                            voucherDiscount: String(item.voucherDiscount || "").trim()
+                        };
+                    });
+                    globalVouchers = Array.isArray(data.globalVouchers) ? data.globalVouchers : [];
+
+                    localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify(products));
+                    localStorage.setItem(VOUCHERS_CACHE_KEY, JSON.stringify(globalVouchers));
+                }
+            } catch (err) {
+                console.warn("Đang sử dụng dữ liệu bộ nhớ tạm:", err);
+            } finally {
+                if (loadingEl) loadingEl.classList.add("hidden");
+                renderNewCarousel();
+                filterProducts();
+                updateCartUI();
+            }
+        }
+
+        // =========================================================================
+        // TRÌNH CHIẾU TỰ ĐỘNG LƯỚT "TÀI LIỆU MỚI NHẤT" Ở TRANG GIỚI THIỆU
+        // =========================================================================
+        function getNewProductsList() {
+            const tagged = products.filter(p => p.isNew || hasNewTag(p.rawTitle));
+            if (tagged.length > 0) return tagged;
+            return products.slice(-5).reverse();
+        }
+
+        function renderNewCarousel() {
+            const slideBox = document.getElementById("new-carousel-slide");
+            const dotsBox = document.getElementById("new-carousel-dots");
+            if (!slideBox || !dotsBox) return;
+
+            const list = getNewProductsList();
+            if (list.length === 0) {
+                slideBox.innerHTML = `
+                    <div class="py-10 text-center space-y-2">
+                        <p class="text-sm font-semibold text-slate-600">Đang cập nhật các bộ học liệu mới nhất...</p>
+                        <button type="button" onclick="switchTab('danh-muc')" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">Mở Kho Tài Liệu</button>
+                    </div>
+                `;
+                dotsBox.innerHTML = "";
+                return;
+            }
+
+            if (newCarouselIndex >= list.length) newCarouselIndex = 0;
+            if (newCarouselIndex < 0) newCarouselIndex = list.length - 1;
+
+            const item = list[newCarouselIndex];
+            const cleanName = cleanProductTitle(item.title || item.rawTitle);
+
+            slideBox.innerHTML = `
+                <div class="animate-fade-in rounded-2xl bg-slate-50/90 border border-slate-200/90 p-5 space-y-4">
+                    <div class="flex items-center justify-between gap-2 flex-wrap">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-rose-500 text-white font-extrabold text-[11px] tracking-wide">MỚI</span>
+                            <span class="px-3 py-0.5 rounded-full bg-white border border-slate-200 text-slate-700 font-bold text-xs">${getCategoryLabel(item.category)}</span>
+                        </div>
+                        <span class="px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 font-extrabold text-sm">${formatCurrency(item.price)}</span>
+                    </div>
+
+                    <div>
+                        <span class="text-xs font-extrabold text-blue-600 block mb-1">${item.code}</span>
+                        <h3 class="font-extrabold text-base sm:text-lg text-slate-900 uppercase leading-snug line-clamp-2">
+                            ${cleanName}
+                        </h3>
+                    </div>
+
+                    <div class="space-y-2 pt-1">
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <button type="button" onclick="openPreviewModal('${item.code}')" class="py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-eye text-slate-600"></i>
+                                <span>Xem Thử</span>
+                            </button>
+                            <button type="button" onclick="buyNow('${item.code}')" class="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-colors flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <span>Đặt Mua Ngay</span>
+                            </button>
+                        </div>
+                        <button type="button" onclick="addToCart('${item.code}')" class="w-full py-2.5 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-cart-plus"></i>
+                            <span>Thêm vào giỏ hàng</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            dotsBox.innerHTML = list.map((_, idx) => `
+                <button type="button" onclick="goToNewSlide(${idx})" aria-label="Chuyển tới tài liệu ${idx + 1}" class="h-2 rounded-full transition-all ${idx === newCarouselIndex ? "w-6 bg-blue-600" : "w-2 bg-slate-300 hover:bg-slate-400"}"></button>
+            `).join("");
+
+            startNewCarouselAutoPlay();
+        }
+
+        function startNewCarouselAutoPlay() {
+            clearInterval(newCarouselTimer);
+            const list = getNewProductsList();
+            if (list.length <= 1) return;
+            newCarouselTimer = setInterval(() => {
+                if (!isNewCarouselPaused) {
+                    newCarouselIndex = (newCarouselIndex + 1) % list.length;
+                    renderNewCarousel();
+                }
+            }, 3500);
+        }
+
+        function pauseNewCarousel() {
+            isNewCarouselPaused = true;
+        }
+
+        function resumeNewCarousel() {
+            isNewCarouselPaused = false;
+        }
+
+        function nextNewSlide() {
+            const list = getNewProductsList();
+            if (list.length === 0) return;
+            newCarouselIndex = (newCarouselIndex + 1) % list.length;
+            renderNewCarousel();
+        }
+
+        function prevNewSlide() {
+            const list = getNewProductsList();
+            if (list.length === 0) return;
+            newCarouselIndex = (newCarouselIndex - 1 + list.length) % list.length;
+            renderNewCarousel();
+        }
+
+        function goToNewSlide(idx) {
+            newCarouselIndex = idx;
+            renderNewCarousel();
+        }
+
+        // =========================================================================
+        // CHỌN CHUYÊN MỤC & TỰ ĐỘNG CUỘN THANH CHUYÊN MỤC LÊN ĐẦU TRANG
+        // =========================================================================
+        function setCategory(cat) {
+            currentCategory = cat;
+
+            const titleEl = document.getElementById("category-display-title");
+            if (titleEl) {
+                titleEl.textContent = getCategoryBannerTitle(cat);
+            }
+
+            // Cập nhật trạng thái nút đang chọn
+            document.querySelectorAll(".cat-btn").forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.classList.remove("bg-white", "text-slate-700", "border", "border-slate-200/90", "hover:border-blue-400", "hover:text-blue-600", "shadow-sm", "font-semibold");
+                    btn.classList.add("bg-blue-600", "text-white", "shadow-lg", "shadow-blue-600/30", "font-bold");
+                } else {
+                    btn.classList.remove("bg-blue-600", "text-white", "shadow-lg", "shadow-blue-600/30", "font-bold");
+                    btn.classList.add("bg-white", "text-slate-700", "border", "border-slate-200/90", "hover:border-blue-400", "hover:text-blue-600", "shadow-sm", "font-semibold");
+                }
+            });
+
+            // Lọc & render danh sách tài liệu trước khi cuộn
+            filterProducts();
+
+            // 1. Cuộn ngang riêng thanh chứa 7 nút để căn giữa nút vừa bấm (KHÔNG dùng scrollIntoView để tránh xung đột)
+            const navContainer = document.getElementById("category-pills-scroll");
+            const activeBtn = navContainer ? navContainer.querySelector(`[data-cat="${cat}"]`) : null;
+            if (navContainer && activeBtn) {
+                const targetLeft = activeBtn.offsetLeft - (navContainer.clientWidth / 2) + (activeBtn.offsetWidth / 2);
+                navContainer.scrollTo({ left: Math.max(0, targetLeft), behavior: "smooth" });
+            }
+
+            // 2. Cuộn dọc trang lên đúng vị trí đưa thanh Khối 10, Khối 11... sát ngay dưới Header (đẩy ô tìm kiếm khuất lên trên)
+            const categoryBar = document.getElementById("category-bar-wrapper");
+            const headerEl = document.querySelector("header");
+            if (categoryBar && headerEl) {
+                const headerHeight = headerEl.offsetHeight;
+                const targetY = categoryBar.getBoundingClientRect().top + window.scrollY - headerHeight - 8;
+                window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
+            }
+        }
+
+        function resolveComboItems(comboStr) {
+            if (!comboStr) return [];
+            const codes = comboStr.split(/[;\n,]+/).map(s => s.trim()).filter(Boolean);
+            return codes.map(code => {
+                const found = products.find(p => p.code.toUpperCase() === code.toUpperCase());
+                return found
+                    ? { code: found.code, title: cleanProductTitle(found.title || found.rawTitle), previewUrl: found.previewUrl, found: true }
+                    : { code: code, title: cleanProductTitle(code), previewUrl: "", found: false };
+            });
+        }
+
+        function filterProducts() {
+            const keyword = (document.getElementById("search-input")?.value || "").trim().toLowerCase();
+            const filtered = products.filter(p => {
+                const cleanName = cleanProductTitle(p.title || p.rawTitle);
+                const matchCat = p.category === currentCategory;
+                const matchKey = !keyword || cleanName.toLowerCase().includes(keyword) || p.code.toLowerCase().includes(keyword);
+                return matchCat && matchKey;
+            });
+            renderProducts(filtered);
+        }
+
+        function renderProducts(list) {
+            const grid = document.getElementById("products-grid");
+            if (!grid) return;
+
+            if (!list || list.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-slate-200/80 p-6">
+                        <p class="text-sm font-semibold text-slate-500">Chưa có tài liệu nào phù hợp trong mục này.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = list.map(p => {
+                const cleanName = cleanProductTitle(p.title || p.rawTitle);
+                const comboList = p.category === "CB" ? resolveComboItems(p.comboItems) : [];
+                const comboHtml = comboList.length > 0 ? `
+                    <div class="mt-3 pt-3 border-t border-slate-100 space-y-1.5">
+                        <div class="text-[11px] font-bold uppercase tracking-wider text-blue-600">Bao gồm các tài liệu:</div>
+                        <ul class="space-y-1 text-xs text-slate-600">
+                            ${comboList.map(item => `
+                                <li class="flex items-start gap-1.5">
+                                    <i class="fa-solid fa-circle-check text-blue-500 mt-0.5 shrink-0"></i>
+                                    <span><strong class="text-slate-800">[${item.code}]</strong> ${item.title}</span>
+                                </li>
+                            `).join("")}
+                        </ul>
+                    </div>
+                ` : "";
+
+                return `
+                    <article class="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-4">
+                                <span class="px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-blue-600 font-extrabold text-xs tracking-wide">${p.code}</span>
+                                <span class="px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 font-extrabold text-sm">${formatCurrency(p.price)}</span>
+                            </div>
+
+                            <h3 class="font-extrabold text-base sm:text-lg text-slate-900 uppercase leading-snug">
+                                ${cleanName}
+                            </h3>
+
+                            ${comboHtml}
+                        </div>
+
+                        <div class="mt-6 space-y-2.5">
+                            <!-- Hàng 1: Xem Thử + Đặt Mua Ngay -->
+                            <div class="grid grid-cols-2 gap-2.5">
+                                <button type="button" onclick="openPreviewModal('${p.code}')" class="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-eye text-slate-600"></i>
+                                    <span>Xem Thử</span>
+                                </button>
+                                <button type="button" onclick="buyNow('${p.code}')" class="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-colors flex items-center justify-center gap-1.5">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    <span>Đặt Mua Ngay</span>
+                                </button>
+                            </div>
+
+                            <!-- Hàng 2: Thêm vào giỏ hàng -->
+                            <button type="button" onclick="addToCart('${p.code}')" class="w-full py-2.5 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Thêm vào giỏ hàng</span>
+                            </button>
+                        </div>
+                    </article>
+                `;
+            }).join("");
+        }
+
+        // =========================================================================
+        // XEM THỬ TÀI LIỆU & DUYỆT THƯ MỤC GOOGLE DRIVE (ẨN ĐUÔI .PDF/.DOCX/.PPTX)
+        // =========================================================================
+        function extractDriveInfo(url) {
+            if (!url) return null;
+            const folderMatch = url.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+            if (folderMatch) return { type: "folder", id: folderMatch[1] };
+
+            const fileMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+            if (fileMatch) return { type: "file", id: fileMatch[1] };
+
+            return null;
+        }
+
+        function stripFileExtension(filename) {
+            return String(filename || "").replace(/\.(pdf|docx?|pptx?|xlsx?|rar|zip)$/i, "").trim();
+        }
+
+        function openPreviewModal(code) {
+            const product = products.find(p => p.code === code);
+            if (!product) return;
+
+            const cleanName = cleanProductTitle(product.title || product.rawTitle);
+            document.getElementById("preview-tag").textContent = `${product.code} • ${getCategoryLabel(product.category).toUpperCase()}`;
+            document.getElementById("preview-title").textContent = cleanName;
+            document.getElementById("preview-price").textContent = formatCurrency(product.price);
+
+            const body = document.getElementById("preview-body");
+            driveNavHistory = [];
+
+            if (product.category === "CB") {
+                const comboList = resolveComboItems(product.comboItems);
+                if (comboList.length > 0) {
+                    body.innerHTML = `
+                        <div class="space-y-3">
+                            <p class="text-sm font-semibold text-slate-700">Bộ Combo bao gồm các tài liệu sau. Thầy/cô bấm vào từng tài liệu để xem thử trực tiếp:</p>
+                            <div class="space-y-2.5">
+                                ${comboList.map(item => `
+                                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                        <div>
+                                            <span class="text-xs font-extrabold text-blue-600">${item.code}</span>
+                                            <div class="font-bold text-sm text-slate-900">${item.title}</div>
+                                        </div>
+                                        ${item.previewUrl ? `
+                                            <button type="button" onclick="previewDriveUrl('${encodeURIComponent(item.previewUrl)}', '${encodeURIComponent(item.title)}')" class="shrink-0 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
+                                                <i class="fa-solid fa-eye mr-1"></i>Xem thử bộ này
+                                            </button>
+                                        ` : `<span class="text-xs text-slate-400 italic">Đang cập nhật link xem thử</span>`}
+                                    </div>
+                                `).join("")}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    renderDrivePreviewInBody(product.previewUrl, cleanName);
+                }
+            } else {
+                renderDrivePreviewInBody(product.previewUrl, cleanName);
+            }
+
+            document.getElementById("preview-modal").classList.remove("hidden");
+            document.body.classList.add("overflow-hidden");
+        }
+
+        function previewDriveUrl(encodedUrl, encodedTitle) {
+            const url = decodeURIComponent(encodedUrl);
+            const title = decodeURIComponent(encodedTitle);
+            driveNavHistory = [];
+            renderDrivePreviewInBody(url, title);
+        }
+
+        function renderDrivePreviewInBody(url, title) {
+            const body = document.getElementById("preview-body");
+            const driveInfo = extractDriveInfo(url);
+
+            if (!driveInfo) {
+                body.innerHTML = `
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-slate-600 text-sm">
+                        ${url ? url : `Liên hệ Zalo <strong>0843 589 647</strong> để xem thử trích đoạn chi tiết bộ tài liệu này.`}
+                    </div>
+                `;
+                return;
+            }
+
+            if (driveInfo.type === "file") {
+                body.innerHTML = `
+                    <div class="w-full h-[65vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
+                        <iframe src="https://drive.google.com/file/d/${driveInfo.id}/preview" class="w-full h-full border-0" allow="autoplay"></iframe>
+                    </div>
+                `;
+                return;
+            }
+
+            driveNavHistory = [{ id: driveInfo.id, name: title || "Thư mục gốc" }];
+            loadDriveFolderContents(driveInfo.id);
+        }
+
+        async function loadDriveFolderContents(folderId) {
+            const body = document.getElementById("preview-body");
+            const backBtnHtml = driveNavHistory.length > 1 ? `
+                <button type="button" onclick="goBackDriveFolder()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Quay lại thư mục trước</span>
+                </button>
+            ` : "";
+
+            const currentFolderName = driveNavHistory[driveNavHistory.length - 1]?.name || "Thư mục tài liệu";
+
+            body.innerHTML = `
+                <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                    <div class="text-xs font-bold text-slate-700 flex items-center gap-2">
+                        <i class="fa-solid fa-folder-open text-amber-500"></i>
+                        <span>${currentFolderName}</span>
+                    </div>
+                    ${backBtnHtml}
+                </div>
+                <div class="py-12 text-center text-slate-500 text-sm">
+                    <i class="fa-solid fa-circle-notch fa-spin text-xl text-blue-600 mb-2"></i>
+                    <p>Đang mở danh sách tệp trong Google Drive...</p>
+                </div>
+            `;
+
+            try {
+                const apiUrl = `${SELLER_CONFIG.googleSheetWebhookUrl}?action=browseDrive&folderId=${encodeURIComponent(folderId)}`;
+                const res = await fetch(apiUrl);
+                const data = await res.json();
+
+                if (data && data.status === "success") {
+                    const folders = data.folders || [];
+                    const files = data.files || [];
+
+                    if (folders.length === 0 && files.length === 0) {
+                        body.innerHTML = `
+                            <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                                <span class="text-xs font-bold text-slate-700">${currentFolderName}</span>
+                                ${backBtnHtml}
+                            </div>
+                            <div class="py-10 text-center text-sm text-slate-500">Thư mục này hiện chưa có tệp xem thử.</div>
+                        `;
+                        return;
+                    }
+
+                    body.innerHTML = `
+                        <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                            <div class="text-xs font-bold text-slate-700 flex items-center gap-2">
+                                <i class="fa-solid fa-folder-open text-amber-500"></i>
+                                <span>${currentFolderName}</span>
+                            </div>
+                            ${backBtnHtml}
+                        </div>
+                        <div class="space-y-2 pt-2">
+                            ${folders.map(f => `
+                                <button type="button" onclick="openSubDriveFolder('${f.id}', '${encodeURIComponent(f.name)}')" class="w-full p-3.5 rounded-2xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 flex items-center justify-between gap-3 text-left transition-all">
+                                    <div class="flex items-center gap-3 min-w-0">
+                                        <i class="fa-solid fa-folder text-amber-500 text-lg shrink-0"></i>
+                                        <span class="font-bold text-sm text-slate-800 truncate">${f.name}</span>
+                                    </div>
+                                    <span class="text-xs font-semibold text-blue-600 shrink-0">Mở thư mục <i class="fa-solid fa-chevron-right ml-1"></i></span>
+                                </button>
+                            `).join("")}
+
+                            ${files.map(file => {
+                                const displayFileName = stripFileExtension(file.name);
+                                return `
+                                <button type="button" onclick="openDriveFilePreview('${file.id}', '${encodeURIComponent(displayFileName)}')" class="w-full p-3.5 rounded-2xl bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 flex items-center justify-between gap-3 text-left transition-all">
+                                    <div class="flex items-center gap-3 min-w-0">
+                                        <i class="fa-solid fa-file-lines text-blue-600 text-lg shrink-0"></i>
+                                        <span class="font-semibold text-sm text-slate-800 truncate">${displayFileName}</span>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold shrink-0">Xem file</span>
+                                </button>
+                                `;
+                            }).join("")}
+                        </div>
+                    `;
+                } else {
+                    body.innerHTML = `
+                        <div class="w-full h-[60vh] rounded-2xl overflow-hidden border border-slate-200">
+                            <iframe src="https://drive.google.com/embeddedfolderview?id=${folderId}#list" class="w-full h-full border-0"></iframe>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                body.innerHTML = `
+                    <div class="w-full h-[60vh] rounded-2xl overflow-hidden border border-slate-200">
+                        <iframe src="https://drive.google.com/embeddedfolderview?id=${folderId}#list" class="w-full h-full border-0"></iframe>
+                    </div>
+                `;
+            }
+        }
+
+        function openSubDriveFolder(folderId, encodedName) {
+            driveNavHistory.push({ id: folderId, name: decodeURIComponent(encodedName) });
+            loadDriveFolderContents(folderId);
+        }
+
+        function goBackDriveFolder() {
+            if (driveNavHistory.length > 1) {
+                driveNavHistory.pop();
+                const prev = driveNavHistory[driveNavHistory.length - 1];
+                loadDriveFolderContents(prev.id);
+            }
+        }
+
+        function openDriveFilePreview(fileId, encodedName) {
+            const body = document.getElementById("preview-body");
+            const fileName = stripFileExtension(decodeURIComponent(encodedName));
+            body.innerHTML = `
+                <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                    <div class="text-xs font-bold text-slate-700 truncate">
+                        <i class="fa-solid fa-file-lines text-blue-600 mr-1.5"></i>${fileName}
+                    </div>
+                    <button type="button" onclick="reloadCurrentDriveFolder()" class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Quay lại danh sách file</span>
+                    </button>
+                </div>
+                <div class="w-full h-[62vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 mt-2">
+                    <iframe src="https://drive.google.com/file/d/${fileId}/preview" class="w-full h-full border-0" allow="autoplay"></iframe>
+                </div>
+            `;
+        }
+
+        function reloadCurrentDriveFolder() {
+            if (driveNavHistory.length > 0) {
+                const curr = driveNavHistory[driveNavHistory.length - 1];
+                loadDriveFolderContents(curr.id);
+            }
+        }
+
+        function closePreviewModal() {
+            document.getElementById("preview-modal").classList.add("hidden");
+            document.getElementById("preview-body").innerHTML = "";
+            document.body.classList.remove("overflow-hidden");
+        }
+
+        // =========================================================================
+        // LOGIC TÍNH MÃ ƯU ĐÃI TỪ GOOGLE SHEETS
+        // =========================================================================
+        function parseDiscountValue(rawDiscount, baseAmount) {
+            const str = String(rawDiscount || "").trim();
+            if (!str) return 0;
+            if (str.includes("%")) {
+                const pct = parseFloat(str.replace("%", "").trim()) || 0;
+                return Math.round((baseAmount * pct) / 100);
+            }
+            const fixed = Number(str.replace(/[^\d]/g, "")) || 0;
+            return Math.min(baseAmount, fixed);
+        }
+
+        function evaluateVoucherForItems(rawCode, targetItems) {
+            const code = String(rawCode || "").trim().toUpperCase();
+            if (!code) {
+                return { valid: false, discount: 0, message: "Thầy/cô vui lòng nhập mã ưu đãi." };
+            }
+
+            const subtotal = targetItems.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+
+            const gVoucher = globalVouchers.find(v => String(v.code || "").trim().toUpperCase() === code);
+            if (gVoucher) {
+                if (subtotal < (Number(gVoucher.minOrder) || 0)) {
+                    return {
+                        valid: false,
+                        discount: 0,
+                        message: `Mã ${code} áp dụng cho đơn từ ${formatCurrency(gVoucher.minOrder)} trở lên.`
+                    };
+                }
+                const discountAmt = parseDiscountValue(gVoucher.discount, subtotal);
+                return {
+                    valid: true,
+                    code: code,
+                    discount: discountAmt,
+                    message: `Áp dụng thành công mã ${code}: giảm ${formatCurrency(discountAmt)}!`
+                };
+            }
+
+            let totalItemDiscount = 0;
+            let matchedCount = 0;
+            targetItems.forEach(item => {
+                if (item.voucherCode && item.voucherCode.toUpperCase() === code) {
+                    matchedCount++;
+                    totalItemDiscount += parseDiscountValue(item.voucherDiscount, Number(item.price) || 0);
+                }
+            });
+
+            if (matchedCount > 0 && totalItemDiscount > 0) {
+                return {
+                    valid: true,
+                    code: code,
+                    discount: totalItemDiscount,
+                    message: `Áp dụng thành công mã ${code}: giảm ${formatCurrency(totalItemDiscount)}!`
+                };
+            }
+
+            return {
+                valid: false,
+                discount: 0,
+                message: `Mã "${code}" không hợp lệ hoặc không áp dụng cho tài liệu này.`
+            };
+        }
+
+        // =========================================================================
+        // QUẢN LÝ GIỎ TÀI LIỆU
+        // =========================================================================
+        function loadCartFromStorage() {
+            try {
+                const raw = localStorage.getItem(CART_STORAGE_KEY);
+                cart = raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                cart = [];
+            }
+            updateCartBadge();
+        }
+
+        function saveCartToStorage() {
+            try {
+                localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+            } catch (e) {}
+            updateCartBadge();
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById("cart-badge");
+            if (badge) badge.textContent = cart.length;
+        }
+
+        function addToCart(code) {
+            const product = products.find(p => p.code === code);
+            if (!product) return;
+
+            if (cart.some(item => item.code === code)) {
+                showCenterCartPopup("Sản phẩm này đã có trong Giỏ hàng", true);
+                return;
+            }
+
+            cart.push({
+                ...product,
+                title: cleanProductTitle(product.title || product.rawTitle)
+            });
+            saveCartToStorage();
+            showCenterCartPopup("Sản phẩm đã được thêm vào Giỏ hàng", false);
+        }
+
+        function removeFromCart(code) {
+            cart = cart.filter(item => item.code !== code);
+            saveCartToStorage();
+            updateCartUI();
+        }
+
+        function clearCart() {
+            cart = [];
+            activeVoucher = null;
+            saveCartToStorage();
+            updateCartUI();
+        }
+
+        function applyVoucher() {
+            const input = document.getElementById("voucher-input");
+            const msgEl = document.getElementById("voucher-message");
+            const res = evaluateVoucherForItems(input.value, cart);
+
+            msgEl.classList.remove("hidden", "text-emerald-600", "text-rose-600");
+            if (!res.valid) {
+                activeVoucher = null;
+                msgEl.textContent = res.message;
+                msgEl.classList.add("text-rose-600");
+            } else {
+                activeVoucher = res.code;
+                msgEl.textContent = res.message;
+                msgEl.classList.add("text-emerald-600");
+            }
+            updateCartUI();
+        }
+
+        function isValidVietnamPhone(phone) {
+            return /^0\d{9}$/.test(String(phone || "").trim());
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").trim());
+        }
+
+        function handlePhoneInput(el) {
+            el.value = el.value.replace(/\D/g, "").slice(0, 10);
+            const err = document.getElementById("phone-error-msg");
+            if (el.value.length > 0 && !isValidVietnamPhone(el.value)) {
+                err.classList.remove("hidden");
+            } else {
+                err.classList.add("hidden");
+            }
+            validateCartForm();
+        }
+
+        function handleEmailInput(el) {
+            const err = document.getElementById("email-error-msg");
+            if (el.value.length > 0 && !isValidEmail(el.value)) {
+                err.classList.remove("hidden");
+            } else {
+                err.classList.add("hidden");
+            }
+            validateCartForm();
+        }
+
+        function validateCartForm() {
+            const name = (document.getElementById("customer-name")?.value || "").trim();
+            const phone = (document.getElementById("customer-zalo")?.value || "").trim();
+            const school = (document.getElementById("customer-school")?.value || "").trim();
+            const email = (document.getElementById("customer-email")?.value || "").trim();
+            const btn = document.getElementById("checkout-btn");
+            if (!btn) return;
+
+            const isValid = cart.length > 0 && name.length >= 2 && isValidVietnamPhone(phone) && school.length >= 2 && isValidEmail(email);
+            btn.disabled = !isValid;
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById("cart-items-container");
+            const countEl = document.getElementById("cart-page-count");
+            const clearBtn = document.getElementById("clear-cart-btn");
+            if (!container) return;
+
+            if (countEl) countEl.textContent = cart.length;
+
+            if (cart.length === 0) {
+                if (clearBtn) clearBtn.classList.add("hidden");
+                container.innerHTML = `
+                    <div class="py-10 text-center space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto text-xl">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-slate-600">Giỏ tài liệu của thầy/cô đang trống.</p>
+                        <button type="button" onclick="switchTab('danh-muc')" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition-colors">
+                            Chọn tài liệu ngay
+                        </button>
+                    </div>
+                `;
+            } else {
+                if (clearBtn) clearBtn.classList.remove("hidden");
+                container.innerHTML = cart.map(item => `
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-4">
+                        <div class="min-w-0">
+                            <span class="text-xs font-extrabold text-blue-600">${item.code}</span>
+                            <div class="font-bold text-sm text-slate-900 truncate">${cleanProductTitle(item.title || item.rawTitle)}</div>
+                            <div class="text-xs font-extrabold text-blue-700 mt-1">${formatCurrency(item.price)}</div>
+                        </div>
+                        <button type="button" onclick="removeFromCart('${item.code}')" class="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-rose-50 hover:text-rose-600 text-slate-400 flex items-center justify-center shrink-0 transition-colors" title="Xóa">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </div>
+                `).join("");
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+            let discount = 0;
+
+            if (activeVoucher && cart.length > 0) {
+                const res = evaluateVoucherForItems(activeVoucher, cart);
+                if (res.valid) {
+                    discount = res.discount;
+                } else {
+                    activeVoucher = null;
+                }
+            }
+
+            const total = Math.max(0, subtotal - discount);
+
+            document.getElementById("cart-subtotal").textContent = formatCurrency(subtotal);
+            const discountRow = document.getElementById("voucher-discount-row");
+            if (discount > 0) {
+                discountRow.classList.remove("hidden");
+                document.getElementById("voucher-discount-label").textContent = `Mã ưu đãi (${activeVoucher}):`;
+                document.getElementById("voucher-discount-amount").textContent = `-${formatCurrency(discount)}`;
+            } else {
+                discountRow.classList.add("hidden");
+            }
+            document.getElementById("cart-total").textContent = formatCurrency(total);
+
+            validateCartForm();
+        }
+
+        // =========================================================================
+        // ĐẶT MUA NGAY TRỰC TIẾP & TẠO MÃ VIETQR (MB BANK 0338844985 - TRAN GIA BAO)
+        // =========================================================================
+        function buyNow(code) {
+            const product = products.find(p => p.code === code);
+            if (!product) return;
+
+            const cleanName = cleanProductTitle(product.title || product.rawTitle);
+            directBuyProduct = { ...product, title: cleanName };
+            directActiveVoucher = null;
+
+            document.getElementById("qr-order-subtitle").textContent = `${product.code} – ${cleanName}`;
+            document.getElementById("direct-buy-form").classList.remove("hidden");
+            document.getElementById("direct-voucher-input").value = "";
+            document.getElementById("direct-voucher-msg").classList.add("hidden");
+            document.getElementById("webhook-status-box").classList.add("hidden");
+
+            const submitBtn = document.getElementById("direct-submit-btn");
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i class="fa-solid fa-qrcode mr-1.5"></i>Xác nhận thông tin & Hiện mã QR`;
+
+            const savedName = document.getElementById("customer-name")?.value || "";
+            const savedZalo = document.getElementById("customer-zalo")?.value || "";
+            const savedSchool = document.getElementById("customer-school")?.value || "";
+            const savedEmail = document.getElementById("customer-email")?.value || "";
+
+            if (savedName) document.getElementById("direct-name").value = savedName;
+            if (savedZalo) document.getElementById("direct-zalo").value = savedZalo;
+            if (savedSchool) document.getElementById("direct-school").value = savedSchool;
+            if (savedEmail) document.getElementById("direct-email").value = savedEmail;
+
+            document.getElementById("qr-amount").textContent = formatCurrency(product.price);
+            document.getElementById("vietqr-img").src = "https://placehold.co/300x300/eff6ff/1d4ed8?text=Ma+QR+Thanh+Toan";
+            document.getElementById("qr-lock-overlay").classList.remove("hidden");
+
+            document.getElementById("checkout-modal").classList.remove("hidden");
+            document.body.classList.add("overflow-hidden");
+        }
+
+        function handleDirectPhoneInput(el) {
+            el.value = el.value.replace(/\D/g, "").slice(0, 10);
+            const err = document.getElementById("direct-phone-err");
+            if (el.value.length > 0 && !isValidVietnamPhone(el.value)) {
+                err.classList.remove("hidden");
+            } else {
+                err.classList.add("hidden");
+            }
+        }
+
+        function handleDirectEmailInput(el) {
+            const err = document.getElementById("direct-email-err");
+            if (el.value.length > 0 && !isValidEmail(el.value)) {
+                err.classList.remove("hidden");
+            } else {
+                err.classList.add("hidden");
+            }
+        }
+
+        function applyDirectVoucher() {
+            if (!directBuyProduct) return;
+            const codeInput = document.getElementById("direct-voucher-input").value;
+            const msgEl = document.getElementById("direct-voucher-msg");
+            const zalo = (document.getElementById("direct-zalo").value || "").trim();
+            const isUnlocked = document.getElementById("qr-lock-overlay").classList.contains("hidden");
+
+            const res = evaluateVoucherForItems(codeInput, [directBuyProduct]);
+            msgEl.classList.remove("hidden", "text-emerald-600", "text-rose-600");
+
+            if (!res.valid) {
+                directActiveVoucher = null;
+                msgEl.textContent = res.message;
+                msgEl.classList.add("text-rose-600");
+                document.getElementById("qr-amount").textContent = formatCurrency(directBuyProduct.price);
+                if (isUnlocked) {
+                    document.getElementById("vietqr-img").src = buildVietQrUrl(directBuyProduct.price, zalo);
+                }
+                return;
+            }
+
+            directActiveVoucher = res.code;
+            const finalPrice = Math.max(0, directBuyProduct.price - res.discount);
+            msgEl.textContent = res.message;
+            msgEl.classList.add("text-emerald-600");
+            document.getElementById("qr-amount").textContent = formatCurrency(finalPrice);
+
+            if (isUnlocked) {
+                document.getElementById("vietqr-img").src = buildVietQrUrl(finalPrice, zalo);
+            }
+        }
+
+        async function sendOrderToGoogleSheets(payload) {
+            const statusBox = document.getElementById("webhook-status-box");
+            if (statusBox) {
+                statusBox.classList.remove("hidden");
+                statusBox.textContent = "Đang ghi nhận thông tin đơn hàng lên hệ thống...";
+            }
+            try {
+                await fetch(SELLER_CONFIG.googleSheetWebhookUrl, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                if (statusBox) {
+                    statusBox.textContent = "✓ Hệ thống đã ghi nhận thông tin nhận Drive của thầy/cô!";
+                }
+            } catch (err) {
+                if (statusBox) {
+                    statusBox.textContent = "Đã tạo mã QR thanh toán. Nếu cần hỗ trợ cấp quyền nhanh, thầy/cô nhắn Zalo 0843 589 647.";
+                }
+            }
+        }
+
+        async function confirmDirectOrder() {
+            if (!directBuyProduct) return;
+
+            const name = (document.getElementById("direct-name").value || "").trim();
+            const zalo = (document.getElementById("direct-zalo").value || "").trim();
+            const school = (document.getElementById("direct-school").value || "").trim();
+            const email = (document.getElementById("direct-email").value || "").trim();
+
+            if (name.length < 2) {
+                showToast("Thầy/cô vui lòng nhập Họ và tên!");
+                document.getElementById("direct-name").focus();
+                return;
+            }
+            if (!isValidVietnamPhone(zalo)) {
+                document.getElementById("direct-phone-err").classList.remove("hidden");
+                document.getElementById("direct-zalo").focus();
+                return;
+            }
+            if (school.length < 2) {
+                showToast("Thầy/cô vui lòng nhập Tên trường đang dạy!");
+                document.getElementById("direct-school").focus();
+                return;
+            }
+            if (!isValidEmail(email)) {
+                document.getElementById("direct-email-err").classList.remove("hidden");
+                document.getElementById("direct-email").focus();
+                return;
+            }
+
+            let discount = 0;
+            if (directActiveVoucher) {
+                const vRes = evaluateVoucherForItems(directActiveVoucher, [directBuyProduct]);
+                if (vRes.valid) discount = vRes.discount;
+            }
+            const finalPrice = Math.max(0, directBuyProduct.price - discount);
+
+            const submitBtn = document.getElementById("direct-submit-btn");
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-check mr-1.5"></i>Đã xác nhận thông tin`;
+
+            document.getElementById("qr-lock-overlay").classList.add("hidden");
+            document.getElementById("qr-amount").textContent = formatCurrency(finalPrice);
+            document.getElementById("vietqr-img").src = buildVietQrUrl(finalPrice, zalo);
+
+            const orderCode = "TP" + Math.floor(100000 + Math.random() * 900000);
+            await sendOrderToGoogleSheets({
+                orderCode: orderCode,
+                teacherName: `${name} (${school})`,
+                teacherZalo: zalo,
+                teacherEmail: email,
+                sttList: directBuyProduct.code,
+                itemsDetail: `[${directBuyProduct.code}] ${directBuyProduct.title}`,
+                voucherUsed: directActiveVoucher || "Không",
+                finalTotal: finalPrice
+            });
+        }
+
+        async function openCheckoutModal() {
+            if (cart.length === 0) return;
+
+            const name = (document.getElementById("customer-name").value || "").trim();
+            const zalo = (document.getElementById("customer-zalo").value || "").trim();
+            const school = (document.getElementById("customer-school").value || "").trim();
+            const email = (document.getElementById("customer-email").value || "").trim();
+
+            if (!name || !isValidVietnamPhone(zalo) || !school || !isValidEmail(email)) {
+                showToast("Thầy/cô vui lòng điền đầy đủ thông tin nhận file!");
+                return;
+            }
+
+            directBuyProduct = null;
+            document.getElementById("direct-buy-form").classList.add("hidden");
+            document.getElementById("qr-lock-overlay").classList.add("hidden");
+
+            const subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+            let discount = 0;
+            if (activeVoucher) {
+                const vRes = evaluateVoucherForItems(activeVoucher, cart);
+                if (vRes.valid) discount = vRes.discount;
+            }
+            const finalTotal = Math.max(0, subtotal - discount);
+
+            const codesStr = cart.map(i => i.code).join(", ");
+            const detailsStr = cart.map(i => `[${i.code}] ${cleanProductTitle(i.title || i.rawTitle)}`).join(" | ");
+
+            document.getElementById("qr-order-subtitle").textContent = `Đơn gồm ${cart.length} tài liệu (${codesStr})`;
+            document.getElementById("qr-amount").textContent = formatCurrency(finalTotal);
+            document.getElementById("vietqr-img").src = buildVietQrUrl(finalTotal, zalo);
+
+            document.getElementById("checkout-modal").classList.remove("hidden");
+            document.body.classList.add("overflow-hidden");
+
+            const orderCode = "TP" + Math.floor(100000 + Math.random() * 900000);
+            await sendOrderToGoogleSheets({
+                orderCode: orderCode,
+                teacherName: `${name} (${school})`,
+                teacherZalo: zalo,
+                teacherEmail: email,
+                sttList: codesStr,
+                itemsDetail: detailsStr,
+                voucherUsed: activeVoucher || "Không",
+                finalTotal: finalTotal
+            });
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById("checkout-modal").classList.add("hidden");
+            document.body.classList.remove("overflow-hidden");
+        }
+
+        function completeOrder() {
+            closeCheckoutModal();
+            showToast("Cảm ơn thầy/cô! Quyền truy cập Drive sẽ được gửi qua Gmail.");
+        }
+
+        // =========================================================================
+        // KHỞI TẠO TRANG WEB
+        // =========================================================================
+        document.addEventListener("DOMContentLoaded", () => {
+            ["customer-name", "customer-school"].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener("input", validateCartForm);
+            });
+
+            loadCartFromStorage();
+            loadCachedData();
+            renderNewCarousel();
+            filterProducts();
+            fetchSheetData();
+        });
+    </script>
+</body>
+</html>
