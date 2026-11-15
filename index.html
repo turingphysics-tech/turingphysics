@@ -88,7 +88,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-10 items-center">
                     <!-- Cột trái: Giới thiệu Turing Physics -->
-                    <div class="lg:col-span-7 space-y-5 sm:space-y-6 min-w-0">
+                    <div id="hero-intro-col" class="lg:col-span-12 space-y-5 sm:space-y-6 min-w-0">
                         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-[11px] sm:text-xs font-bold leading-snug">
                             <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse shrink-0"></span>
                             <span>Cập nhật mới nhất năm học 2026 – 2027 (GDPT 2018 &amp; Luyện thi TNTHPT 2027)</span>
@@ -130,8 +130,8 @@
                         </div>
                     </div>
 
-                    <!-- Cột phải: Khung trình chiếu tự động lướt TÀI LIỆU MỚI NHẤT -->
-                    <div class="lg:col-span-5 w-full min-w-0">
+                    <!-- Cột phải: Khung trình chiếu tự động lướt TÀI LIỆU MỚI NHẤT (Chỉ hiện khi có tài liệu gắn (new)) -->
+                    <div id="new-docs-carousel-wrapper" class="hidden lg:col-span-5 w-full min-w-0">
                         <div id="new-docs-carousel-box" onmouseenter="pauseNewCarousel()" onmouseleave="resumeNewCarousel()" ontouchstart="pauseNewCarousel()" ontouchend="resumeNewCarousel()" class="bg-white rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50 p-4 sm:p-7 space-y-4 sm:space-y-5">
                             <div class="flex items-center justify-between gap-2 border-b border-slate-100 pb-3.5">
                                 <div class="flex items-center gap-2 min-w-0">
@@ -672,10 +672,10 @@
 
         // Dữ liệu dự phòng phong phú khi ngoại tuyến / bị chặn CORS
         const FALLBACK_PRODUCTS = [
-            { id: "VL10_01", code: "VL10_01", category: "K10", rawTitle: "DẠY THÊM VẬT LÝ KHỐI 10 – TRỌN BỘ CHƯƠNG TRÌNH MỚI (new)", title: "DẠY THÊM VẬT LÝ KHỐI 10 – TRỌN BỘ CHƯƠNG TRÌNH MỚI", isNew: true, previewUrl: "", price: 180000, comboItems: "", voucherCode: "", voucherDiscount: "" },
-            { id: "VL11_01", code: "VL11_01", category: "K11", rawTitle: "DẠY THÊM VẬT LÝ KHỐI 11 – CHUẨN CV 5512 & BÀI TẬP PHÂN DẠNG (new)", title: "DẠY THÊM VẬT LÝ KHỐI 11 – CHUẨN CV 5512 & BÀI TẬP PHÂN DẠNG", isNew: true, previewUrl: "", price: 180000, comboItems: "", voucherCode: "", voucherDiscount: "" },
-            { id: "VL12_01", code: "VL12_01", category: "K12", rawTitle: "DẠY THÊM VẬT LÝ KHỐI 12 – VẬT LÝ NHIỆT & KHÍ LÝ TƯỞNG (new)", title: "DẠY THÊM VẬT LÝ KHỐI 12 – VẬT LÝ NHIỆT & KHÍ LÝ TƯỞNG", isNew: true, previewUrl: "", price: 220000, comboItems: "", voucherCode: "", voucherDiscount: "" },
-            { id: "TN27_01", code: "TN27_01", category: "TN", rawTitle: "BỘ 50 ĐỀ LUYỆN THI TNTHPT VẬT LÝ 2027 CHUẨN CẤU TRÚC MỚI (new)", title: "BỘ 50 ĐỀ LUYỆN THI TNTHPT VẬT LÝ 2027 CHUẨN CẤU TRÚC MỚI", isNew: true, previewUrl: "", price: 250000, comboItems: "", voucherCode: "", voucherDiscount: "" },
+            { id: "VL10_01", code: "VL10_01", category: "K10", rawTitle: "DẠY THÊM VẬT LÝ KHỐI 10 – TRỌN BỘ CHƯƠNG TRÌNH MỚI", title: "DẠY THÊM VẬT LÝ KHỐI 10 – TRỌN BỘ CHƯƠNG TRÌNH MỚI", isNew: false, previewUrl: "", price: 180000, comboItems: "", voucherCode: "", voucherDiscount: "" },
+            { id: "VL11_01", code: "VL11_01", category: "K11", rawTitle: "DẠY THÊM VẬT LÝ KHỐI 11 – CHUẨN CV 5512 & BÀI TẬP PHÂN DẠNG", title: "DẠY THÊM VẬT LÝ KHỐI 11 – CHUẨN CV 5512 & BÀI TẬP PHÂN DẠNG", isNew: false, previewUrl: "", price: 180000, comboItems: "", voucherCode: "", voucherDiscount: "" },
+            { id: "VL12_01", code: "VL12_01", category: "K12", rawTitle: "DẠY THÊM VẬT LÝ KHỐI 12 – VẬT LÝ NHIỆT & KHÍ LÝ TƯỞNG", title: "DẠY THÊM VẬT LÝ KHỐI 12 – VẬT LÝ NHIỆT & KHÍ LÝ TƯỞNG", isNew: false, previewUrl: "", price: 220000, comboItems: "", voucherCode: "", voucherDiscount: "" },
+            { id: "TN27_01", code: "TN27_01", category: "TN", rawTitle: "BỘ 50 ĐỀ LUYỆN THI TNTHPT VẬT LÝ 2027 CHUẨN CẤU TRÚC MỚI", title: "BỘ 50 ĐỀ LUYỆN THI TNTHPT VẬT LÝ 2027 CHUẨN CẤU TRÚC MỚI", isNew: false, previewUrl: "", price: 250000, comboItems: "", voucherCode: "", voucherDiscount: "" },
             { id: "CB_01", code: "CB_01", category: "CB", rawTitle: "COMBO TRỌN BỘ DẠY THÊM VẬT LÝ 10 - 11 - 12", title: "COMBO TRỌN BỘ DẠY THÊM VẬT LÝ 10 - 11 - 12", isNew: false, previewUrl: "", price: 450000, comboItems: "VL10_01; VL11_01; VL12_01", voucherCode: "", voucherDiscount: "" },
             { id: "GA_01", code: "GA_01", category: "GA", rawTitle: "BỘ SLIDE POWERPOINT HIỆU ỨNG THÍ NGHIỆM VẬT LÝ THPT", title: "BỘ SLIDE POWERPOINT HIỆU ỨNG THÍ NGHIỆM VẬT LÝ THPT", isNew: false, previewUrl: "", price: 200000, comboItems: "", voucherCode: "", voucherDiscount: "" },
             { id: "LT_01", code: "LT_01", category: "LT", rawTitle: "CHUYÊN ĐỀ LUYỆN LÝ THUYẾT & CÂU HỎI ĐÚNG SAI VẬT LÝ 12", title: "CHUYÊN ĐỀ LUYỆN LÝ THUYẾT & CÂU HỎI ĐÚNG SAI VẬT LÝ 12", isNew: false, previewUrl: "", price: 160000, comboItems: "", voucherCode: "", voucherDiscount: "" }
@@ -690,21 +690,24 @@
         let directBuyProduct = null;
         let directActiveVoucher = null;
         let driveNavHistory = [];
-
+        let activeComboProduct = null;
+        let activeComboSubCode = null;
         // Trạng thái trình chiếu Tài Liệu Mới Nhất
         let newCarouselIndex = 0;
         let newCarouselTimer = null;
-        let isNewCarouselPaused = false;
+        let newCarouselPaused = false;
+        let centerPopupTimeout = null;
+        let toastTimeout = null;
 
         // =========================================================================
-        // HÀM LÀM SẠCH NHÃN (new) & TIỆN ÍCH ĐỊNH DẠNG
+        // CÁC HÀM TIỆN ÍCH CƠ BẢN & ĐIỀU HƯỚNG TAB
         // =========================================================================
-        function hasNewTag(rawTitle) {
-            return /\(\s*new\s*\)/i.test(String(rawTitle || ""));
+        function hasNewTag(title) {
+            return /\(new\)\s*$/i.test(String(title || "").trim());
         }
 
-        function cleanProductTitle(rawTitle) {
-            return String(rawTitle || "").replace(/\s*\(\s*new\s*\)\s*/gi, " ").replace(/\s+/g, " ").trim();
+        function cleanProductTitle(title) {
+            return String(title || "").replace(/\s*\(new\)\s*$/i, "").trim();
         }
 
         function formatCurrency(amount) {
@@ -712,91 +715,44 @@
             return num.toLocaleString("vi-VN") + "đ";
         }
 
-        function buildVietQrUrl(amount, transferNote) {
-            const params = new URLSearchParams();
-            params.set("amount", String(Math.max(0, Math.round(Number(amount) || 0))));
-            if (transferNote) params.set("addInfo", String(transferNote).trim());
-            if (SELLER_CONFIG.accountName) params.set("accountName", SELLER_CONFIG.accountName);
-            return `https://img.vietqr.io/image/${SELLER_CONFIG.bankId}-${SELLER_CONFIG.accountNo}-qr_only.png?${params.toString()}`;
-        }
-
-        function toggleFloatingContactButtons(hide) {
-            const floating = document.getElementById("floating-contact-buttons");
-            if (!floating) return;
-            if (hide) {
-                floating.classList.add("hidden");
-            } else {
-                floating.classList.remove("hidden");
-            }
-        }
-
-        function copyTextValue(text, successMsg) {
-            const tempInput = document.createElement("input");
-            tempInput.value = text;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand("copy");
-            document.body.removeChild(tempInput);
-            showToast(successMsg || "Đã sao chép!");
-        }
-
-        function showToast(message) {
-            const box = document.getElementById("toast-box");
-            const msg = document.getElementById("toast-message");
-            if (!box || !msg) return;
-            msg.textContent = message;
-            box.classList.remove("opacity-0", "translate-y-3");
-            clearTimeout(window._toastTimer);
-            window._toastTimer = setTimeout(() => {
-                box.classList.add("opacity-0", "translate-y-3");
-            }, 2600);
-        }
-
-        function showCenterCartPopup(message, isAlreadyAdded = false) {
-            const popup = document.getElementById("center-cart-popup");
-            const textEl = document.getElementById("center-popup-text");
-            const iconEl = document.getElementById("center-popup-icon");
-            if (!popup || !textEl || !iconEl) return;
-
-            textEl.textContent = message;
-            if (isAlreadyAdded) {
-                iconEl.className = "w-16 h-16 rounded-full bg-blue-500 text-white flex items-center justify-center text-3xl mb-4 shadow-lg shadow-blue-500/30";
-                iconEl.innerHTML = '<i class="fa-solid fa-cart-shopping"></i>';
-            } else {
-                iconEl.className = "w-16 h-16 rounded-full bg-emerald-500 text-white flex items-center justify-center text-3xl mb-4 shadow-lg shadow-emerald-500/30";
-                iconEl.innerHTML = '<i class="fa-solid fa-check"></i>';
-            }
-
-            popup.classList.remove("opacity-0", "scale-95");
-            popup.classList.add("opacity-100", "scale-100");
-
-            clearTimeout(window._centerPopupTimer);
-            window._centerPopupTimer = setTimeout(() => {
-                popup.classList.remove("opacity-100", "scale-100");
-                popup.classList.add("opacity-0", "scale-95");
-            }, 1500);
+        function getCategoryLabel(cat) {
+            const map = {
+                K10: "Khối 10",
+                K11: "Khối 11",
+                K12: "Khối 12",
+                TN: "Luyện Thi TNTHPT",
+                CB: "Combo",
+                GA: "PPT & Giáo Án",
+                LT: "Chuyên Luyện Lý Thuyết"
+            };
+            return map[String(cat || "").toUpperCase()] || "Tài Liệu Vật Lý";
         }
 
         function switchTab(tabId) {
-            document.getElementById("cart-page-view").classList.add("hidden");
-            document.getElementById("main-store-view").classList.remove("hidden");
+            const mainView = document.getElementById("main-store-view");
+            const cartView = document.getElementById("cart-page-view");
+            if (cartView) cartView.classList.add("hidden");
+            if (mainView) mainView.classList.remove("hidden");
 
             document.querySelectorAll(".tab-page-section").forEach(sec => {
-                sec.classList.add("hidden");
+                if (sec.id === tabId) {
+                    sec.classList.remove("hidden");
+                } else {
+                    sec.classList.add("hidden");
+                }
             });
 
-            const target = document.getElementById(tabId);
-            if (target) {
-                target.classList.remove("hidden");
-            }
-
             document.querySelectorAll(".main-nav-tab").forEach(btn => {
-                if (btn.dataset.tab === tabId) {
-                    btn.classList.remove("text-slate-600", "hover:text-blue-600", "hover:bg-slate-100/80", "font-semibold");
-                    btn.classList.add("bg-blue-50", "text-blue-700", "font-bold");
+                const isActive = btn.getAttribute("data-tab") === tabId;
+                const isMobile = btn.classList.contains("text-xs");
+                if (isMobile) {
+                    btn.className = isActive
+                        ? "main-nav-tab shrink-0 px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold transition-all"
+                        : "main-nav-tab shrink-0 px-2.5 py-1.5 rounded-lg text-slate-600 text-xs font-semibold transition-all";
                 } else {
-                    btn.classList.remove("bg-blue-50", "text-blue-700", "font-bold");
-                    btn.classList.add("text-slate-600", "hover:text-blue-600", "hover:bg-slate-100/80", "font-semibold");
+                    btn.className = isActive
+                        ? "main-nav-tab px-4 py-2 rounded-xl bg-blue-50 text-blue-700 font-bold transition-all"
+                        : "main-nav-tab px-4 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-slate-100/80 transition-all";
                 }
             });
 
@@ -804,168 +760,121 @@
         }
 
         function showCartView() {
-            document.getElementById("main-store-view").classList.add("hidden");
-            document.getElementById("cart-page-view").classList.remove("hidden");
+            const mainView = document.getElementById("main-store-view");
+            const cartView = document.getElementById("cart-page-view");
+            if (mainView) mainView.classList.add("hidden");
+            if (cartView) cartView.classList.remove("hidden");
+
             document.querySelectorAll(".main-nav-tab").forEach(btn => {
-                btn.classList.remove("bg-blue-50", "text-blue-700", "font-bold");
-                btn.classList.add("text-slate-600", "font-semibold");
+                const isMobile = btn.classList.contains("text-xs");
+                btn.className = isMobile
+                    ? "main-nav-tab shrink-0 px-2.5 py-1.5 rounded-lg text-slate-600 text-xs font-semibold transition-all"
+                    : "main-nav-tab px-4 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-slate-100/80 transition-all";
             });
+
             updateCartUI();
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
 
-        // =========================================================================
-        // CHUẨN HÓA NHÓM & TẢI DỮ LIỆU TỪ GOOGLE SHEETS
-        // =========================================================================
-        function normalizeCategory(rawCat) {
-            const val = String(rawCat || "")
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .trim()
-                .toUpperCase();
-
-            if (val.includes("10")) return "K10";
-            if (val.includes("11")) return "K11";
-            if (val.includes("12")) return "K12";
-            if (val === "TN" || val.includes("TNTHPT") || val.includes("LUYEN THI")) return "TN";
-            if (val === "CB" || val.includes("COMBO")) return "CB";
-            if (val === "GA" || val.includes("PPT") || val.includes("GIAO AN")) return "GA";
-            if (val === "LT" || val.includes("LY THUYET")) return "LT";
-            return "K10";
+        function toggleFloatingContactButtons(hide) {
+            const box = document.getElementById("floating-contact-buttons");
+            if (!box) return;
+            if (hide) {
+                box.classList.add("opacity-0", "pointer-events-none");
+            } else {
+                box.classList.remove("opacity-0", "pointer-events-none");
+            }
         }
 
-        function getCategoryLabel(catCode) {
-            const map = {
-                "K10": "Khối 10",
-                "K11": "Khối 11",
-                "K12": "Khối 12",
-                "TN": "Luyện Thi TNTHPT",
-                "CB": "Combo",
-                "GA": "PPT & Giáo Án",
-                "LT": "Chuyên Luyện Lý Thuyết"
-            };
-            return map[catCode] || "Tài Liệu Vật Lý";
+        function buildVietQrUrl(amount, info) {
+            const safeAmount = Math.max(0, Math.round(Number(amount) || 0));
+            return `https://img.vietqr.io/image/${SELLER_CONFIG.bankId}-${SELLER_CONFIG.accountNo}-qr_only.png?amount=${safeAmount}&addInfo=${encodeURIComponent(info)}&accountName=${encodeURIComponent(SELLER_CONFIG.accountName)}`;
         }
 
-        function getCategoryBannerTitle(catCode) {
-            const titles = {
-                "K10": "DẠY THÊM KHỐI 10",
-                "K11": "DẠY THÊM KHỐI 11",
-                "K12": "DẠY THÊM KHỐI 12",
-                "TN": "LUYỆN THI TNTHPT",
-                "CB": "COMBO TÀI LIỆU TIẾT KIỆM",
-                "GA": "PPT & GIÁO ÁN CHUẨN",
-                "LT": "CHUYÊN LUYỆN LÝ THUYẾT"
-            };
-            return titles[catCode] || "KHO TÀI LIỆU VẬT LÝ";
-        }
-
-        function resolveComboItems(comboItemsStr) {
-            if (!comboItemsStr) return [];
-            const codes = String(comboItemsStr)
-                .split(/[;,|]+/)
-                .map(c => c.trim().toUpperCase())
-                .filter(Boolean);
-            return codes.map(code => {
-                const found = products.find(p => String(p.code || "").trim().toUpperCase() === code);
-                if (found) {
-                    return {
-                        code: found.code,
-                        title: cleanProductTitle(found.title || found.rawTitle),
-                        previewUrl: found.previewUrl || ""
-                    };
-                }
-                return { code: code, title: "Tài liệu thành phần trong Combo", previewUrl: "" };
-            });
-        }
-
-        function loadCachedData() {
+        function copyTextValue(text, successMsg) {
+            const temp = document.createElement("textarea");
+            temp.value = text;
+            temp.style.position = "fixed";
+            temp.style.opacity = "0";
+            document.body.appendChild(temp);
+            temp.select();
             try {
-                const cachedP = localStorage.getItem(PRODUCTS_CACHE_KEY);
-                const cachedV = localStorage.getItem(VOUCHERS_CACHE_KEY);
-                if (cachedP !== null) {
-                    products = JSON.parse(cachedP) || [];
-                } else {
-                    products = [...FALLBACK_PRODUCTS];
-                }
-                if (cachedV !== null) {
-                    globalVouchers = JSON.parse(cachedV) || [];
-                }
+                document.execCommand("copy");
+                showToast(successMsg || "Đã sao chép!");
             } catch (e) {
-                products = [];
-                globalVouchers = [];
+                showToast("Không thể sao chép tự động.");
             }
+            document.body.removeChild(temp);
         }
 
-        async function fetchSheetData() {
-            const loadingEl = document.getElementById("loading-state");
-            if (products.length === 0 && loadingEl) {
-                loadingEl.classList.remove("hidden");
+        function showToast(message) {
+            const box = document.getElementById("toast-box");
+            const msgEl = document.getElementById("toast-message");
+            if (!box || !msgEl) return;
+            msgEl.textContent = message;
+            box.classList.remove("opacity-0", "translate-y-3");
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                box.classList.add("opacity-0", "translate-y-3");
+            }, 2500);
+        }
+
+        function showCenterCartPopup(message, isAlreadyAdded) {
+            const popup = document.getElementById("center-cart-popup");
+            const iconBox = document.getElementById("center-popup-icon");
+            const textEl = document.getElementById("center-popup-text");
+            if (!popup || !iconBox || !textEl) return;
+
+            textEl.textContent = message;
+            if (isAlreadyAdded) {
+                iconBox.className = "w-16 h-16 rounded-full bg-amber-500 text-white flex items-center justify-center text-3xl mb-4 shadow-lg shadow-amber-500/30";
+                iconBox.innerHTML = `<i class="fa-solid fa-info"></i>`;
+            } else {
+                iconBox.className = "w-16 h-16 rounded-full bg-emerald-500 text-white flex items-center justify-center text-3xl mb-4 shadow-lg shadow-emerald-500/30";
+                iconBox.innerHTML = `<i class="fa-solid fa-check"></i>`;
             }
 
-            try {
-                const separator = SELLER_CONFIG.googleSheetWebhookUrl.includes("?") ? "&" : "?";
-                const res = await fetch(`${SELLER_CONFIG.googleSheetWebhookUrl}${separator}t=${Date.now()}`);
-                const data = await res.json();
-                if (data && data.status === "success" && Array.isArray(data.products)) {
-                    products = data.products.map((item, idx) => {
-                        const rawTitle = String(item.title || "").trim();
-                        return {
-                            id: item.code || ("DOC-" + (idx + 1)),
-                            code: String(item.code || ("DOC-" + (idx + 1))).trim(),
-                            category: normalizeCategory(item.category),
-                            rawTitle: rawTitle,
-                            title: cleanProductTitle(rawTitle),
-                            isNew: hasNewTag(rawTitle),
-                            previewUrl: String(item.previewUrl || item.sampleContent || "").trim(),
-                            price: Number(item.price) || 0,
-                            comboItems: String(item.comboItems || "").trim(),
-                            voucherCode: String(item.voucherCode || "").trim().toUpperCase(),
-                            voucherDiscount: String(item.voucherDiscount || "").trim()
-                        };
-                    });
-                    globalVouchers = Array.isArray(data.globalVouchers) ? data.globalVouchers : [];
+            popup.classList.remove("opacity-0", "scale-95");
+            popup.classList.add("opacity-100", "scale-100");
 
-                    localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify(products));
-                    localStorage.setItem(VOUCHERS_CACHE_KEY, JSON.stringify(globalVouchers));
-                }
-            } catch (err) {
-                console.warn("Đang sử dụng dữ liệu bộ nhớ tạm:", err);
-                if (localStorage.getItem(PRODUCTS_CACHE_KEY) === null && products.length === 0) {
-                    products = [...FALLBACK_PRODUCTS];
-                }
-            } finally {
-                if (loadingEl) loadingEl.classList.add("hidden");
-                renderNewCarousel();
-                filterProducts();
-                updateCartUI();
-            }
+            if (centerPopupTimeout) clearTimeout(centerPopupTimeout);
+            centerPopupTimeout = setTimeout(() => {
+                popup.classList.remove("opacity-100", "scale-100");
+                popup.classList.add("opacity-0", "scale-95");
+            }, 1500);
         }
 
         // =========================================================================
-        // TRÌNH CHIẾU TỰ ĐỘNG LƯỚT "TÀI LIỆU MỚI NHẤT" Ở TRANG GIỚI THIỆU
+        // TRÌNH CHIẾU TỰ ĐỘNG TÀI LIỆU MỚI NHẤT (CHỈ HIỆN KHI CÓ GẮN NHÃN (new))
         // =========================================================================
-        function getNewProductsList() {
-            const tagged = products.filter(p => p.isNew || hasNewTag(p.rawTitle));
-            if (tagged.length > 0) return tagged;
-            return products.slice(-5).reverse();
+        function getNewDocuments() {
+            return products.filter(p => hasNewTag(p.rawTitle));
         }
 
         function renderNewCarousel() {
-            const slideBox = document.getElementById("new-carousel-slide");
-            const dotsBox = document.getElementById("new-carousel-dots");
-            if (!slideBox || !dotsBox) return;
+            const wrapperEl = document.getElementById("new-docs-carousel-wrapper");
+            const heroColEl = document.getElementById("hero-intro-col");
+            const slideEl = document.getElementById("new-carousel-slide");
+            const dotsEl = document.getElementById("new-carousel-dots");
+            if (!slideEl || !dotsEl) return;
 
-            const list = getNewProductsList();
+            const list = getNewDocuments();
             if (list.length === 0) {
-                slideBox.innerHTML = `
-                    <div class="py-10 text-center space-y-2">
-                        <p class="text-sm font-semibold text-slate-600">Đang cập nhật các bộ học liệu mới nhất...</p>
-                        <button type="button" onclick="switchTab('danh-muc')" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold">Mở Kho Tài Liệu</button>
-                    </div>
-                `;
-                dotsBox.innerHTML = "";
+                if (wrapperEl) wrapperEl.classList.add("hidden");
+                if (heroColEl) {
+                    heroColEl.classList.remove("lg:col-span-7");
+                    heroColEl.classList.add("lg:col-span-12");
+                }
+                slideEl.innerHTML = "";
+                dotsEl.innerHTML = "";
+                stopNewCarouselTimer();
                 return;
+            }
+
+            if (wrapperEl) wrapperEl.classList.remove("hidden");
+            if (heroColEl) {
+                heroColEl.classList.remove("lg:col-span-12");
+                heroColEl.classList.add("lg:col-span-7");
             }
 
             if (newCarouselIndex >= list.length) newCarouselIndex = 0;
@@ -974,35 +883,33 @@
             const item = list[newCarouselIndex];
             const cleanName = cleanProductTitle(item.title || item.rawTitle);
 
-            slideBox.innerHTML = `
-                <div class="animate-fade-in rounded-2xl bg-slate-50/90 border border-slate-200/90 p-4 sm:p-5 space-y-4">
+            slideEl.innerHTML = `
+                <div class="p-4 sm:p-5 rounded-2xl bg-slate-50/90 border border-blue-100 space-y-4 animate-fade-in">
                     <div class="flex items-center justify-between gap-2 flex-wrap">
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-0.5 rounded-full bg-rose-500 text-white font-extrabold text-[11px] tracking-wide">MỚI</span>
-                            <span class="px-3 py-0.5 rounded-full bg-white border border-slate-200 text-slate-700 font-bold text-xs">${getCategoryLabel(item.category)}</span>
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2.5 py-0.5 rounded-full bg-rose-500 text-white text-[11px] font-extrabold uppercase">MỚI</span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-slate-700 text-[11px] font-bold">${getCategoryLabel(item.category)}</span>
                         </div>
-                        <span class="px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 font-extrabold text-sm">${formatCurrency(item.price)}</span>
+                        <span class="px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 font-extrabold text-xs sm:text-sm">${formatCurrency(item.price)}</span>
                     </div>
 
                     <div>
-                        <span class="text-xs font-extrabold text-blue-600 block mb-1">${item.code}</span>
-                        <h3 class="font-extrabold text-sm sm:text-lg text-slate-900 uppercase leading-snug line-clamp-2">
-                            ${cleanName}
-                        </h3>
+                        <span class="text-xs font-extrabold text-blue-600 block">${item.code}</span>
+                        <h3 class="font-extrabold text-sm sm:text-base text-slate-900 uppercase leading-snug mt-1 line-clamp-2">${cleanName}</h3>
                     </div>
 
                     <div class="space-y-2 pt-1">
-                        <div class="grid grid-cols-2 gap-2.5">
-                            <button type="button" onclick="openPreviewModal('${item.code}')" class="py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5">
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button" onclick="openPreviewModal('${item.code}')" class="py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 font-bold text-xs transition-colors flex items-center justify-center gap-1.5">
                                 <i class="fa-solid fa-eye text-slate-600"></i>
                                 <span>Xem Thử</span>
                             </button>
-                            <button type="button" onclick="buyNow('${item.code}')" class="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-colors flex items-center justify-center gap-1.5">
+                            <button type="button" onclick="buyNow('${item.code}')" class="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm transition-colors flex items-center justify-center gap-1.5">
                                 <i class="fa-solid fa-cart-shopping"></i>
                                 <span>Đặt Mua Ngay</span>
                             </button>
                         </div>
-                        <button type="button" onclick="addToCart('${item.code}')" class="w-full py-2.5 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5">
+                        <button type="button" onclick="addToCart('${item.code}')" class="w-full py-2.5 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 font-bold text-xs transition-colors flex items-center justify-center gap-1.5">
                             <i class="fa-solid fa-cart-plus"></i>
                             <span>Thêm vào giỏ hàng</span>
                         </button>
@@ -1010,131 +917,225 @@
                 </div>
             `;
 
-            dotsBox.innerHTML = list.map((_, idx) => `
-                <button type="button" onclick="goToNewSlide(${idx})" aria-label="Chuyển tới tài liệu ${idx + 1}" class="h-2 rounded-full transition-all ${idx === newCarouselIndex ? "w-6 bg-blue-600" : "w-2 bg-slate-300 hover:bg-slate-400"}"></button>
+            dotsEl.innerHTML = list.map((_, idx) => `
+                <button type="button" onclick="goToNewSlide(${idx})" aria-label="Tài liệu mới ${idx + 1}" class="h-2 rounded-full transition-all ${idx === newCarouselIndex ? "w-6 bg-blue-600" : "w-2 bg-slate-300 hover:bg-slate-400"}"></button>
             `).join("");
 
-            startNewCarouselAutoPlay();
+            startNewCarouselTimer();
         }
 
-        function startNewCarouselAutoPlay() {
-            clearInterval(newCarouselTimer);
-            const list = getNewProductsList();
+        function startNewCarouselTimer() {
+            stopNewCarouselTimer();
+            const list = getNewDocuments();
             if (list.length <= 1) return;
             newCarouselTimer = setInterval(() => {
-                if (!isNewCarouselPaused) {
+                if (!newCarouselPaused) {
                     newCarouselIndex = (newCarouselIndex + 1) % list.length;
                     renderNewCarousel();
                 }
             }, 3500);
         }
 
+        function stopNewCarouselTimer() {
+            if (newCarouselTimer) {
+                clearInterval(newCarouselTimer);
+                newCarouselTimer = null;
+            }
+        }
+
         function pauseNewCarousel() {
-            isNewCarouselPaused = true;
+            newCarouselPaused = true;
         }
 
         function resumeNewCarousel() {
-            isNewCarouselPaused = false;
+            newCarouselPaused = false;
         }
 
         function nextNewSlide() {
-            const list = getNewProductsList();
+            const list = getNewDocuments();
             if (list.length === 0) return;
             newCarouselIndex = (newCarouselIndex + 1) % list.length;
             renderNewCarousel();
         }
 
         function prevNewSlide() {
-            const list = getNewProductsList();
+            const list = getNewDocuments();
             if (list.length === 0) return;
             newCarouselIndex = (newCarouselIndex - 1 + list.length) % list.length;
             renderNewCarousel();
         }
 
-        function goToNewSlide(idx) {
-            newCarouselIndex = idx;
+        function goToNewSlide(index) {
+            newCarouselIndex = index;
             renderNewCarousel();
         }
 
         // =========================================================================
-        // CHỌN CHUYÊN MỤC & TỰ ĐỘNG CUỘN THANH CHUYÊN MỤC LÊN ĐẦU TRANG
+        // ĐỒNG BỘ DỮ LIỆU TỪ GOOGLE SHEETS
         // =========================================================================
+        function normalizeProductRow(raw) {
+            const code = String(raw.code || raw.id || "").trim();
+            const rawTitle = String(raw.title || raw.name || "").trim();
+            const isNew = Boolean(raw.isNew) || hasNewTag(rawTitle);
+            return {
+                id: code,
+                code: code,
+                category: String(raw.category || "K10").trim().toUpperCase(),
+                rawTitle: rawTitle,
+                title: cleanProductTitle(rawTitle),
+                isNew: isNew,
+                previewUrl: String(raw.previewUrl || raw.preview || "").trim(),
+                price: Number(String(raw.price || "0").replace(/[^\d]/g, "")) || 0,
+                comboItems: String(raw.comboItems || raw.combo || "").trim(),
+                voucherCode: String(raw.voucherCode || "").trim(),
+                voucherDiscount: String(raw.voucherDiscount || "").trim()
+            };
+        }
+
+        function loadCachedData() {
+            try {
+                const cachedProducts = localStorage.getItem(PRODUCTS_CACHE_KEY);
+                const cachedVouchers = localStorage.getItem(VOUCHERS_CACHE_KEY);
+                if (cachedProducts !== null) {
+                    const parsed = JSON.parse(cachedProducts);
+                    products = Array.isArray(parsed) ? parsed.map(normalizeProductRow) : [];
+                } else {
+                    products = FALLBACK_PRODUCTS.map(normalizeProductRow);
+                }
+                if (cachedVouchers !== null) {
+                    globalVouchers = JSON.parse(cachedVouchers) || [];
+                }
+            } catch (e) {
+                products = FALLBACK_PRODUCTS.map(normalizeProductRow);
+                globalVouchers = [];
+            }
+        }
+
+        async function fetchSheetData() {
+            const loadingEl = document.getElementById("loading-state");
+            if (loadingEl && products.length === 0) loadingEl.classList.remove("hidden");
+
+            try {
+                const url = `${SELLER_CONFIG.googleSheetWebhookUrl}?action=getProducts&t=${Date.now()}`;
+                const res = await fetch(url);
+                const data = await res.json();
+
+                if (data && data.status === "success" && Array.isArray(data.products)) {
+                    products = data.products
+                        .map(normalizeProductRow)
+                        .filter(item => item.code && item.title);
+                    globalVouchers = Array.isArray(data.vouchers) ? data.vouchers : [];
+
+                    try {
+                        localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify(products));
+                        localStorage.setItem(VOUCHERS_CACHE_KEY, JSON.stringify(globalVouchers));
+                    } catch (e) {}
+
+                    renderNewCarousel();
+                    filterProducts();
+                }
+            } catch (err) {
+                if (products.length === 0) {
+                    products = FALLBACK_PRODUCTS.map(normalizeProductRow);
+                    renderNewCarousel();
+                    filterProducts();
+                }
+            } finally {
+                if (loadingEl) loadingEl.classList.add("hidden");
+            }
+        }
+
+        // =========================================================================
+        // LỌC CHUYÊN MỤC, TÌM KIẾM & HIỂN THỊ THẺ TÀI LIỆU
+        // =========================================================================
+        function resolveComboItems(comboStr) {
+            if (!comboStr) return [];
+            const codes = String(comboStr)
+                .split(/[,;|]+/)
+                .map(c => c.trim().toUpperCase())
+                .filter(Boolean);
+
+            return codes.map(code => {
+                const found = products.find(p => p.code.toUpperCase() === code);
+                if (found) {
+                    return {
+                        code: found.code,
+                        title: cleanProductTitle(found.title || found.rawTitle),
+                        previewUrl: found.previewUrl
+                    };
+                }
+                return { code: code, title: `Tài liệu mã ${code}`, previewUrl: "" };
+            });
+        }
+
         function selectCategory(cat) {
             currentCategory = cat;
 
-            const titleEl = document.getElementById("category-display-title");
-            if (titleEl) {
-                titleEl.textContent = getCategoryBannerTitle(cat);
+            const bar = document.getElementById("categoryBar");
+            if (bar) {
+                bar.querySelectorAll(".cat-btn").forEach(btn => {
+                    const isSelected = btn.getAttribute("data-cat") === cat;
+                    if (isSelected) {
+                        btn.className = "cat-btn shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold bg-blue-600 text-white shadow-lg shadow-blue-600/30 transition-all";
+                        const targetLeft = btn.offsetLeft - (bar.clientWidth / 2) + (btn.offsetWidth / 2);
+                        bar.scrollTo({ left: Math.max(0, targetLeft), behavior: "smooth" });
+                    } else {
+                        btn.className = "cat-btn shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-white text-slate-700 border border-slate-200/90 hover:border-blue-400 hover:text-blue-600 shadow-sm transition-all";
+                    }
+                });
             }
 
-            // Cập nhật trạng thái nút đang chọn
-            document.querySelectorAll(".cat-btn").forEach(btn => {
-                if (btn.dataset.cat === cat) {
-                    btn.classList.remove("bg-white", "text-slate-700", "border", "border-slate-200/90", "hover:border-blue-400", "hover:text-blue-600", "shadow-sm", "font-semibold");
-                    btn.classList.add("bg-blue-600", "text-white", "shadow-lg", "shadow-blue-600/30", "font-bold");
-                } else {
-                    btn.classList.remove("bg-blue-600", "text-white", "shadow-lg", "shadow-blue-600/30", "font-bold");
-                    btn.classList.add("bg-white", "text-slate-700", "border", "border-slate-200/90", "hover:border-blue-400", "hover:text-blue-600", "shadow-sm", "font-semibold");
-                }
-            });
+            const titleEl = document.getElementById("category-display-title");
+            if (titleEl) titleEl.textContent = getCategoryLabel(cat).toUpperCase();
 
             filterProducts();
 
-            // 1. Cuộn ngang riêng thanh #categoryBar để căn giữa nút vừa bấm trên điện thoại
-            const navContainer = document.getElementById("categoryBar");
-            const activeBtn = navContainer ? navContainer.querySelector(`[data-cat="${cat}"]`) : null;
-            if (navContainer && activeBtn) {
-                const targetLeft = activeBtn.offsetLeft - (navContainer.clientWidth / 2) + (activeBtn.offsetWidth / 2);
-                navContainer.scrollTo({ left: Math.max(0, targetLeft), behavior: "smooth" });
+            const anchor = document.getElementById("category-bar-anchor");
+            const header = document.querySelector("header");
+            if (anchor && header) {
+                const targetY = anchor.getBoundingClientRect().top + window.scrollY - header.offsetHeight;
+                window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
             }
-
-            // 2. Cuộn dọc trang lên đúng vị trí đưa thanh Khối 10, Khối 11... nằm sát ngay dưới Header (đẩy ô tìm kiếm khuất lên trên)
-            setTimeout(() => {
-                const categoryBar = document.getElementById("category-bar-anchor");
-                const headerEl = document.querySelector("header");
-                if (categoryBar && headerEl) {
-                    const headerHeight = headerEl.offsetHeight;
-                    const barTop = categoryBar.getBoundingClientRect().top + window.pageYOffset;
-                    window.scrollTo({ top: Math.max(0, barTop - headerHeight), behavior: "smooth" });
-                }
-            }, 30);
         }
 
         function filterProducts() {
-            const keyword = (document.getElementById("search-input")?.value || "").trim().toLowerCase();
-            const filtered = products.filter(p => {
-                const cleanName = cleanProductTitle(p.title || p.rawTitle);
-                const matchCat = p.category === currentCategory;
-                const matchKey = !keyword || cleanName.toLowerCase().includes(keyword) || p.code.toLowerCase().includes(keyword);
-                return matchCat && matchKey;
-            });
-            renderProducts(filtered);
-        }
-
-        function renderProducts(list) {
             const grid = document.getElementById("products-grid");
             if (!grid) return;
 
-            if (!list || list.length === 0) {
+            const query = (document.getElementById("search-input")?.value || "").trim().toLowerCase();
+
+            const filtered = products.filter(p => {
+                if (query) {
+                    const hay = `${p.code} ${p.title} ${p.rawTitle}`.toLowerCase();
+                    return hay.includes(query);
+                }
+                return p.category === currentCategory;
+            });
+
+            if (filtered.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-slate-200/80 p-6">
-                        <p class="text-sm font-semibold text-slate-500">Chưa có tài liệu nào phù hợp trong mục này.</p>
+                    <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-slate-200 p-6">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3 text-xl">
+                            <i class="fa-solid fa-folder-open"></i>
+                        </div>
+                        <p class="text-sm sm:text-base font-bold text-slate-700">Chưa có tài liệu nào trong mục này.</p>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">Thầy/cô vui lòng chọn chuyên mục khác hoặc xóa từ khóa tìm kiếm nhé!</p>
                     </div>
                 `;
                 return;
             }
 
-            grid.innerHTML = list.map(p => {
+            grid.innerHTML = filtered.map(p => {
                 const cleanName = cleanProductTitle(p.title || p.rawTitle);
                 const comboList = p.category === "CB" ? resolveComboItems(p.comboItems) : [];
                 const comboHtml = comboList.length > 0 ? `
-                    <div class="mt-3 pt-3 border-t border-slate-100 space-y-1.5">
-                        <div class="text-[11px] font-bold uppercase tracking-wider text-blue-600">Bao gồm các tài liệu:</div>
-                        <ul class="space-y-1 text-xs text-slate-600">
+                    <div class="mt-4 pt-3.5 border-t border-slate-200 space-y-2">
+                        <div class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-900">Bao gồm các tài liệu:</div>
+                        <ul class="space-y-2 text-sm sm:text-[15px] font-bold text-slate-900 leading-snug">
                             ${comboList.map(item => `
-                                <li class="flex items-start gap-1.5">
-                                    <i class="fa-solid fa-circle-check text-blue-500 mt-0.5 shrink-0"></i>
-                                    <span><strong class="text-slate-800">[${item.code}]</strong> ${item.title}</span>
+                                <li class="flex items-start gap-2 text-slate-900">
+                                    <i class="fa-solid fa-circle-check text-slate-900 mt-1 shrink-0"></i>
+                                    <span class="text-slate-900 font-bold">[${item.code}] ${item.title}</span>
                                 </li>
                             `).join("")}
                         </ul>
@@ -1207,32 +1208,17 @@
             document.getElementById("preview-title").textContent = cleanName;
             document.getElementById("preview-price").textContent = formatCurrency(product.price);
 
-            const body = document.getElementById("preview-body");
             driveNavHistory = [];
+            activeComboProduct = null;
+            activeComboSubCode = null;
 
             if (product.category === "CB") {
                 const comboList = resolveComboItems(product.comboItems);
                 if (comboList.length > 0) {
-                    body.innerHTML = `
-                        <div class="space-y-3">
-                            <p class="text-sm font-semibold text-slate-700">Bộ Combo bao gồm các tài liệu sau. Thầy/cô bấm vào từng tài liệu để xem thử trực tiếp:</p>
-                            <div class="space-y-2.5">
-                                ${comboList.map(item => `
-                                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                                        <div class="min-w-0">
-                                            <span class="text-xs font-extrabold text-blue-600">${item.code}</span>
-                                            <div class="font-bold text-sm text-slate-900 break-words">${item.title}</div>
-                                        </div>
-                                        ${item.previewUrl ? `
-                                            <button type="button" onclick="previewDriveUrl('${encodeURIComponent(item.previewUrl)}', '${encodeURIComponent(item.title)}')" class="shrink-0 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
-                                                <i class="fa-solid fa-eye mr-1"></i>Xem thử bộ này
-                                            </button>
-                                        ` : `<span class="text-xs text-slate-400 italic">Đang cập nhật link xem thử</span>`}
-                                    </div>
-                                `).join("")}
-                            </div>
-                        </div>
-                    `;
+                    activeComboProduct = product;
+                    const firstWithUrl = comboList.find(i => i.previewUrl) || comboList[0];
+                    activeComboSubCode = firstWithUrl.code;
+                    renderComboPreviewLayout(product, firstWithUrl.previewUrl, firstWithUrl.title);
                 } else {
                     renderDrivePreviewInBody(product.previewUrl, cleanName);
                 }
@@ -1245,20 +1231,63 @@
             document.body.classList.add("overflow-hidden");
         }
 
-        function previewDriveUrl(encodedUrl, encodedTitle) {
-            const url = decodeURIComponent(encodedUrl);
-            const title = decodeURIComponent(encodedTitle);
+        function getComboHeaderHtml(product) {
+            const comboList = resolveComboItems(product.comboItems);
+            return `
+                <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+                    <div class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-900">
+                        Danh sách tài liệu trong Combo (bấm để chuyển xem trực tiếp):
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        ${comboList.map(item => {
+                            const isSelected = item.code === activeComboSubCode;
+                            return `
+                                <button type="button" onclick="selectComboSubItem('${item.code}')" class="p-3 rounded-xl border text-left transition-all flex items-center justify-between gap-2.5 ${isSelected ? "bg-blue-600 border-blue-600 text-white shadow-sm" : "bg-white hover:bg-slate-100 border-slate-200 text-slate-900"}">
+                                    <div class="min-w-0">
+                                        <div class="text-xs sm:text-sm font-extrabold truncate ${isSelected ? "text-white" : "text-slate-900"}">[${item.code}] ${item.title}</div>
+                                    </div>
+                                    <span class="shrink-0 text-xs font-bold px-2.5 py-1 rounded-lg ${isSelected ? "bg-white/20 text-white" : "bg-slate-100 text-slate-900"}">
+                                        ${isSelected ? "Đang xem" : "Xem thử"}
+                                    </span>
+                                </button>
+                            `;
+                        }).join("")}
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectComboSubItem(subCode) {
+            if (!activeComboProduct) return;
+            const comboList = resolveComboItems(activeComboProduct.comboItems);
+            const found = comboList.find(i => i.code === subCode);
+            if (!found) return;
+            activeComboSubCode = found.code;
             driveNavHistory = [];
-            renderDrivePreviewInBody(url, title);
+            renderComboPreviewLayout(activeComboProduct, found.previewUrl, found.title);
+        }
+
+        function renderComboPreviewLayout(product, subUrl, subTitle) {
+            const body = document.getElementById("preview-body");
+            body.innerHTML = `
+                ${getComboHeaderHtml(product)}
+                <div id="combo-drive-viewer" class="space-y-3 pt-1"></div>
+            `;
+            renderDrivePreviewIntoContainer(document.getElementById("combo-drive-viewer"), subUrl, subTitle);
         }
 
         function renderDrivePreviewInBody(url, title) {
             const body = document.getElementById("preview-body");
+            renderDrivePreviewIntoContainer(body, url, title);
+        }
+
+        function renderDrivePreviewIntoContainer(container, url, title) {
+            if (!container) return;
             const driveInfo = extractDriveInfo(url);
 
             if (!driveInfo) {
-                body.innerHTML = `
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-slate-600 text-sm">
+                container.innerHTML = `
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-slate-800 text-sm">
                         ${url ? url : `Liên hệ Zalo <strong>0843 589 647</strong> để xem thử trích đoạn chi tiết bộ tài liệu này.`}
                     </div>
                 `;
@@ -1266,8 +1295,8 @@
             }
 
             if (driveInfo.type === "file") {
-                body.innerHTML = `
-                    <div class="w-full h-[65vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
+                container.innerHTML = `
+                    <div class="w-full h-[58vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
                         <iframe src="https://drive.google.com/file/d/${driveInfo.id}/preview" class="w-full h-full border-0" allow="autoplay"></iframe>
                     </div>
                 `;
@@ -1278,12 +1307,17 @@
             loadDriveFolderContents(driveInfo.id);
         }
 
+        function getDriveTargetContainer() {
+            return document.getElementById("combo-drive-viewer") || document.getElementById("preview-body");
+        }
+
         async function loadDriveFolderContents(folderId) {
-            const body = document.getElementById("preview-body");
+            const body = getDriveTargetContainer();
+            if (!body) return;
             const backBtnHtml = driveNavHistory.length > 1 ? `
                 <button type="button" onclick="goBackDriveFolder()" class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors">
                     <i class="fa-solid fa-arrow-left"></i>
-                    <span>Quay lại</span>
+                    <span>Quay lại thư mục trước</span>
                 </button>
             ` : "";
 
@@ -1386,7 +1420,8 @@
         }
 
         function openDriveFilePreview(fileId, encodedName) {
-            const body = document.getElementById("preview-body");
+            const body = getDriveTargetContainer();
+            if (!body) return;
             const fileName = stripFileExtension(decodeURIComponent(encodedName));
             body.innerHTML = `
                 <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
@@ -1395,10 +1430,10 @@
                     </div>
                     <button type="button" onclick="reloadCurrentDriveFolder()" class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors">
                         <i class="fa-solid fa-arrow-left"></i>
-                        <span>Quay lại</span>
+                        <span>Quay lại thư mục</span>
                     </button>
                 </div>
-                <div class="w-full h-[62vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 mt-2">
+                <div class="w-full h-[56vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 mt-2">
                     <iframe src="https://drive.google.com/file/d/${fileId}/preview" class="w-full h-full border-0" allow="autoplay"></iframe>
                 </div>
             `;
@@ -1414,6 +1449,9 @@
         function closePreviewModal() {
             document.getElementById("preview-modal").classList.add("hidden");
             document.getElementById("preview-body").innerHTML = "";
+            activeComboProduct = null;
+            activeComboSubCode = null;
+            driveNavHistory = [];
             document.body.classList.remove("overflow-hidden");
             toggleFloatingContactButtons(false);
         }
