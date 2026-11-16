@@ -973,22 +973,54 @@
         // =========================================================================
         // ĐỒNG BỘ DỮ LIỆU TỪ GOOGLE SHEETS
         // =========================================================================
+        function extractFlexibleField(raw, candidateKeys, regexPattern) {
+            if (!raw || typeof raw !== "object") return "";
+            for (const key of candidateKeys) {
+                if (raw[key] !== undefined && raw[key] !== null && String(raw[key]).trim() !== "") {
+                    return raw[key];
+                }
+            }
+            if (regexPattern) {
+                const matchedKey = Object.keys(raw).find(k => regexPattern.test(k) && raw[k] !== undefined && raw[k] !== null && String(raw[k]).trim() !== "");
+                if (matchedKey) return raw[matchedKey];
+            }
+            return "";
+        }
+
+        function parseSheetPrice(rawVal) {
+            if (typeof rawVal === "number" && !isNaN(rawVal)) return Math.round(rawVal);
+            const str = String(rawVal || "").trim();
+            if (!str) return 0;
+            const digits = Number(str.replace(/[^\d]/g, "")) || 0;
+            if (digits > 0 && digits < 1000 && /k\b/i.test(str)) {
+                return digits * 1000;
+            }
+            return digits;
+        }
+
         function normalizeProductRow(raw) {
-            const code = String(raw.code || raw.id || "").trim();
-            const rawTitle = String(raw.title || raw.name || "").trim();
+            const code = String(extractFlexibleField(raw, ["code", "Code", "CODE", "id", "ID", "ma", "Ma", "stt", "STT"], /^(code|id|ma|stt)$/i)).trim();
+            const rawTitle = String(extractFlexibleField(raw, ["title", "Title", "TITLE", "name", "Name", "ten", "Ten", "Tên"], /^(title|name|ten|tên)/i)).trim();
+            const rawCategory = String(extractFlexibleField(raw, ["category", "Category", "CATEGORY", "khoi", "Khoi", "nhom", "Nhom", "danhMuc"], /^(category|khoi|khối|nhom|nhóm|danhmuc)/i) || "K10").trim().toUpperCase();
+            const rawPreview = String(extractFlexibleField(raw, ["previewUrl", "PreviewUrl", "preview", "Preview", "link", "Link", "url", "URL", "drive"], /(preview|link|url|drive)/i)).trim();
+            const rawPrice = extractFlexibleField(raw, ["price", "Price", "PRICE", "gia", "Gia", "Giá", "GIÁ", "giaBan", "donGia", "amount", "cost"], /^(price|gia|giá|giaban|dongia|amount|cost)$/i);
+            const rawCombo = String(extractFlexibleField(raw, ["comboItems", "ComboItems", "combo", "Combo", "COMBO", "baoGom"], /(combo|baogom)/i)).trim();
+            const rawVoucherCode = String(extractFlexibleField(raw, ["voucherCode", "VoucherCode", "maGiamGia"], /(vouchercode|magiamgia)/i)).trim();
+            const rawVoucherDiscount = String(extractFlexibleField(raw, ["voucherDiscount", "VoucherDiscount", "giamGia"], /(voucherdiscount|giamgia)/i)).trim();
+
             const isNew = Boolean(raw.isNew) || hasNewTag(rawTitle);
             return {
                 id: code,
                 code: code,
-                category: String(raw.category || "K10").trim().toUpperCase(),
+                category: rawCategory,
                 rawTitle: rawTitle,
                 title: cleanProductTitle(rawTitle),
                 isNew: isNew,
-                previewUrl: String(raw.previewUrl || raw.preview || "").trim(),
-                price: Number(String(raw.price || "0").replace(/[^\d]/g, "")) || 0,
-                comboItems: String(raw.comboItems || raw.combo || "").trim(),
-                voucherCode: String(raw.voucherCode || "").trim(),
-                voucherDiscount: String(raw.voucherDiscount || "").trim()
+                previewUrl: rawPreview,
+                price: parseSheetPrice(rawPrice),
+                comboItems: rawCombo,
+                voucherCode: rawVoucherCode,
+                voucherDiscount: rawVoucherDiscount
             };
         }
 
@@ -1496,11 +1528,22 @@
         // LOGIC TÍNH MÃ ƯU ĐÃI TỪ GOOGLE SHEETS
         // =========================================================================
         function parseDiscountValue(rawDiscount, baseAmount) {
-            const str = String(rawDiscount || "").trim();
+            if (rawDiscount === null || rawDiscount === undefined) return 0;
+            if (typeof rawDiscount === "number" && !isNaN(rawDiscount)) {
+                if (rawDiscount > 0 && rawDiscount <= 1) {
+                    return Math.round(baseAmount * rawDiscount);
+                }
+                return Math.min(baseAmount, Math.round(rawDiscount));
+            }
+            const str = String(rawDiscount).trim();
             if (!str) return 0;
             if (str.includes("%")) {
-                const pct = parseFloat(str.replace("%", "").trim()) || 0;
+                const pct = parseFloat(str.replace(",", ".").replace("%", "").trim()) || 0;
                 return Math.round((baseAmount * pct) / 100);
+            }
+            const numVal = parseFloat(str.replace(",", "."));
+            if (!isNaN(numVal) && numVal > 0 && numVal <= 1) {
+                return Math.round(baseAmount * numVal);
             }
             const fixed = Number(str.replace(/[^\d]/g, "")) || 0;
             return Math.min(baseAmount, fixed);
