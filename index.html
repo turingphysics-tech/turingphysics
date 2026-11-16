@@ -61,7 +61,7 @@
                 <button type="button" onclick="switchTab('hoi-dap')" data-tab="hoi-dap" class="main-nav-tab px-4 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-slate-100/80 transition-all">Hỏi Đáp</button>
             </nav>
 
-            <!-- Nút Giỏ hàng (Hiển thị rõ chữ "Giỏ hàng" trên cả điện thoại và máy tính) -->
+            <!-- Nút Giỏ hàng (Luôn hiển thị đầy đủ chữ "Giỏ hàng" trên cả điện thoại và máy tính) -->
             <div class="flex items-center gap-2 shrink-0">
                 <button type="button" onclick="showCartView()" class="relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white text-xs sm:text-sm font-bold transition-all shadow-sm">
                     <i class="fa-solid fa-cart-shopping"></i>
@@ -167,8 +167,8 @@
         </section>
 
         <!-- ==================== MỤC 2: KHO TÀI LIỆU ==================== -->
-        <section id="danh-muc" class="tab-page-section hidden animate-fade-in pt-5 sm:pt-7 pb-36 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[calc(100vh+220px)]">
-            <!-- Thanh tìm kiếm nhanh (Sẽ tự động cuộn khuất lên trên khi bấm chọn chuyên mục bên dưới) -->
+        <section id="danh-muc" class="tab-page-section hidden animate-fade-in pt-5 sm:pt-7 pb-36 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[calc(100vh+260px)]">
+            <!-- Thanh tìm kiếm nhanh (Tự động cuộn khuất lên trên khi bấm chọn chuyên mục bên dưới) -->
             <div id="search-bar-container" class="max-w-xl mx-auto mb-4 sm:mb-5">
                 <div class="relative">
                     <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
@@ -210,10 +210,10 @@
                 </div>
             </div>
 
-            <!-- Tiêu đề chuyên mục nổi bật căn giữa (gọn gàng để ưu tiên lưới tài liệu) -->
+            <!-- Tiêu đề chuyên mục nổi bật căn giữa -->
             <div class="text-center mb-5 sm:mb-6 pt-1 border-t border-slate-200/70">
                 <h3 id="category-display-title" class="text-lg sm:text-2xl font-extrabold text-blue-900 uppercase tracking-tight mt-3">
-                    DẠY THÊM KHỐI 10
+                    KHỐI 10
                 </h3>
                 <div class="w-14 h-1 bg-blue-500 rounded-full mx-auto mt-2 mb-1.5"></div>
                 <p class="text-xs sm:text-sm text-slate-500 font-medium">Danh sách các kho tài liệu chất lượng cao đã chọn lọc</p>
@@ -336,7 +336,7 @@
         </section>
     </main>
 
-    <!-- ==================== TRANG RIÊNG: GIỎ HÀNG & THANH TOÁN (CHỐNG TRÀN NGANG TUYỆT ĐỐI) ==================== -->
+    <!-- ==================== TRANG RIÊNG: GIỎ HÀNG & THANH TOÁN ==================== -->
     <section id="cart-page-view" class="hidden animate-fade-in min-h-[calc(100vh-140px)] py-6 sm:py-12 pb-32 max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 overflow-x-hidden">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-5 mb-6 sm:mb-8 border-b border-slate-200">
             <div class="min-w-0">
@@ -377,25 +377,42 @@
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-md p-4 sm:p-6 space-y-5">
                     <h2 class="font-extrabold text-base sm:text-lg text-slate-900 border-b border-slate-100 pb-3">Chi Tiết Thanh Toán</h2>
 
-                    <!-- Ô nhập mã giảm giá -->
-                    <div class="space-y-2">
-                        <label class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Mã ưu đãi (Nếu có)</label>
-                        <div class="flex gap-2 min-w-0">
-                            <input type="text" id="voucher-input" placeholder="Nhập mã ưu đãi..." class="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-sm uppercase font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <button type="button" onclick="applyVoucher()" class="shrink-0 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition-colors">
-                                Áp dụng
-                            </button>
+                    <!-- Nút Voucher kiểu Shopee (Bấm vào mới mở khung nhập & gợi ý mã) -->
+                    <div class="space-y-2.5">
+                        <button type="button" onclick="toggleCartVoucherBox()" class="w-full px-3.5 py-3 rounded-xl bg-orange-50/70 hover:bg-orange-50 border border-dashed border-orange-300 flex items-center justify-between gap-2 transition-all group">
+                            <div class="flex items-center gap-2.5 min-w-0">
+                                <div class="w-8 h-8 rounded-lg bg-orange-500 text-white flex items-center justify-center shrink-0 shadow-sm">
+                                    <i class="fa-solid fa-ticket text-sm"></i>
+                                </div>
+                                <span class="text-xs sm:text-sm font-bold text-slate-800 truncate">Nhập voucher giảm giá</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <span id="cart-voucher-trigger-badge" class="text-xs font-semibold text-orange-600">Chọn hoặc nhập mã</span>
+                                <i id="cart-voucher-chevron" class="fa-solid fa-chevron-right text-[11px] text-orange-500 transition-transform duration-200"></i>
+                            </div>
+                        </button>
+
+                        <!-- Khung nhập mã & danh sách gợi ý (Ẩn mặc định, mở khi bấm nút trên) -->
+                        <div id="cart-voucher-drawer" class="hidden p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 animate-fade-in">
+                            <div class="flex gap-2 min-w-0">
+                                <input type="text" id="voucher-input" onkeydown="if(event.key==='Enter'){event.preventDefault();applyVoucher();}" placeholder="Nhập mã ưu đãi..." class="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm uppercase font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <button type="button" onclick="applyVoucher()" class="shrink-0 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
+                                    Áp dụng
+                                </button>
+                            </div>
+                            <p id="voucher-message" class="text-xs font-semibold hidden"></p>
+                            <!-- Gợi ý mã ưu đãi từ Google Sheets -->
+                            <div id="cart-voucher-suggestions" class="space-y-1.5"></div>
                         </div>
-                        <p id="voucher-message" class="text-xs font-medium hidden"></p>
                     </div>
 
-                    <!-- Bảng tính tiền (Căn chuẩn không bao giờ bị cắt lệch bên phải trên điện thoại) -->
+                    <!-- Bảng tính tiền -->
                     <div class="space-y-2.5 text-sm border-t border-slate-100 pt-4">
                         <div class="flex items-center justify-between gap-2 text-slate-600">
                             <span>Tạm tính:</span>
                             <span id="cart-subtotal" class="font-semibold text-slate-900 shrink-0">0đ</span>
                         </div>
-                        <div id="voucher-discount-row" class="hidden flex items-center justify-between gap-2 text-blue-600 font-medium">
+                        <div id="voucher-discount-row" class="hidden flex items-center justify-between gap-2 text-emerald-600 font-semibold">
                             <span id="voucher-discount-label" class="truncate">Mã ưu đãi:</span>
                             <span id="voucher-discount-amount" class="shrink-0">-0đ</span>
                         </div>
@@ -496,7 +513,7 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL THANH TOÁN VIETQR (MOBILE-SAFE & COMPACT BEFORE SUBMIT) ==================== -->
+    <!-- ==================== MODAL THANH TOÁN VIETQR ==================== -->
     <div id="checkout-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
         <div class="fixed inset-0" onclick="closeCheckoutModal()"></div>
         <div class="relative w-full max-w-4xl bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 max-h-[92vh] flex flex-col overflow-hidden z-10">
@@ -541,14 +558,34 @@
                             <p id="direct-email-err" class="hidden text-[11px] text-rose-600 font-medium mt-1">Gmail chưa đúng định dạng.</p>
                         </div>
                     </div>
-                    <!-- Ô nhập mã ưu đãi -->
-                    <div class="flex gap-2 min-w-0">
-                        <input type="text" id="direct-voucher-input" placeholder="Nhập mã ưu đãi (nếu có)..." class="flex-1 min-w-0 px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs sm:text-sm uppercase font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <button type="button" onclick="applyDirectVoucher()" class="shrink-0 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition-colors">
-                            Áp dụng
+
+                    <!-- Nút Voucher kiểu Shopee trong Đặt Mua Ngay -->
+                    <div class="space-y-2 pt-0.5">
+                        <button type="button" onclick="toggleDirectVoucherBox()" class="w-full px-3.5 py-2.5 rounded-xl bg-orange-50/80 hover:bg-orange-100/70 border border-dashed border-orange-300 flex items-center justify-between gap-2 transition-all">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span class="w-7 h-7 rounded-lg bg-orange-500 text-white flex items-center justify-center shrink-0 text-xs">
+                                    <i class="fa-solid fa-ticket"></i>
+                                </span>
+                                <span class="text-xs sm:text-sm font-bold text-slate-800 truncate">Nhập voucher giảm giá</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <span id="direct-voucher-trigger-badge" class="text-xs font-semibold text-orange-600">Chọn hoặc nhập mã</span>
+                                <i id="direct-voucher-chevron" class="fa-solid fa-chevron-right text-[11px] text-orange-500 transition-transform duration-200"></i>
+                            </div>
                         </button>
+
+                        <div id="direct-voucher-drawer" class="hidden p-3 rounded-xl bg-white border border-slate-200 space-y-2.5 animate-fade-in">
+                            <div class="flex gap-2 min-w-0">
+                                <input type="text" id="direct-voucher-input" onkeydown="if(event.key==='Enter'){event.preventDefault();applyDirectVoucher();}" placeholder="Nhập mã ưu đãi..." class="flex-1 min-w-0 px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs sm:text-sm uppercase font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <button type="button" onclick="applyDirectVoucher()" class="shrink-0 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
+                                    Áp dụng
+                                </button>
+                            </div>
+                            <p id="direct-voucher-msg" class="hidden text-xs font-semibold"></p>
+                            <div id="direct-voucher-suggestions" class="space-y-1.5"></div>
+                        </div>
                     </div>
-                    <p id="direct-voucher-msg" class="hidden text-xs font-semibold"></p>
+
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-1">
                         <p class="text-[11px] text-amber-800 leading-snug"><i class="fa-solid fa-circle-info text-amber-600 mr-1"></i>Vui lòng điền đúng Gmail để cấp quyền Drive tự động.</p>
                         <button type="button" onclick="confirmDirectOrder()" id="direct-submit-btn" class="w-full sm:w-auto shrink-0 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-colors flex items-center justify-center">
@@ -556,6 +593,7 @@
                         </button>
                     </div>
                 </div>
+
                 <!-- Trạng thái chờ gọn gàng (Chỉ hiện khi CHƯA xác nhận thông tin) -->
                 <div id="qrWaitingBox" class="hidden py-4 px-4 rounded-2xl border border-dashed border-slate-300 bg-slate-50 text-center space-y-1">
                     <div class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-white text-blue-600 text-base mb-1 shadow-sm border border-slate-200">
@@ -666,11 +704,11 @@
             googleSheetWebhookUrl: "https://script.google.com/macros/s/AKfycbwIfIdYbrZ_IRcHAa5Yfs1oLnvc3oYcGWnpZ6XVocsgTCGVJospnp10GOgpDqIWQ7pp/exec"
         };
 
-        const PRODUCTS_CACHE_KEY = "turingphysics_products_cache_v5";
-        const VOUCHERS_CACHE_KEY = "turingphysics_vouchers_cache_v5";
-        const CART_STORAGE_KEY = "turingphysics_cart_v5";
+        const PRODUCTS_CACHE_KEY = "turingphysics_products_cache_v6";
+        const VOUCHERS_CACHE_KEY = "turingphysics_vouchers_cache_v6";
+        const CART_STORAGE_KEY = "turingphysics_cart_v6";
 
-        // Dữ liệu dự phòng phong phú khi ngoại tuyến / bị chặn CORS
+        // Dữ liệu dự phòng khi ngoại tuyến
         const FALLBACK_PRODUCTS = [
             { id: "VL10_01", code: "VL10_01", category: "K10", rawTitle: "DẠY THÊM VẬT LÝ KHỐI 10 – TRỌN BỘ CHƯƠNG TRÌNH MỚI", title: "DẠY THÊM VẬT LÝ KHỐI 10 – TRỌN BỘ CHƯƠNG TRÌNH MỚI", isNew: false, previewUrl: "", price: 180000, comboItems: "", voucherCode: "", voucherDiscount: "" },
             { id: "VL11_01", code: "VL11_01", category: "K11", rawTitle: "DẠY THÊM VẬT LÝ KHỐI 11 – CHUẨN CV 5512 & BÀI TẬP PHÂN DẠNG", title: "DẠY THÊM VẬT LÝ KHỐI 11 – CHUẨN CV 5512 & BÀI TẬP PHÂN DẠNG", isNew: false, previewUrl: "", price: 180000, comboItems: "", voucherCode: "", voucherDiscount: "" },
@@ -692,7 +730,7 @@
         let driveNavHistory = [];
         let activeComboProduct = null;
         let viewingComboSubItem = false;
-        // Trạng thái trình chiếu Tài Liệu Mới Nhất
+
         let newCarouselIndex = 0;
         let newCarouselTimer = null;
         let newCarouselPaused = false;
@@ -971,7 +1009,7 @@
         }
 
         // =========================================================================
-        // ĐỒNG BỘ DỮ LIỆU TỪ GOOGLE SHEETS
+        // ĐỒNG BỘ DỮ LIỆU TỪ GOOGLE APPS SCRIPT (KHỚP 100% CODE.GS)
         // =========================================================================
         function extractFlexibleField(raw, candidateKeys, regexPattern) {
             if (!raw || typeof raw !== "object") return "";
@@ -1010,11 +1048,12 @@
             const rawPreview = String(extractFlexibleField(raw, ["previewUrl", "PreviewUrl", "preview", "Preview", "link", "Link", "url", "URL", "drive", "Link xem thử"], /(preview|link|url|drive)/i)).trim();
             const rawPrice = extractFlexibleField(raw, ["price", "Price", "PRICE", "gia", "Gia", "Giá", "GIÁ", "Giá bán (VNĐ)", "Giá bán", "giaBan", "donGia", "amount", "cost"], /(price|gia|giá|giaban|dongia|amount|cost)/i);
             const rawCombo = String(extractFlexibleField(raw, ["comboItems", "ComboItems", "combo", "Combo", "COMBO", "baoGom", "Mã lẻ trong Combo (cách dấu ;)", "Mã lẻ trong Combo"], /(combo|baogom|mã lẻ)/i)).trim();
-            const rawVoucherCode = String(extractFlexibleField(raw, ["promoCode", "PromoCode", "voucherCode", "VoucherCode", "maGiamGia", "Mã ưu đãi riêng", "Mã ưu đãi"], /(promocode|vouchercode|magiamgia|mã ưu đãi|ưu đãi)/i)).trim();
-            const rawVoucherDiscount = extractFlexibleField(raw, ["discount", "Discount", "voucherDiscount", "VoucherDiscount", "giamGia", "Mức giảm (% hoặc VNĐ)", "Mức giảm"], /(discount|voucherdiscount|giamgia|mức giảm|giảm)/i);
+            const rawVoucherCode = String(extractFlexibleField(raw, ["voucherCode", "VoucherCode", "promoCode", "PromoCode", "maGiamGia", "Mã ưu đãi riêng", "Mã ưu đãi"], /(vouchercode|promocode|magiamgia|mã ưu đãi|ưu đãi)/i)).trim().toUpperCase();
+            const rawVoucherDiscount = extractFlexibleField(raw, ["voucherDiscount", "VoucherDiscount", "discount", "Discount", "giamGia", "Mức giảm (% hoặc VNĐ)", "Mức giảm"], /(voucherdiscount|discount|giamgia|mức giảm|giảm)/i);
 
             const rawIsNew = raw.isNew === true || String(raw.isNew || "").trim().toLowerCase() === "true" || String(raw.isNew || "").trim().toUpperCase() === "CO";
             const isNew = rawIsNew || hasNewTag(rawTitle);
+
             return {
                 id: code,
                 code: code,
@@ -1101,12 +1140,15 @@
                 const data = await res.json();
 
                 if (data && data.status === "success" && Array.isArray(data.products)) {
+                    // Đồng bộ trực tiếp kể cả khi Google Sheets xóa sạch tài liệu (mảng rỗng)
                     products = data.products
                         .map(normalizeProductRow)
                         .filter(item => item.code && item.title);
-                    const rawVoucherList = Array.isArray(data.vouchers)
-                        ? data.vouchers
-                        : (Array.isArray(data.promoCodes) ? data.promoCodes : []);
+
+                    // Khớp 100% trường globalVouchers trả về từ Code.gs
+                    const rawVoucherList = Array.isArray(data.globalVouchers)
+                        ? data.globalVouchers
+                        : (Array.isArray(data.vouchers) ? data.vouchers : (Array.isArray(data.promoCodes) ? data.promoCodes : []));
                     globalVouchers = rawVoucherList.map(normalizeVoucherRow).filter(Boolean);
 
                     try {
@@ -1417,7 +1459,7 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] text-slate-600 mt-2">
-                    <span><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>Nếu mạng 4G chậm hoặc báo sự cố tải trang, thầy/cô bấm nút <strong>Tải lại</strong> nhiều lần để trình duyệt nạp lại tài liệu.</span>
+                    <span><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>Nếu mạng 4G chậm hoặc báo sự cố tải trang, thầy/cô bấm nút <strong>Tải lại</strong> nhiều lần để hệ thống nạp lại nhé.</span>
                 </div>
                 <div class="w-full h-[54vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 mt-2 relative">
                     <iframe id="drive-preview-iframe-${fileId}" src="${standardUrl}" class="w-full h-full border-0" allow="autoplay"></iframe>
@@ -1446,7 +1488,7 @@
             const folderBackBtn = driveNavHistory.length > 1 ? `
                 <button type="button" onclick="goBackDriveFolder()" class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] sm:text-xs font-bold transition-colors">
                     <i class="fa-solid fa-arrow-left"></i>
-                    <span>Thư mục trước</span>
+                    <span>Danh sách tài liệu</span>
                 </button>
             ` : "";
             const backBtnHtml = (getBackToComboBtnHtml() || folderBackBtn) ? `
@@ -1579,8 +1621,27 @@
         }
 
         // =========================================================================
-        // LOGIC TÍNH MÃ ƯU ĐÃI TỪ GOOGLE SHEETS
+        // LOGIC TÍNH MÃ ƯU ĐÃI & GIAO DIỆN VOUCHER KIỂU SHOPEE
         // =========================================================================
+        function formatDiscountLabel(rawDiscount) {
+            if (rawDiscount === null || rawDiscount === undefined) return "";
+            if (typeof rawDiscount === "number" && !isNaN(rawDiscount)) {
+                if (rawDiscount > 0 && rawDiscount <= 1) {
+                    return `Giảm ${Math.round(rawDiscount * 100)}%`;
+                }
+                return `Giảm ${formatCurrency(rawDiscount)}`;
+            }
+            const str = String(rawDiscount).trim();
+            if (!str) return "";
+            if (str.includes("%")) return `Giảm ${str}`;
+            const numVal = parseFloat(str.replace(",", "."));
+            if (!isNaN(numVal) && numVal > 0 && numVal <= 1) {
+                return `Giảm ${Math.round(numVal * 100)}%`;
+            }
+            const fixed = Number(str.replace(/[^\d]/g, "")) || 0;
+            return fixed > 0 ? `Giảm ${formatCurrency(fixed)}` : "";
+        }
+
         function parseDiscountValue(rawDiscount, baseAmount) {
             if (rawDiscount === null || rawDiscount === undefined) return 0;
             if (typeof rawDiscount === "number" && !isNaN(rawDiscount)) {
@@ -1611,6 +1672,7 @@
 
             const subtotal = targetItems.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
 
+            // 1. Kiểm tra trong danh sách mã ưu đãi chung (Ma_Uu_Dai_Chung)
             const gVoucher = globalVouchers.find(v => String(v.code || "").trim().toUpperCase() === code);
             if (gVoucher) {
                 if (subtotal < (Number(gVoucher.minOrder) || 0)) {
@@ -1629,10 +1691,11 @@
                 };
             }
 
+            // 2. Kiểm tra mã ưu đãi riêng từng tài liệu (Danh_Muc_Tai_Lieu)
             let totalItemDiscount = 0;
             let matchedCount = 0;
             targetItems.forEach(item => {
-                if (item.voucherCode && item.voucherCode.toUpperCase() === code) {
+                if (item.voucherCode && String(item.voucherCode).trim().toUpperCase() === code) {
                     matchedCount++;
                     totalItemDiscount += parseDiscountValue(item.voucherDiscount, Number(item.price) || 0);
                 }
@@ -1652,6 +1715,110 @@
                 discount: 0,
                 message: `Mã "${code}" không hợp lệ hoặc không áp dụng cho tài liệu này.`
             };
+        }
+
+        function getAvailableVouchersForItems(targetItems) {
+            const map = new Map();
+            globalVouchers.forEach(gv => {
+                if (gv && gv.code) {
+                    const label = formatDiscountLabel(gv.discount);
+                    const minStr = gv.minOrder > 0 ? ` • Đơn từ ${formatCurrency(gv.minOrder)}` : " • Mọi tài liệu";
+                    map.set(gv.code.toUpperCase(), {
+                        code: gv.code.toUpperCase(),
+                        desc: `${label}${minStr}`
+                    });
+                }
+            });
+            targetItems.forEach(item => {
+                const vCode = String(item.voucherCode || "").trim().toUpperCase();
+                if (vCode && !map.has(vCode)) {
+                    const label = formatDiscountLabel(item.voucherDiscount);
+                    map.set(vCode, {
+                        code: vCode,
+                        desc: `${label} • Áp dụng cho ${item.code}`
+                    });
+                }
+            });
+            return Array.from(map.values());
+        }
+
+        function renderVoucherSuggestions(containerId, targetItems, appliedCode, selectCallbackName) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const list = getAvailableVouchersForItems(targetItems);
+            if (list.length === 0) {
+                container.innerHTML = "";
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 pt-1">Mã ưu đãi hiện có:</div>
+                <div class="space-y-1.5">
+                    ${list.map(v => {
+                        const isApplied = appliedCode && appliedCode.toUpperCase() === v.code;
+                        return `
+                            <div class="p-2.5 rounded-xl bg-white border ${isApplied ? "border-emerald-400 bg-emerald-50/40" : "border-slate-200"} flex items-center justify-between gap-2">
+                                <div class="min-w-0">
+                                    <span class="text-xs font-extrabold text-orange-600 block">${v.code}</span>
+                                    <span class="text-[11px] font-medium text-slate-600 block truncate">${v.desc}</span>
+                                </div>
+                                <button type="button" onclick="${selectCallbackName}('${v.code}')" class="shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-colors ${isApplied ? "bg-emerald-600 text-white" : "bg-orange-500 hover:bg-orange-600 text-white"}">
+                                    ${isApplied ? "Đang dùng" : "Dùng ngay"}
+                                </button>
+                            </div>
+                        `;
+                    }).join("")}
+                </div>
+            `;
+        }
+
+        function toggleCartVoucherBox() {
+            const drawer = document.getElementById("cart-voucher-drawer");
+            const chevron = document.getElementById("cart-voucher-chevron");
+            if (!drawer) return;
+            const isHidden = drawer.classList.contains("hidden");
+            if (isHidden) {
+                drawer.classList.remove("hidden");
+                if (chevron) chevron.classList.add("rotate-90");
+                renderVoucherSuggestions("cart-voucher-suggestions", cart, activeVoucher, "selectCartSuggestionVoucher");
+                const input = document.getElementById("voucher-input");
+                if (input) input.focus();
+            } else {
+                drawer.classList.add("hidden");
+                if (chevron) chevron.classList.remove("rotate-90");
+            }
+        }
+
+        function selectCartSuggestionVoucher(code) {
+            const input = document.getElementById("voucher-input");
+            if (input) input.value = code;
+            applyVoucher();
+        }
+
+        function toggleDirectVoucherBox() {
+            const drawer = document.getElementById("direct-voucher-drawer");
+            const chevron = document.getElementById("direct-voucher-chevron");
+            if (!drawer) return;
+            const isHidden = drawer.classList.contains("hidden");
+            if (isHidden) {
+                drawer.classList.remove("hidden");
+                if (chevron) chevron.classList.add("rotate-90");
+                if (directBuyProduct) {
+                    renderVoucherSuggestions("direct-voucher-suggestions", [directBuyProduct], directActiveVoucher, "selectDirectSuggestionVoucher");
+                }
+                const input = document.getElementById("direct-voucher-input");
+                if (input) input.focus();
+            } else {
+                drawer.classList.add("hidden");
+                if (chevron) chevron.classList.remove("rotate-90");
+            }
+        }
+
+        function selectDirectSuggestionVoucher(code) {
+            const input = document.getElementById("direct-voucher-input");
+            if (input) input.value = code;
+            applyDirectVoucher();
         }
 
         // =========================================================================
@@ -1725,6 +1892,7 @@
                 msgEl.classList.add("text-emerald-600");
             }
             updateCartUI();
+            renderVoucherSuggestions("cart-voucher-suggestions", cart, activeVoucher, "selectCartSuggestionVoucher");
         }
 
         function isValidVietnamPhone(phone) {
@@ -1822,15 +1990,26 @@
 
             document.getElementById("cart-subtotal").textContent = formatCurrency(subtotal);
             const discountRow = document.getElementById("voucher-discount-row");
-            if (discount > 0) {
+            const triggerBadge = document.getElementById("cart-voucher-trigger-badge");
+
+            if (discount > 0 && activeVoucher) {
                 discountRow.classList.remove("hidden");
                 document.getElementById("voucher-discount-label").textContent = `Mã ưu đãi (${activeVoucher}):`;
                 document.getElementById("voucher-discount-amount").textContent = `-${formatCurrency(discount)}`;
+                if (triggerBadge) {
+                    triggerBadge.textContent = `-${formatCurrency(discount)} (${activeVoucher})`;
+                    triggerBadge.className = "px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-700 text-xs font-extrabold";
+                }
             } else {
                 discountRow.classList.add("hidden");
+                if (triggerBadge) {
+                    triggerBadge.textContent = "Chọn hoặc nhập mã";
+                    triggerBadge.className = "text-xs font-semibold text-orange-600";
+                }
             }
             document.getElementById("cart-total").textContent = formatCurrency(total);
 
+            renderVoucherSuggestions("cart-voucher-suggestions", cart, activeVoucher, "selectCartSuggestionVoucher");
             validateCartForm();
         }
 
@@ -1847,8 +2026,21 @@
 
             document.getElementById("qr-order-subtitle").textContent = `${product.code} – ${cleanName}`;
             document.getElementById("direct-buy-form").classList.remove("hidden");
+
+            // Đặt lại trạng thái nút voucher Shopee trong modal
+            const drawer = document.getElementById("direct-voucher-drawer");
+            const chevron = document.getElementById("direct-voucher-chevron");
+            const triggerBadge = document.getElementById("direct-voucher-trigger-badge");
+            if (drawer) drawer.classList.add("hidden");
+            if (chevron) chevron.classList.remove("rotate-90");
+            if (triggerBadge) {
+                triggerBadge.textContent = "Chọn hoặc nhập mã";
+                triggerBadge.className = "text-xs font-semibold text-orange-600";
+            }
             document.getElementById("direct-voucher-input").value = "";
             document.getElementById("direct-voucher-msg").classList.add("hidden");
+            renderVoucherSuggestions("direct-voucher-suggestions", [directBuyProduct], null, "selectDirectSuggestionVoucher");
+
             document.getElementById("webhook-status-box").classList.add("hidden");
 
             const submitBtn = document.getElementById("direct-submit-btn");
@@ -1898,6 +2090,7 @@
             if (!directBuyProduct) return;
             const codeInput = document.getElementById("direct-voucher-input").value;
             const msgEl = document.getElementById("direct-voucher-msg");
+            const triggerBadge = document.getElementById("direct-voucher-trigger-badge");
             const zalo = (document.getElementById("direct-zalo").value || "").trim();
             const isUnlocked = document.getElementById("qrWaitingBox").classList.contains("hidden");
             const transferNote = `${zalo} ${directBuyProduct.code}`.trim();
@@ -1909,10 +2102,15 @@
                 directActiveVoucher = null;
                 msgEl.textContent = res.message;
                 msgEl.classList.add("text-rose-600");
+                if (triggerBadge) {
+                    triggerBadge.textContent = "Chọn hoặc nhập mã";
+                    triggerBadge.className = "text-xs font-semibold text-orange-600";
+                }
                 document.getElementById("qr-amount").textContent = formatCurrency(directBuyProduct.price);
                 if (isUnlocked) {
                     document.getElementById("vietqr-img").src = buildVietQrUrl(directBuyProduct.price, transferNote);
                 }
+                renderVoucherSuggestions("direct-voucher-suggestions", [directBuyProduct], null, "selectDirectSuggestionVoucher");
                 return;
             }
 
@@ -1920,11 +2118,16 @@
             const finalPrice = Math.max(0, directBuyProduct.price - res.discount);
             msgEl.textContent = res.message;
             msgEl.classList.add("text-emerald-600");
+            if (triggerBadge) {
+                triggerBadge.textContent = `-${formatCurrency(res.discount)} (${res.code})`;
+                triggerBadge.className = "px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-700 text-xs font-extrabold";
+            }
             document.getElementById("qr-amount").textContent = formatCurrency(finalPrice);
 
             if (isUnlocked) {
                 document.getElementById("vietqr-img").src = buildVietQrUrl(finalPrice, transferNote);
             }
+            renderVoucherSuggestions("direct-voucher-suggestions", [directBuyProduct], directActiveVoucher, "selectDirectSuggestionVoucher");
         }
 
         async function sendOrderToGoogleSheets(payload) {
