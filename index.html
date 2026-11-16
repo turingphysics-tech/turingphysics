@@ -572,7 +572,7 @@
                     <!-- Cột trái: Mã QR vuông sắc nét & Thông tin tài khoản MB Bank -->
                     <div class="lg:col-span-6 flex flex-col items-center justify-center bg-slate-50/90 rounded-2xl border-2 border-dashed border-blue-200 p-4 sm:p-5">
                         <div class="bg-white p-2.5 sm:p-3 rounded-2xl shadow-sm border border-slate-200">
-                            <img id="vietqr-img" src="" alt="Mã VietQR thanh toán MB Bank" onerror="this.src='https://placehold.co/300x300/eff6ff/1d4ed8?text=Ma+QR+MB+Bank'" class="w-56 h-56 sm:w-[260px] sm:h-[260px] object-contain mx-auto">
+                            <img id="vietqr-img" src="" alt="Mã VietQR thanh toán MB Bank" onerror="this.src='https://placehold.co/300x300/eff6ff/1d4ed8?text=Ma+QR+MB+Bank'" class="w-56 h-56 sm:w-64 sm:h-64 object-contain mx-auto">
                         </div>
                         <div class="mt-3 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80">
                             <span id="qr-amount" class="text-lg sm:text-2xl font-extrabold text-emerald-600">0đ</span>
@@ -999,14 +999,19 @@
         }
 
         function normalizeProductRow(raw) {
+            const visibleRaw = String(extractFlexibleField(raw, ["visible", "Visible", "hienThi", "Hiển thị (CO/KHONG)", "Hiển thị"], /(visible|hienthi|hiển thị)/i)).trim().toUpperCase();
+            if (visibleRaw === "KHONG" || visibleRaw === "KHÔNG" || visibleRaw === "FALSE" || visibleRaw === "0") {
+                return { id: "", code: "", title: "" };
+            }
+
             const code = String(extractFlexibleField(raw, ["code", "Code", "CODE", "id", "ID", "ma", "Ma", "stt", "STT", "Mã tài liệu", "Mã"], /(code|id|ma|mã|stt)/i)).trim();
             const rawTitle = String(extractFlexibleField(raw, ["title", "Title", "TITLE", "name", "Name", "ten", "Ten", "Tên", "Tên tài liệu"], /(title|name|ten|tên)/i)).trim();
-            const rawCategory = String(extractFlexibleField(raw, ["category", "Category", "CATEGORY", "khoi", "Khoi", "nhom", "Nhom", "danhMuc", "Danh mục", "Khối"], /(category|khoi|khối|nhom|nhóm|danhmuc|danh mục)/i) || "K10").trim().toUpperCase();
+            const rawCategory = String(extractFlexibleField(raw, ["category", "Category", "CATEGORY", "khoi", "Khoi", "nhom", "Nhom", "danhMuc", "Danh mục", "Chuyên mục", "Khối"], /(category|khoi|khối|nhom|nhóm|danhmuc|danh mục|chuyên mục)/i) || "K10").trim().toUpperCase();
             const rawPreview = String(extractFlexibleField(raw, ["previewUrl", "PreviewUrl", "preview", "Preview", "link", "Link", "url", "URL", "drive", "Link xem thử"], /(preview|link|url|drive)/i)).trim();
             const rawPrice = extractFlexibleField(raw, ["price", "Price", "PRICE", "gia", "Gia", "Giá", "GIÁ", "Giá bán (VNĐ)", "Giá bán", "giaBan", "donGia", "amount", "cost"], /(price|gia|giá|giaban|dongia|amount|cost)/i);
-            const rawCombo = String(extractFlexibleField(raw, ["comboItems", "ComboItems", "combo", "Combo", "COMBO", "baoGom", "Mã lẻ trong Combo (cách dấu ;)"], /(combo|baogom|mã lẻ)/i)).trim();
-            const rawVoucherCode = String(extractFlexibleField(raw, ["voucherCode", "VoucherCode", "maGiamGia", "Mã ưu đãi riêng", "Mã ưu đãi"], /(vouchercode|magiamgia|mã ưu đãi|ưu đãi)/i)).trim();
-            const rawVoucherDiscount = extractFlexibleField(raw, ["voucherDiscount", "VoucherDiscount", "giamGia", "Mức giảm (% hoặc VNĐ)", "Mức giảm"], /(voucherdiscount|giamgia|mức giảm|giảm)/i);
+            const rawCombo = String(extractFlexibleField(raw, ["comboItems", "ComboItems", "combo", "Combo", "COMBO", "baoGom", "Mã lẻ trong Combo (cách dấu ;)", "Mã lẻ trong Combo"], /(combo|baogom|mã lẻ)/i)).trim();
+            const rawVoucherCode = String(extractFlexibleField(raw, ["promoCode", "PromoCode", "voucherCode", "VoucherCode", "maGiamGia", "Mã ưu đãi riêng", "Mã ưu đãi"], /(promocode|vouchercode|magiamgia|mã ưu đãi|ưu đãi)/i)).trim();
+            const rawVoucherDiscount = extractFlexibleField(raw, ["discount", "Discount", "voucherDiscount", "VoucherDiscount", "giamGia", "Mức giảm (% hoặc VNĐ)", "Mức giảm"], /(discount|voucherdiscount|giamgia|mức giảm|giảm)/i);
 
             const rawIsNew = raw.isNew === true || String(raw.isNew || "").trim().toLowerCase() === "true" || String(raw.isNew || "").trim().toUpperCase() === "CO";
             const isNew = rawIsNew || hasNewTag(rawTitle);
@@ -1027,9 +1032,14 @@
 
         function normalizeVoucherRow(raw) {
             if (!raw || typeof raw !== "object") return null;
-            const code = String(extractFlexibleField(raw, ["code", "Code", "CODE", "ma", "Mã", "Mã ưu đãi"], /(code|ma|mã)/i)).trim().toUpperCase();
-            const discount = extractFlexibleField(raw, ["discount", "Discount", "giam", "Mức giảm", "Mức giảm (% hoặc VNĐ)"], /(discount|giam|giảm)/i);
-            const minOrderRaw = extractFlexibleField(raw, ["minOrder", "MinOrder", "donToiThieu", "Đơn tối thiểu"], /(minorder|toithieu|tối thiểu)/i);
+            const visibleRaw = String(extractFlexibleField(raw, ["visible", "Visible", "hienThi", "Hiển thị (CO/KHONG)", "Hiển thị"], /(visible|hienthi|hiển thị)/i)).trim().toUpperCase();
+            if (visibleRaw === "KHONG" || visibleRaw === "KHÔNG" || visibleRaw === "FALSE" || visibleRaw === "0") {
+                return null;
+            }
+
+            const code = String(extractFlexibleField(raw, ["code", "Code", "CODE", "promoCode", "ma", "Mã", "Mã ưu đãi"], /(code|ma|mã)/i)).trim().toUpperCase();
+            const discount = extractFlexibleField(raw, ["discount", "Discount", "giam", "Mức giảm (% hoặc VNĐ)", "Mức giảm"], /(discount|giam|giảm)/i);
+            const minOrderRaw = extractFlexibleField(raw, ["minOrder", "MinOrder", "donToiThieu", "Đơn tối thiểu (VNĐ)", "Đơn tối thiểu"], /(minorder|toithieu|tối thiểu)/i);
             if (!code) return null;
             return {
                 code: code,
@@ -1094,9 +1104,10 @@
                     products = data.products
                         .map(normalizeProductRow)
                         .filter(item => item.code && item.title);
-                    globalVouchers = Array.isArray(data.vouchers)
-                        ? data.vouchers.map(normalizeVoucherRow).filter(Boolean)
-                        : [];
+                    const rawVoucherList = Array.isArray(data.vouchers)
+                        ? data.vouchers
+                        : (Array.isArray(data.promoCodes) ? data.promoCodes : []);
+                    globalVouchers = rawVoucherList.map(normalizeVoucherRow).filter(Boolean);
 
                     try {
                         localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify(products));
@@ -1204,12 +1215,12 @@
                 const comboList = p.category === "CB" ? resolveComboItems(p.comboItems) : [];
                 const comboHtml = comboList.length > 0 ? `
                     <div class="mt-3.5 p-3 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-1.5">
-                        <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Bao gồm ${comboList.length} tài liệu:</div>
-                        <ul class="space-y-1.5 text-xs sm:text-[13px] text-slate-800 leading-snug">
+                        <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-900">BAO GỒM CÁC TÀI LIỆU:</div>
+                        <ul class="space-y-1.5 text-xs sm:text-[13px] text-slate-900 leading-snug">
                             ${comboList.map(item => `
                                 <li class="flex items-start gap-2">
-                                    <i class="fa-solid fa-check text-blue-600 text-[11px] mt-1 shrink-0"></i>
-                                    <span class="text-slate-800"><strong class="font-bold text-slate-900">[${item.code}]</strong> <span class="font-medium">${item.title}</span></span>
+                                    <i class="fa-solid fa-check text-slate-900 text-[11px] mt-1 shrink-0"></i>
+                                    <span class="font-bold text-slate-900">[${item.code}] ${item.title}</span>
                                 </li>
                             `).join("")}
                         </ul>
@@ -1349,8 +1360,8 @@
             if (!activeComboProduct || !viewingComboSubItem) return "";
             return `
                 <button type="button" onclick="renderComboListScreen(activeComboProduct)" class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11px] sm:text-xs font-bold shadow-sm transition-colors">
-                    <i class="fa-solid fa-list-ul"></i>
-                    <span>Danh sách Combo</span>
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Danh sách tài liệu</span>
                 </button>
             `;
         }
@@ -1385,6 +1396,7 @@
 
         function buildFileViewerHtml(fileId, fileName, showBackBtn) {
             const standardUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+            const comboBackBtn = getBackToComboBtnHtml();
 
             return `
                 <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
@@ -1401,11 +1413,11 @@
                                 <i class="fa-solid fa-arrow-left"></i>
                                 <span>Danh sách tài liệu</span>
                             </button>
-                        ` : ""}
+                        ` : comboBackBtn}
                     </div>
                 </div>
                 <div class="flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] text-slate-600 mt-2">
-                    <span><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>Nếu mạng 4G chậm hoặc báo sự cố tải trang, thầy/cô bấm nút <strong>Tải lại</strong> nhiều lần nhé!</span>
+                    <span><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>Nếu mạng 4G chậm hoặc báo sự cố tải trang, thầy/cô bấm nút <strong>Tải lại</strong> nhiều lần để trình duyệt nạp lại tài liệu.</span>
                 </div>
                 <div class="w-full h-[54vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 mt-2 relative">
                     <iframe id="drive-preview-iframe-${fileId}" src="${standardUrl}" class="w-full h-full border-0" allow="autoplay"></iframe>
