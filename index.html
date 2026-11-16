@@ -83,7 +83,7 @@
     <!-- ==================== TRANG CHÍNH ==================== -->
     <main id="main-store-view" class="min-h-[calc(100vh-140px)]">
 
-        <!-- ==================== MỤC 1: GIỚI THIỆU (2 CỘT + AUTO CAROUSEL TÀI LIỆU MỚI NHẤT) ==================== -->
+        <!-- ==================== MỤC 1: GIỚI THIỆU ==================== -->
         <section id="gioi-thieu" class="tab-page-section animate-fade-in relative overflow-hidden physics-grid-bg pt-7 pb-12 sm:pt-14 sm:pb-24 min-h-[calc(100vh-140px)] flex items-center">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-10 items-center">
@@ -377,7 +377,7 @@
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-md p-4 sm:p-6 space-y-5">
                     <h2 class="font-extrabold text-base sm:text-lg text-slate-900 border-b border-slate-100 pb-3">Chi Tiết Thanh Toán</h2>
 
-                    <!-- Nút Voucher kiểu Shopee (Bấm vào mới mở khung nhập & gợi ý mã) -->
+                    <!-- Nút Voucher kiểu Shopee (Bấm vào mới mở khung nhập mã - không gợi ý mã sẵn) -->
                     <div class="space-y-2.5">
                         <button type="button" onclick="toggleCartVoucherBox()" class="w-full px-3.5 py-3 rounded-xl bg-orange-50/70 hover:bg-orange-50 border border-dashed border-orange-300 flex items-center justify-between gap-2 transition-all group">
                             <div class="flex items-center gap-2.5 min-w-0">
@@ -387,22 +387,31 @@
                                 <span class="text-xs sm:text-sm font-bold text-slate-800 truncate">Nhập voucher giảm giá</span>
                             </div>
                             <div class="flex items-center gap-1.5 shrink-0">
-                                <span id="cart-voucher-trigger-badge" class="text-xs font-semibold text-orange-600">Chọn hoặc nhập mã</span>
+                                <span id="cart-voucher-trigger-badge" class="text-xs font-semibold text-orange-600">Nhập mã</span>
                                 <i id="cart-voucher-chevron" class="fa-solid fa-chevron-right text-[11px] text-orange-500 transition-transform duration-200"></i>
                             </div>
                         </button>
 
-                        <!-- Khung nhập mã & danh sách gợi ý (Ẩn mặc định, mở khi bấm nút trên) -->
-                        <div id="cart-voucher-drawer" class="hidden p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-3 animate-fade-in">
+                        <!-- Khung nhập mã (Chỉ cho nhập mã, không lộ danh sách mã có sẵn) -->
+                        <div id="cart-voucher-drawer" class="hidden p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5 animate-fade-in">
                             <div class="flex gap-2 min-w-0">
-                                <input type="text" id="voucher-input" onkeydown="if(event.key==='Enter'){event.preventDefault();applyVoucher();}" placeholder="Nhập mã ưu đãi..." class="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm uppercase font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="voucher-input" onkeydown="if(event.key==='Enter'){event.preventDefault();applyVoucher();}" placeholder="Nhập mã giảm giá..." class="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm uppercase font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <button type="button" onclick="applyVoucher()" class="shrink-0 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
                                     Áp dụng
                                 </button>
                             </div>
                             <p id="voucher-message" class="text-xs font-semibold hidden"></p>
-                            <!-- Gợi ý mã ưu đãi từ Google Sheets -->
-                            <div id="cart-voucher-suggestions" class="space-y-1.5"></div>
+                        </div>
+
+                        <!-- Thẻ xanh hiển thị mã đã áp dụng kèm nút gỡ -->
+                        <div id="cart-applied-voucher-pill" class="hidden px-3.5 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-2 animate-fade-in">
+                            <div class="flex items-center gap-2 min-w-0 text-emerald-700 text-xs sm:text-sm font-bold">
+                                <i class="fa-solid fa-circle-check text-emerald-600 shrink-0"></i>
+                                <span id="cart-applied-voucher-text" class="truncate"></span>
+                            </div>
+                            <button type="button" onclick="removeCartVoucher()" aria-label="Gỡ mã ưu đãi" class="w-7 h-7 rounded-lg bg-white hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-emerald-200 flex items-center justify-center shrink-0 transition-colors">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                            </button>
                         </div>
                     </div>
 
@@ -422,7 +431,7 @@
                         </div>
                     </div>
 
-                    <!-- Form thông tin giáo viên nhận file -->
+                    <!-- Form thông tin giáo viên nhận file (Đủ 4 ô input riêng biệt) -->
                     <div class="space-y-3 pt-3 border-t border-slate-100">
                         <div class="flex items-center justify-between gap-2">
                             <label class="text-xs font-bold uppercase tracking-wider text-slate-700">Thông tin giáo viên nhận file</label>
@@ -439,9 +448,6 @@
                                 <input type="tel" id="customer-zalo" maxlength="10" oninput="handlePhoneInput(this)" placeholder="VD: 0912345678" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <p id="phone-error-msg" class="hidden text-[11px] text-rose-600 font-medium mt-1">Vui lòng nhập đúng SĐT 10 số (VD: 0912345678).</p>
                             </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div class="min-w-0">
                                 <label for="customer-school" class="block text-xs font-semibold text-slate-600 mb-1">Trường thầy cô đang dạy <span class="text-rose-500">*</span></label>
                                 <input type="text" id="customer-school" placeholder="VD: THPT Chu Văn An" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -468,7 +474,7 @@
         </div>
     </section>
 
-    <!-- ==================== FOOTER (CĂN GIỮA CHUẨN MẪU) ==================== -->
+    <!-- ==================== FOOTER ==================== -->
     <footer class="bg-[#0B132B] text-slate-300 py-8 px-4 text-center pb-28 sm:pb-10 border-t border-slate-800">
         <div class="max-w-7xl mx-auto space-y-1.5">
             <p class="text-sm sm:text-base">
@@ -513,15 +519,18 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL THANH TOÁN VIETQR ==================== -->
-    <div id="checkout-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+    <!-- ==================== MODAL THANH TOÁN VIETQR (BỐ CỤC CHUẨN KHÔNG BỊ ĐÈ / KHÔNG KÉO DÃN NÚT) ==================== -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="fixed inset-0" onclick="closeCheckoutModal()"></div>
         <div class="relative w-full max-w-4xl bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 max-h-[92vh] flex flex-col overflow-hidden z-10">
             <!-- Header cố định -->
-            <div class="shrink-0 px-4 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between gap-3 bg-white">
-                <div class="min-w-0">
+            <div class="shrink-0 px-4 sm:px-6 py-4 border-b border-slate-100 flex items-start justify-between gap-3 bg-white">
+                <div class="min-w-0 flex-1">
                     <h3 class="text-base sm:text-xl font-extrabold text-blue-700 uppercase tracking-tight">Đặt Mua &amp; Thanh Toán VietQR</h3>
-                    <p id="qr-order-subtitle" class="text-xs sm:text-sm font-bold text-slate-700 mt-0.5 truncate"></p>
+                    <div class="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                        <p id="qr-order-subtitle" class="text-xs sm:text-sm font-bold text-slate-800 break-words"></p>
+                        <div id="qr-header-price-box" class="inline-flex flex-wrap items-center gap-2"></div>
+                    </div>
                 </div>
                 <button type="button" onclick="closeCheckoutModal()" aria-label="Đóng cửa sổ thanh toán" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center shrink-0 transition-colors">
                     <i class="fa-solid fa-xmark"></i>
@@ -529,37 +538,42 @@
             </div>
 
             <!-- Body cuộn mượt -->
-            <div class="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 space-y-5">
-                <!-- Form nhập nhanh thông tin giáo viên (Khi bấm Đặt Mua Ngay) -->
-                <div id="direct-buy-form" class="hidden bg-slate-50 rounded-2xl border border-slate-200 p-4 space-y-3">
+            <div id="checkout-modal-body" class="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 space-y-5">
+                <!-- Form nhập thông tin giáo viên (Khi bấm Đặt Mua Ngay) -->
+                <div id="direct-buy-form" class="hidden bg-slate-50 rounded-2xl border border-slate-200 p-4 sm:p-5 space-y-4">
                     <div class="flex items-center justify-between gap-2">
                         <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Thông tin giáo viên nhận file</span>
                         <span class="text-[11px] text-rose-500 font-semibold shrink-0">* Bắt buộc</span>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                    <!-- ĐỦ 4 Ô INPUT RIÊNG BIỆT (2 CỘT TRÊN MÁY TÍNH, 1 CỘT TRÊN ĐIỆN THOẠI) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <!-- Cột 1 hàng 1 -->
                         <div class="min-w-0">
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Họ và tên thầy cô <span class="text-rose-500">*</span></label>
+                            <label for="direct-name" class="block text-xs font-semibold text-slate-700 mb-1">Họ và tên thầy cô <span class="text-rose-500">*</span></label>
                             <input type="text" id="direct-name" placeholder="VD: Nguyễn Văn An" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
+                        <!-- Cột 2 hàng 1 -->
                         <div class="min-w-0">
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Số điện thoại / Zalo <span class="text-rose-500">*</span></label>
+                            <label for="direct-zalo" class="block text-xs font-semibold text-slate-700 mb-1">Số điện thoại / Zalo <span class="text-rose-500">*</span></label>
                             <input type="tel" id="direct-zalo" maxlength="10" oninput="handleDirectPhoneInput(this)" placeholder="VD: 0912345678" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <p id="direct-phone-err" class="hidden text-[11px] text-rose-600 font-medium mt-1">SĐT chưa đúng định dạng 10 số.</p>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Cột 1 hàng 2 -->
                         <div class="min-w-0">
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Trường thầy cô đang dạy <span class="text-rose-500">*</span></label>
+                            <label for="direct-school" class="block text-xs font-semibold text-slate-700 mb-1">Trường thầy cô đang dạy <span class="text-rose-500">*</span></label>
                             <input type="text" id="direct-school" placeholder="VD: THPT Chu Văn An" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
+                        <!-- Cột 2 hàng 2: Ô nhập Gmail (Độc lập hoàn toàn, không bị đè) -->
                         <div class="min-w-0">
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Gmail nhận tài liệu Google Drive <span class="text-rose-500">*</span></label>
+                            <label for="direct-email" class="block text-xs font-semibold text-slate-700 mb-1">Gmail nhận tài liệu Google Drive <span class="text-rose-500">*</span></label>
                             <input type="email" id="direct-email" oninput="handleDirectEmailInput(this)" placeholder="VD: giaovien@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <p id="direct-email-err" class="hidden text-[11px] text-rose-600 font-medium mt-1">Gmail chưa đúng định dạng.</p>
                         </div>
                     </div>
 
-                    <!-- Nút Voucher kiểu Shopee trong Đặt Mua Ngay -->
+                    <!-- Nút Voucher kiểu Shopee nằm toàn chiều rộng ngay bên dưới 4 ô input (CHỈ CHO NHẬP MÃ) -->
+                    <!-- Nút Voucher kiểu Shopee trong Đặt Mua Ngay (Chỉ cho nhập mã) -->
                     <div class="space-y-2 pt-0.5">
                         <button type="button" onclick="toggleDirectVoucherBox()" class="w-full px-3.5 py-2.5 rounded-xl bg-orange-50/80 hover:bg-orange-100/70 border border-dashed border-orange-300 flex items-center justify-between gap-2 transition-all">
                             <div class="flex items-center gap-2 min-w-0">
@@ -569,45 +583,59 @@
                                 <span class="text-xs sm:text-sm font-bold text-slate-800 truncate">Nhập voucher giảm giá</span>
                             </div>
                             <div class="flex items-center gap-1.5 shrink-0">
-                                <span id="direct-voucher-trigger-badge" class="text-xs font-semibold text-orange-600">Chọn hoặc nhập mã</span>
+                                <span id="direct-voucher-trigger-badge" class="text-xs font-semibold text-orange-600">Nhập mã</span>
                                 <i id="direct-voucher-chevron" class="fa-solid fa-chevron-right text-[11px] text-orange-500 transition-transform duration-200"></i>
                             </div>
                         </button>
 
-                        <div id="direct-voucher-drawer" class="hidden p-3 rounded-xl bg-white border border-slate-200 space-y-2.5 animate-fade-in">
+                        <div id="direct-voucher-drawer" class="hidden p-3 rounded-xl bg-white border border-slate-200 space-y-2 animate-fade-in">
                             <div class="flex gap-2 min-w-0">
-                                <input type="text" id="direct-voucher-input" onkeydown="if(event.key==='Enter'){event.preventDefault();applyDirectVoucher();}" placeholder="Nhập mã ưu đãi..." class="flex-1 min-w-0 px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs sm:text-sm uppercase font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="direct-voucher-input" onkeydown="if(event.key==='Enter'){event.preventDefault();applyDirectVoucher();}" placeholder="Nhập mã giảm giá..." class="flex-1 min-w-0 px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-300 text-xs sm:text-sm uppercase font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
                                 <button type="button" onclick="applyDirectVoucher()" class="shrink-0 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
                                     Áp dụng
                                 </button>
                             </div>
                             <p id="direct-voucher-msg" class="hidden text-xs font-semibold"></p>
-                            <div id="direct-voucher-suggestions" class="space-y-1.5"></div>
+                        </div>
+
+                        <!-- Thẻ xanh hiển thị mã đã áp dụng trong Đặt Mua Ngay -->
+                        <div id="direct-applied-voucher-pill" class="hidden px-3.5 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-2 animate-fade-in">
+                            <div class="flex items-center gap-2 min-w-0 text-emerald-700 text-xs sm:text-sm font-bold">
+                                <i class="fa-solid fa-circle-check text-emerald-600 shrink-0"></i>
+                                <span id="direct-applied-voucher-text" class="truncate"></span>
+                            </div>
+                            <button type="button" onclick="removeDirectVoucher()" aria-label="Gỡ mã ưu đãi" class="w-7 h-7 rounded-lg bg-white hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-emerald-200 flex items-center justify-center shrink-0 transition-colors">
+                                <i class="fa-solid fa-xmark text-xs"></i>
+                            </button>
                         </div>
                     </div>
 
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-1">
-                        <p class="text-[11px] text-amber-800 leading-snug"><i class="fa-solid fa-circle-info text-amber-600 mr-1"></i>Vui lòng điền đúng Gmail để cấp quyền Drive tự động.</p>
-                        <button type="button" onclick="confirmDirectOrder()" id="direct-submit-btn" class="w-full sm:w-auto shrink-0 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-colors flex items-center justify-center">
+                    <!-- Dòng lưu ý + Nút Xác nhận thông tin & Hiện mã QR -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1 border-t border-slate-200/70">
+                        <p class="text-xs text-amber-800 leading-snug">
+                            <i class="fa-solid fa-circle-info text-amber-600 mr-1"></i>Vui lòng điền đúng Gmail để cấp quyền Drive tự động.
+                        </p>
+                        <button type="button" onclick="confirmDirectOrder()" id="direct-submit-btn" class="w-full sm:w-auto shrink-0 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-colors flex items-center justify-center">
                             <i class="fa-solid fa-qrcode mr-1.5"></i>Xác nhận thông tin &amp; Hiện mã QR
                         </button>
                     </div>
                 </div>
 
-                <!-- Trạng thái chờ gọn gàng (Chỉ hiện khi CHƯA xác nhận thông tin) -->
-                <div id="qrWaitingBox" class="hidden py-4 px-4 rounded-2xl border border-dashed border-slate-300 bg-slate-50 text-center space-y-1">
-                    <div class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-white text-blue-600 text-base mb-1 shadow-sm border border-slate-200">
+                <!-- KHUNG MÃ QR TOÀN CHIỀU RỘNG BÊN DƯỚI (KHÔNG XẾP CẠNH NÚT ĐÓNG) -->
+                <!-- 1. Trạng thái chờ gọn gàng trước khi xác nhận thông tin -->
+                <div id="qrWaitingBox" class="hidden w-full py-5 px-4 rounded-2xl border border-dashed border-slate-300 bg-slate-50 text-center space-y-1.5">
+                    <div class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-white text-blue-600 text-base shadow-sm border border-slate-200">
                         <i class="fa-solid fa-qrcode"></i>
                     </div>
                     <div class="text-sm sm:text-base font-extrabold text-slate-900">Sẵn sàng tạo mã QR thanh toán</div>
-                    <p class="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto leading-relaxed">
+                    <p class="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
                         Sau khi thầy/cô điền đầy đủ thông tin nhận tài liệu ở trên và bấm <strong class="text-blue-600">'Xác nhận thông tin &amp; Hiện mã QR'</strong>, hệ thống sẽ tự động hiển thị mã QR kèm sẵn số tiền và nội dung chuyển khoản ạ!
                     </p>
                 </div>
 
-                <!-- Khung thanh toán 2 cột (Chỉ bung ra SAU KHI đã xác nhận thông tin) -->
-                <div id="qrActiveBox" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-center animate-fade-in">
-                    <!-- Cột trái: Mã QR vuông sắc nét & Thông tin tài khoản MB Bank -->
+                <!-- 2. Khung hiển thị mã VietQR & 3 bước hướng dẫn sau khi xác nhận -->
+                <div id="qrActiveBox" class="hidden w-full grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-center animate-fade-in">
+                    <!-- Cột trái: Mã QR vuông sắc nét & Thông tin MB Bank -->
                     <div class="lg:col-span-6 flex flex-col items-center justify-center bg-slate-50/90 rounded-2xl border-2 border-dashed border-blue-200 p-4 sm:p-5">
                         <div class="bg-white p-2.5 sm:p-3 rounded-2xl shadow-sm border border-slate-200">
                             <img id="vietqr-img" src="" alt="Mã VietQR thanh toán MB Bank" onerror="this.src='https://placehold.co/300x300/eff6ff/1d4ed8?text=Ma+QR+MB+Bank'" class="w-56 h-56 sm:w-64 sm:h-64 object-contain mx-auto">
@@ -620,7 +648,7 @@
                             <div class="flex items-center justify-center gap-2 flex-wrap">
                                 <span>STK: <strong class="text-blue-700 text-sm">0338844985</strong></span>
                                 <button type="button" onclick="copyTextValue('0338844985', 'Đã sao chép số tài khoản MB Bank')" class="px-2.5 py-1 rounded-md bg-white hover:bg-blue-50 border border-slate-200 text-blue-600 font-bold text-[11px] transition-colors">
-                                    <i class="fa-regular fa-copy mr-1"></i>Sao chép STK
+                                    <i class="fa-regular fa-copy mr-1"></i>Sao chép
                                 </button>
                             </div>
                             <div class="pt-0.5">Nội dung CK: <strong id="qr-transfer-note" class="text-slate-900 font-bold"></strong></div>
@@ -651,8 +679,11 @@
                 </div>
 
                 <div id="webhook-status-box" class="hidden text-center text-xs font-semibold px-3 py-2 rounded-xl bg-blue-50 text-blue-700 border border-blue-200"></div>
+            </div>
 
-                <button type="button" onclick="completeOrder()" class="w-full py-3 sm:py-3.5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-bold text-sm sm:text-base transition-colors">
+            <!-- Thanh Footer cố định cuối hộp thoại (Chiều cao tiêu chuẩn, không bao giờ bị kéo dãn) -->
+            <div class="shrink-0 px-4 sm:px-6 py-3.5 bg-slate-50 border-t border-slate-200">
+                <button type="button" onclick="completeOrder()" class="w-full py-3 px-5 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-bold text-sm sm:text-base transition-colors">
                     Đã chuyển khoản xong / Đóng
                 </button>
             </div>
@@ -696,81 +727,228 @@
         // =========================================================================
         // CẤU HÌNH THÔNG TIN THANH TOÁN & GOOGLE SHEETS
         // =========================================================================
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIfIdYbrZ_IRcHAa5Yfs1oLnvc3oYcGWnpZ6XVocsgTCGVJospnp10GOgpDqIWQ7pp/exec";
+
         const SELLER_CONFIG = {
             bankId: "MB",
             accountNo: "0338844985",
             accountName: "TRAN GIA BAO",
             zaloPhone: "0843589647",
-            googleSheetWebhookUrl: "https://script.google.com/macros/s/AKfycbwIfIdYbrZ_IRcHAa5Yfs1oLnvc3oYcGWnpZ6XVocsgTCGVJospnp10GOgpDqIWQ7pp/exec"
+            googleSheetWebhookUrl: APPS_SCRIPT_URL
         };
 
-        const PRODUCTS_CACHE_KEY = "turingphysics_products_cache_v6";
-        const VOUCHERS_CACHE_KEY = "turingphysics_vouchers_cache_v6";
-        const CART_STORAGE_KEY = "turingphysics_cart_v6";
-
-        // Dữ liệu dự phòng khi ngoại tuyến
-        const FALLBACK_PRODUCTS = [
-            { id: "VL10_01", code: "VL10_01", category: "K10", rawTitle: "DẠY THÊM VẬT LÝ KHỐI 10 – TRỌN BỘ CHƯƠNG TRÌNH MỚI", title: "DẠY THÊM VẬT LÝ KHỐI 10 – TRỌN BỘ CHƯƠNG TRÌNH MỚI", isNew: false, previewUrl: "", price: 180000, comboItems: "", voucherCode: "", voucherDiscount: "" },
-            { id: "VL11_01", code: "VL11_01", category: "K11", rawTitle: "DẠY THÊM VẬT LÝ KHỐI 11 – CHUẨN CV 5512 & BÀI TẬP PHÂN DẠNG", title: "DẠY THÊM VẬT LÝ KHỐI 11 – CHUẨN CV 5512 & BÀI TẬP PHÂN DẠNG", isNew: false, previewUrl: "", price: 180000, comboItems: "", voucherCode: "", voucherDiscount: "" },
-            { id: "VL12_01", code: "VL12_01", category: "K12", rawTitle: "DẠY THÊM VẬT LÝ KHỐI 12 – VẬT LÝ NHIỆT & KHÍ LÝ TƯỞNG", title: "DẠY THÊM VẬT LÝ KHỐI 12 – VẬT LÝ NHIỆT & KHÍ LÝ TƯỞNG", isNew: false, previewUrl: "", price: 220000, comboItems: "", voucherCode: "", voucherDiscount: "" },
-            { id: "TN27_01", code: "TN27_01", category: "TN", rawTitle: "BỘ 50 ĐỀ LUYỆN THI TNTHPT VẬT LÝ 2027 CHUẨN CẤU TRÚC MỚI", title: "BỘ 50 ĐỀ LUYỆN THI TNTHPT VẬT LÝ 2027 CHUẨN CẤU TRÚC MỚI", isNew: false, previewUrl: "", price: 250000, comboItems: "", voucherCode: "", voucherDiscount: "" },
-            { id: "CB_01", code: "CB_01", category: "CB", rawTitle: "COMBO TRỌN BỘ DẠY THÊM VẬT LÝ 10 - 11 - 12", title: "COMBO TRỌN BỘ DẠY THÊM VẬT LÝ 10 - 11 - 12", isNew: false, previewUrl: "", price: 450000, comboItems: "VL10_01; VL11_01; VL12_01", voucherCode: "", voucherDiscount: "" },
-            { id: "GA_01", code: "GA_01", category: "GA", rawTitle: "BỘ SLIDE POWERPOINT HIỆU ỨNG THÍ NGHIỆM VẬT LÝ THPT", title: "BỘ SLIDE POWERPOINT HIỆU ỨNG THÍ NGHIỆM VẬT LÝ THPT", isNew: false, previewUrl: "", price: 200000, comboItems: "", voucherCode: "", voucherDiscount: "" },
-            { id: "LT_01", code: "LT_01", category: "LT", rawTitle: "CHUYÊN ĐỀ LUYỆN LÝ THUYẾT & CÂU HỎI ĐÚNG SAI VẬT LÝ 12", title: "CHUYÊN ĐỀ LUYỆN LÝ THUYẾT & CÂU HỎI ĐÚNG SAI VẬT LÝ 12", isNew: false, previewUrl: "", price: 160000, comboItems: "", voucherCode: "", voucherDiscount: "" }
-        ];
+        // =========================================================================
+        // 1. TRẠNG THÁI TOÀN CỤC & LƯU TRỮ LOCALSTORAGE
+        // =========================================================================
+        const CART_STORAGE_KEY = "turing_physics_cart_v1";
+        const PRODUCTS_CACHE_KEY = "turing_physics_products_cache_v1";
+        const VOUCHERS_CACHE_KEY = "turing_physics_vouchers_cache_v1";
 
         let products = [];
         let globalVouchers = [];
         let cart = [];
-        let currentCategory = "K10";
         let activeVoucher = null;
-
         let directBuyProduct = null;
         let directActiveVoucher = null;
-        let driveNavHistory = [];
-        let activeComboProduct = null;
-        let viewingComboSubItem = false;
 
+        let currentCategory = "K10";
         let newCarouselIndex = 0;
         let newCarouselTimer = null;
-        let newCarouselPaused = false;
-        let centerPopupTimeout = null;
-        let toastTimeout = null;
+
+        let activeComboProduct = null;
+        let viewingComboSubItem = false;
+        let driveNavHistory = [];
+
+        const CATEGORY_TITLES = {
+            K10: "KHỐI 10",
+            K11: "KHỐI 11",
+            K12: "KHỐI 12",
+            TN: "LUYỆN THI TNTHPT",
+            CB: "COMBO TÀI LIỆU TIẾT KIỆM",
+            GA: "PPT & GIÁO ÁN",
+            LT: "CHUYÊN LUYỆN LÝ THUYẾT"
+        };
 
         // =========================================================================
-        // CÁC HÀM TIỆN ÍCH CƠ BẢN & ĐIỀU HƯỚNG TAB
+        // 2. HÀM TIỆN ÍCH ĐỊNH DẠNG & HIỂN THỊ
         // =========================================================================
-        function hasNewTag(title) {
-            return /(\(\s*new\s*\)|\[\s*new\s*\])/i.test(String(title || "").trim());
-        }
-
-        function cleanProductTitle(title) {
-            return String(title || "").replace(/\s*(\(\s*new\s*\)|\[\s*new\s*\])\s*/gi, " ").replace(/\s+/g, " ").trim();
-        }
-
         function formatCurrency(amount) {
-            const num = Number(amount) || 0;
+            const num = Math.round(Number(amount) || 0);
             return num.toLocaleString("vi-VN") + "đ";
         }
 
-        function getCategoryLabel(cat) {
-            const map = {
-                K10: "Khối 10",
-                K11: "Khối 11",
-                K12: "Khối 12",
-                TN: "Luyện Thi TNTHPT",
-                CB: "Combo",
-                GA: "PPT & Giáo Án",
-                LT: "Chuyên Luyện Lý Thuyết"
-            };
-            return map[String(cat || "").toUpperCase()] || "Tài Liệu Vật Lý";
+        function hasNewTag(rawTitle, item = null) {
+            if (item && (item.isNew === true || String(item.isNew).toUpperCase() === "TRUE")) return true;
+            return /(\(\s*new\s*\)|\[\s*new\s*\])\s*$/i.test(String(rawTitle || "").trim());
         }
 
+        function cleanProductTitle(rawTitle) {
+            return String(rawTitle || "")
+                .replace(/(\(\s*new\s*\)|\[\s*new\s*\])\s*$/i, "")
+                .trim();
+        }
+
+        function stripFileExtension(fileName) {
+            return String(fileName || "")
+                .replace(/\.(pdf|docx?|pptx?|xlsx?|zip|rar)$/i, "")
+                .trim();
+        }
+
+        function buildVietQrUrl(amount, addInfo) {
+            const amt = Math.max(0, Math.round(Number(amount) || 0));
+            const info = encodeURIComponent(String(addInfo || "").trim());
+            const accName = encodeURIComponent(SELLER_CONFIG.accountName);
+            return `https://img.vietqr.io/image/${SELLER_CONFIG.bankId}-${SELLER_CONFIG.accountNo}-compact2.png?amount=${amt}&addInfo=${info}&accountName=${accName}`;
+        }
+
+        function toggleFloatingContactButtons(hide) {
+            const el = document.getElementById("floating-contact-buttons");
+            if (!el) return;
+            if (hide) {
+                el.classList.add("opacity-0", "pointer-events-none");
+            } else {
+                el.classList.remove("opacity-0", "pointer-events-none");
+            }
+        }
+
+        function copyTextValue(text, successMsg) {
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            tempInput.style.position = "fixed";
+            tempInput.style.opacity = "0";
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand("copy");
+                showToast(successMsg || "Đã sao chép!");
+            } catch (e) {
+                showToast("Không thể sao chép tự động.");
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        let toastTimeout = null;
+        function showToast(message) {
+            const box = document.getElementById("toast-box");
+            const msg = document.getElementById("toast-message");
+            if (!box || !msg) return;
+            msg.textContent = message;
+            box.classList.remove("opacity-0", "translate-y-3");
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                box.classList.add("opacity-0", "translate-y-3");
+            }, 2600);
+        }
+
+        let centerPopupTimeout = null;
+        function showCenterCartPopup(message, isAlreadyInCart = false) {
+            const popup = document.getElementById("center-cart-popup");
+            const iconBox = document.getElementById("center-popup-icon");
+            const textEl = document.getElementById("center-popup-text");
+            if (!popup || !iconBox || !textEl) return;
+
+            textEl.textContent = message;
+            if (isAlreadyInCart) {
+                iconBox.className = "w-16 h-16 rounded-full bg-amber-500 text-white flex items-center justify-center text-3xl mb-4 shadow-lg shadow-amber-500/30";
+                iconBox.innerHTML = `<i class="fa-solid fa-circle-info"></i>`;
+            } else {
+                iconBox.className = "w-16 h-16 rounded-full bg-emerald-500 text-white flex items-center justify-center text-3xl mb-4 shadow-lg shadow-emerald-500/30";
+                iconBox.innerHTML = `<i class="fa-solid fa-check"></i>`;
+            }
+
+            popup.classList.remove("opacity-0", "scale-95");
+            clearTimeout(centerPopupTimeout);
+            centerPopupTimeout = setTimeout(() => {
+                popup.classList.add("opacity-0", "scale-95");
+            }, 1450);
+        }
+
+        // =========================================================================
+        // 3. ĐỒNG BỘ DỮ LIỆU GOOGLE SHEETS & CACHE
+        // =========================================================================
+        function normalizeProductRow(raw) {
+            const rawTitle = String(raw.title || raw.name || raw["Tên tài liệu"] || "").trim();
+            const rawPrice = raw.price ?? raw.Price ?? raw["Giá bán (VNĐ)"] ?? raw["Giá"] ?? 0;
+            const numericPrice = typeof rawPrice === "number"
+                ? rawPrice
+                : (Number(String(rawPrice).replace(/[^\d]/g, "")) || 0);
+
+            return {
+                code: String(raw.code || raw["Mã tài liệu"] || "").trim(),
+                category: String(raw.category || raw["Nhóm (K10/K11/K12/TN/CB/GA/LT)"] || "K10").trim().toUpperCase(),
+                rawTitle: rawTitle,
+                title: cleanProductTitle(rawTitle),
+                isNew: hasNewTag(rawTitle, raw),
+                previewUrl: String(raw.previewUrl || raw["Link Drive (Xem thử & Gốc)"] || "").trim(),
+                price: numericPrice,
+                comboItems: String(raw.comboItems || raw["Mã lẻ trong Combo (cách dấu ;)"] || "").trim(),
+                voucherCode: String(raw.voucherCode || raw["Mã ưu đãi riêng"] || "").trim().toUpperCase(),
+                voucherDiscount: raw.voucherDiscount ?? raw["Mức giảm (% hoặc VNĐ)"] ?? ""
+            };
+        }
+
+        function loadCachedData() {
+            try {
+                const cachedProducts = localStorage.getItem(PRODUCTS_CACHE_KEY);
+                if (cachedProducts) {
+                    const parsed = JSON.parse(cachedProducts);
+                    if (Array.isArray(parsed)) {
+                        products = parsed.map(normalizeProductRow);
+                    }
+                }
+                const cachedVouchers = localStorage.getItem(VOUCHERS_CACHE_KEY);
+                if (cachedVouchers) {
+                    const parsedV = JSON.parse(cachedVouchers);
+                    if (Array.isArray(parsedV)) {
+                        globalVouchers = parsedV;
+                    }
+                }
+            } catch (e) {
+                products = [];
+                globalVouchers = [];
+            }
+        }
+
+        async function fetchSheetData() {
+            const loadingEl = document.getElementById("loading-state");
+            if (loadingEl && products.length === 0) {
+                loadingEl.classList.remove("hidden");
+            }
+
+            try {
+                const url = `${APPS_SCRIPT_URL}?t=${Date.now()}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data && data.status === "success") {
+                    products = Array.isArray(data.products) ? data.products.map(normalizeProductRow) : [];
+                    globalVouchers = Array.isArray(data.globalVouchers) ? data.globalVouchers : [];
+
+                    try {
+                        localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify(products));
+                        localStorage.setItem(VOUCHERS_CACHE_KEY, JSON.stringify(globalVouchers));
+                    } catch (e) {}
+
+                    syncCartWithProducts();
+                    renderNewCarousel();
+                    filterProducts();
+                    if (!document.getElementById("cart-page-view").classList.contains("hidden")) {
+                        updateCartUI();
+                    }
+                }
+            } catch (err) {
+                console.warn("Không thể đồng bộ dữ liệu mới từ Google Sheets:", err);
+            } finally {
+                if (loadingEl) loadingEl.classList.add("hidden");
+            }
+        }
+
+        // =========================================================================
+        // 4. ĐIỀU HƯỚNG TAB & TRANG GIỎ HÀNG
+        // =========================================================================
         function switchTab(tabId) {
-            const mainView = document.getElementById("main-store-view");
-            const cartView = document.getElementById("cart-page-view");
-            if (cartView) cartView.classList.add("hidden");
-            if (mainView) mainView.classList.remove("hidden");
+            document.getElementById("main-store-view").classList.remove("hidden");
+            document.getElementById("cart-page-view").classList.add("hidden");
 
             document.querySelectorAll(".tab-page-section").forEach(sec => {
                 if (sec.id === tabId) {
@@ -781,447 +959,172 @@
             });
 
             document.querySelectorAll(".main-nav-tab").forEach(btn => {
-                const isActive = btn.getAttribute("data-tab") === tabId;
-                const isMobile = btn.classList.contains("text-xs");
-                if (isMobile) {
-                    btn.className = isActive
-                        ? "main-nav-tab shrink-0 px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold transition-all"
-                        : "main-nav-tab shrink-0 px-2.5 py-1.5 rounded-lg text-slate-600 text-xs font-semibold transition-all";
-                } else {
-                    btn.className = isActive
+                const isTarget = btn.getAttribute("data-tab") === tabId;
+                if (btn.closest("nav")) {
+                    btn.className = isTarget
                         ? "main-nav-tab px-4 py-2 rounded-xl bg-blue-50 text-blue-700 font-bold transition-all"
                         : "main-nav-tab px-4 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-slate-100/80 transition-all";
+                } else {
+                    btn.className = isTarget
+                        ? "main-nav-tab shrink-0 px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold transition-all"
+                        : "main-nav-tab shrink-0 px-2.5 py-1.5 rounded-lg text-slate-600 text-xs font-semibold transition-all";
                 }
             });
 
+            if (tabId === "danh-muc") {
+                filterProducts();
+            }
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
 
         function showCartView() {
-            const mainView = document.getElementById("main-store-view");
-            const cartView = document.getElementById("cart-page-view");
-            if (mainView) mainView.classList.add("hidden");
-            if (cartView) cartView.classList.remove("hidden");
+            document.getElementById("main-store-view").classList.add("hidden");
+            document.getElementById("cart-page-view").classList.remove("hidden");
 
             document.querySelectorAll(".main-nav-tab").forEach(btn => {
-                const isMobile = btn.classList.contains("text-xs");
-                btn.className = isMobile
-                    ? "main-nav-tab shrink-0 px-2.5 py-1.5 rounded-lg text-slate-600 text-xs font-semibold transition-all"
-                    : "main-nav-tab px-4 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-slate-100/80 transition-all";
+                if (btn.closest("nav")) {
+                    btn.className = "main-nav-tab px-4 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-slate-100/80 transition-all";
+                } else {
+                    btn.className = "main-nav-tab shrink-0 px-2.5 py-1.5 rounded-lg text-slate-600 text-xs font-semibold transition-all";
+                }
             });
 
             updateCartUI();
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
 
-        function toggleFloatingContactButtons(hide) {
-            const box = document.getElementById("floating-contact-buttons");
-            if (!box) return;
-            if (hide) {
-                box.classList.add("opacity-0", "pointer-events-none");
-            } else {
-                box.classList.remove("opacity-0", "pointer-events-none");
-            }
-        }
-
-        function buildVietQrUrl(amount, info) {
-            const safeAmount = Math.max(0, Math.round(Number(amount) || 0));
-            return `https://img.vietqr.io/image/${SELLER_CONFIG.bankId}-${SELLER_CONFIG.accountNo}-qr_only.png?amount=${safeAmount}&addInfo=${encodeURIComponent(info)}&accountName=${encodeURIComponent(SELLER_CONFIG.accountName)}`;
-        }
-
-        function copyTextValue(text, successMsg) {
-            const temp = document.createElement("textarea");
-            temp.value = text;
-            temp.style.position = "fixed";
-            temp.style.opacity = "0";
-            document.body.appendChild(temp);
-            temp.select();
-            try {
-                document.execCommand("copy");
-                showToast(successMsg || "Đã sao chép!");
-            } catch (e) {
-                showToast("Không thể sao chép tự động.");
-            }
-            document.body.removeChild(temp);
-        }
-
-        function showToast(message) {
-            const box = document.getElementById("toast-box");
-            const msgEl = document.getElementById("toast-message");
-            if (!box || !msgEl) return;
-            msgEl.textContent = message;
-            box.classList.remove("opacity-0", "translate-y-3");
-            if (toastTimeout) clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                box.classList.add("opacity-0", "translate-y-3");
-            }, 2500);
-        }
-
-        function showCenterCartPopup(message, isAlreadyAdded) {
-            const popup = document.getElementById("center-cart-popup");
-            const iconBox = document.getElementById("center-popup-icon");
-            const textEl = document.getElementById("center-popup-text");
-            if (!popup || !iconBox || !textEl) return;
-
-            textEl.textContent = message;
-            if (isAlreadyAdded) {
-                iconBox.className = "w-16 h-16 rounded-full bg-amber-500 text-white flex items-center justify-center text-3xl mb-4 shadow-lg shadow-amber-500/30";
-                iconBox.innerHTML = `<i class="fa-solid fa-info"></i>`;
-            } else {
-                iconBox.className = "w-16 h-16 rounded-full bg-emerald-500 text-white flex items-center justify-center text-3xl mb-4 shadow-lg shadow-emerald-500/30";
-                iconBox.innerHTML = `<i class="fa-solid fa-check"></i>`;
-            }
-
-            popup.classList.remove("opacity-0", "scale-95");
-            popup.classList.add("opacity-100", "scale-100");
-
-            if (centerPopupTimeout) clearTimeout(centerPopupTimeout);
-            centerPopupTimeout = setTimeout(() => {
-                popup.classList.remove("opacity-100", "scale-100");
-                popup.classList.add("opacity-0", "scale-95");
-            }, 1500);
-        }
-
         // =========================================================================
-        // TRÌNH CHIẾU TỰ ĐỘNG TÀI LIỆU MỚI NHẤT (CHỈ HIỆN KHI CÓ GẮN NHÃN (new))
+        // 5. TRÌNH CHIẾU TÀI LIỆU MỚI NHẤT (CHỈ HIỆN KHI CÓ TÀI LIỆU GẮN (NEW))
         // =========================================================================
-        function getNewDocuments() {
-            return products.filter(p => Boolean(p.isNew) || hasNewTag(p.rawTitle) || hasNewTag(p.title));
+        function getNewProducts() {
+            return products.filter(p => p.isNew);
         }
 
         function renderNewCarousel() {
-            const wrapperEl = document.getElementById("new-docs-carousel-wrapper");
-            const heroColEl = document.getElementById("hero-intro-col");
-            const slideEl = document.getElementById("new-carousel-slide");
-            const dotsEl = document.getElementById("new-carousel-dots");
-            if (!slideEl || !dotsEl) return;
+            const wrapper = document.getElementById("new-docs-carousel-wrapper");
+            const heroCol = document.getElementById("hero-intro-col");
+            const slideBox = document.getElementById("new-carousel-slide");
+            const dotsBox = document.getElementById("new-carousel-dots");
+            if (!wrapper || !heroCol || !slideBox || !dotsBox) return;
 
-            const list = getNewDocuments();
-            if (list.length === 0) {
-                if (wrapperEl) wrapperEl.classList.add("hidden");
-                if (heroColEl) {
-                    heroColEl.classList.remove("lg:col-span-7");
-                    heroColEl.classList.add("lg:col-span-12");
-                }
-                slideEl.innerHTML = "";
-                dotsEl.innerHTML = "";
-                stopNewCarouselTimer();
+            const newItems = getNewProducts();
+            if (newItems.length === 0) {
+                wrapper.classList.add("hidden");
+                heroCol.className = "lg:col-span-12 space-y-5 sm:space-y-6 min-w-0";
+                pauseNewCarousel();
                 return;
             }
 
-            if (wrapperEl) wrapperEl.classList.remove("hidden");
-            if (heroColEl) {
-                heroColEl.classList.remove("lg:col-span-12");
-                heroColEl.classList.add("lg:col-span-7");
-            }
+            wrapper.classList.remove("hidden");
+            heroCol.className = "lg:col-span-7 space-y-5 sm:space-y-6 min-w-0";
 
-            if (newCarouselIndex >= list.length) newCarouselIndex = 0;
-            if (newCarouselIndex < 0) newCarouselIndex = list.length - 1;
+            if (newCarouselIndex >= newItems.length) newCarouselIndex = 0;
+            const item = newItems[newCarouselIndex];
 
-            const item = list[newCarouselIndex];
-            const cleanName = cleanProductTitle(item.title || item.rawTitle);
-
-            slideEl.innerHTML = `
-                <div class="p-4 sm:p-5 rounded-2xl bg-slate-50/90 border border-blue-100 space-y-4 animate-fade-in">
-                    <div class="flex items-center justify-between gap-2 flex-wrap">
-                        <div class="flex items-center gap-1.5">
-                            <span class="px-2.5 py-0.5 rounded-full bg-rose-500 text-white text-[11px] font-extrabold uppercase">MỚI</span>
-                            <span class="px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-slate-700 text-[11px] font-bold">${getCategoryLabel(item.category)}</span>
-                        </div>
-                        <span class="px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 font-extrabold text-xs sm:text-sm">${formatCurrency(item.price)}</span>
+            slideBox.innerHTML = `
+                <div class="space-y-4 animate-fade-in">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-extrabold">${item.code}</span>
+                        <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs sm:text-sm font-extrabold">${formatCurrency(item.price)}</span>
                     </div>
-
-                    <div>
-                        <span class="text-xs font-extrabold text-blue-600 block">${item.code}</span>
-                        <h3 class="font-extrabold text-sm sm:text-base text-slate-900 uppercase leading-snug mt-1 line-clamp-2">${cleanName}</h3>
-                    </div>
-
-                    <div class="space-y-2 pt-1">
-                        <div class="grid grid-cols-2 gap-2">
-                            <button type="button" onclick="openPreviewModal('${item.code}')" class="py-2.5 px-3 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 font-bold text-xs transition-colors flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-eye text-slate-600"></i>
-                                <span>Xem Thử</span>
-                            </button>
-                            <button type="button" onclick="buyNow('${item.code}')" class="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm transition-colors flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                                <span>Đặt Mua Ngay</span>
-                            </button>
-                        </div>
-                        <button type="button" onclick="addToCart('${item.code}')" class="w-full py-2.5 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 font-bold text-xs transition-colors flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-cart-plus"></i>
-                            <span>Thêm vào giỏ hàng</span>
+                    <h3 class="text-base sm:text-lg font-extrabold text-slate-900 leading-snug line-clamp-3 min-h-[3.75rem]">
+                        ${cleanProductTitle(item.title || item.rawTitle)}
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2.5 pt-1">
+                        <button type="button" onclick="openPreviewModal('${item.code}')" class="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-eye"></i>
+                            <span>Xem Thử</span>
+                        </button>
+                        <button type="button" onclick="buyNow('${item.code}')" class="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-colors flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span>Đặt Mua Ngay</span>
                         </button>
                     </div>
                 </div>
             `;
 
-            dotsEl.innerHTML = list.map((_, idx) => `
-                <button type="button" onclick="goToNewSlide(${idx})" aria-label="Tài liệu mới ${idx + 1}" class="h-2 rounded-full transition-all ${idx === newCarouselIndex ? "w-6 bg-blue-600" : "w-2 bg-slate-300 hover:bg-slate-400"}"></button>
+            dotsBox.innerHTML = newItems.map((_, idx) => `
+                <button type="button" onclick="goToNewSlide(${idx})" aria-label="Tài liệu ${idx + 1}" class="h-2 rounded-full transition-all ${idx === newCarouselIndex ? "w-6 bg-blue-600" : "w-2 bg-slate-300 hover:bg-slate-400"}"></button>
             `).join("");
 
-            startNewCarouselTimer();
+            resumeNewCarousel();
         }
 
-        function startNewCarouselTimer() {
-            stopNewCarouselTimer();
-            const list = getNewDocuments();
-            if (list.length <= 1) return;
-            newCarouselTimer = setInterval(() => {
-                if (!newCarouselPaused) {
-                    newCarouselIndex = (newCarouselIndex + 1) % list.length;
-                    renderNewCarousel();
-                }
-            }, 3500);
+        function goToNewSlide(idx) {
+            const newItems = getNewProducts();
+            if (newItems.length === 0) return;
+            newCarouselIndex = (idx + newItems.length) % newItems.length;
+            renderNewCarousel();
         }
 
-        function stopNewCarouselTimer() {
+        function nextNewSlide() {
+            goToNewSlide(newCarouselIndex + 1);
+        }
+
+        function prevNewSlide() {
+            goToNewSlide(newCarouselIndex - 1);
+        }
+
+        function pauseNewCarousel() {
             if (newCarouselTimer) {
                 clearInterval(newCarouselTimer);
                 newCarouselTimer = null;
             }
         }
 
-        function pauseNewCarousel() {
-            newCarouselPaused = true;
-        }
-
         function resumeNewCarousel() {
-            newCarouselPaused = false;
-        }
-
-        function nextNewSlide() {
-            const list = getNewDocuments();
-            if (list.length === 0) return;
-            newCarouselIndex = (newCarouselIndex + 1) % list.length;
-            renderNewCarousel();
-        }
-
-        function prevNewSlide() {
-            const list = getNewDocuments();
-            if (list.length === 0) return;
-            newCarouselIndex = (newCarouselIndex - 1 + list.length) % list.length;
-            renderNewCarousel();
-        }
-
-        function goToNewSlide(index) {
-            newCarouselIndex = index;
-            renderNewCarousel();
-        }
-
-        // =========================================================================
-        // ĐỒNG BỘ DỮ LIỆU TỪ GOOGLE APPS SCRIPT (KHỚP 100% CODE.GS)
-        // =========================================================================
-        function extractFlexibleField(raw, candidateKeys, regexPattern) {
-            if (!raw || typeof raw !== "object") return "";
-            for (const key of candidateKeys) {
-                if (raw[key] !== undefined && raw[key] !== null && String(raw[key]).trim() !== "") {
-                    return raw[key];
-                }
-            }
-            if (regexPattern) {
-                const matchedKey = Object.keys(raw).find(k => regexPattern.test(k) && raw[k] !== undefined && raw[k] !== null && String(raw[k]).trim() !== "");
-                if (matchedKey) return raw[matchedKey];
-            }
-            return "";
-        }
-
-        function parseSheetPrice(rawVal) {
-            if (typeof rawVal === "number" && !isNaN(rawVal)) return Math.round(rawVal);
-            const str = String(rawVal || "").trim();
-            if (!str) return 0;
-            const digits = Number(str.replace(/[^\d]/g, "")) || 0;
-            if (digits > 0 && digits < 1000 && /k\b/i.test(str)) {
-                return digits * 1000;
-            }
-            return digits;
-        }
-
-        function normalizeProductRow(raw) {
-            const visibleRaw = String(extractFlexibleField(raw, ["visible", "Visible", "hienThi", "Hiển thị (CO/KHONG)", "Hiển thị"], /(visible|hienthi|hiển thị)/i)).trim().toUpperCase();
-            if (visibleRaw === "KHONG" || visibleRaw === "KHÔNG" || visibleRaw === "FALSE" || visibleRaw === "0") {
-                return { id: "", code: "", title: "" };
-            }
-
-            const code = String(extractFlexibleField(raw, ["code", "Code", "CODE", "id", "ID", "ma", "Ma", "stt", "STT", "Mã tài liệu", "Mã"], /(code|id|ma|mã|stt)/i)).trim();
-            const rawTitle = String(extractFlexibleField(raw, ["title", "Title", "TITLE", "name", "Name", "ten", "Ten", "Tên", "Tên tài liệu"], /(title|name|ten|tên)/i)).trim();
-            const rawCategory = String(extractFlexibleField(raw, ["category", "Category", "CATEGORY", "khoi", "Khoi", "nhom", "Nhom", "danhMuc", "Danh mục", "Chuyên mục", "Khối"], /(category|khoi|khối|nhom|nhóm|danhmuc|danh mục|chuyên mục)/i) || "K10").trim().toUpperCase();
-            const rawPreview = String(extractFlexibleField(raw, ["previewUrl", "PreviewUrl", "preview", "Preview", "link", "Link", "url", "URL", "drive", "Link xem thử"], /(preview|link|url|drive)/i)).trim();
-            const rawPrice = extractFlexibleField(raw, ["price", "Price", "PRICE", "gia", "Gia", "Giá", "GIÁ", "Giá bán (VNĐ)", "Giá bán", "giaBan", "donGia", "amount", "cost"], /(price|gia|giá|giaban|dongia|amount|cost)/i);
-            const rawCombo = String(extractFlexibleField(raw, ["comboItems", "ComboItems", "combo", "Combo", "COMBO", "baoGom", "Mã lẻ trong Combo (cách dấu ;)", "Mã lẻ trong Combo"], /(combo|baogom|mã lẻ)/i)).trim();
-            const rawVoucherCode = String(extractFlexibleField(raw, ["voucherCode", "VoucherCode", "promoCode", "PromoCode", "maGiamGia", "Mã ưu đãi riêng", "Mã ưu đãi"], /(vouchercode|promocode|magiamgia|mã ưu đãi|ưu đãi)/i)).trim().toUpperCase();
-            const rawVoucherDiscount = extractFlexibleField(raw, ["voucherDiscount", "VoucherDiscount", "discount", "Discount", "giamGia", "Mức giảm (% hoặc VNĐ)", "Mức giảm"], /(voucherdiscount|discount|giamgia|mức giảm|giảm)/i);
-
-            const rawIsNew = raw.isNew === true || String(raw.isNew || "").trim().toLowerCase() === "true" || String(raw.isNew || "").trim().toUpperCase() === "CO";
-            const isNew = rawIsNew || hasNewTag(rawTitle);
-
-            return {
-                id: code,
-                code: code,
-                category: rawCategory,
-                rawTitle: rawTitle,
-                title: cleanProductTitle(rawTitle),
-                isNew: isNew,
-                previewUrl: rawPreview,
-                price: parseSheetPrice(rawPrice),
-                comboItems: rawCombo,
-                voucherCode: rawVoucherCode,
-                voucherDiscount: rawVoucherDiscount
-            };
-        }
-
-        function normalizeVoucherRow(raw) {
-            if (!raw || typeof raw !== "object") return null;
-            const visibleRaw = String(extractFlexibleField(raw, ["visible", "Visible", "hienThi", "Hiển thị (CO/KHONG)", "Hiển thị"], /(visible|hienthi|hiển thị)/i)).trim().toUpperCase();
-            if (visibleRaw === "KHONG" || visibleRaw === "KHÔNG" || visibleRaw === "FALSE" || visibleRaw === "0") {
-                return null;
-            }
-
-            const code = String(extractFlexibleField(raw, ["code", "Code", "CODE", "promoCode", "ma", "Mã", "Mã ưu đãi"], /(code|ma|mã)/i)).trim().toUpperCase();
-            const discount = extractFlexibleField(raw, ["discount", "Discount", "giam", "Mức giảm (% hoặc VNĐ)", "Mức giảm"], /(discount|giam|giảm)/i);
-            const minOrderRaw = extractFlexibleField(raw, ["minOrder", "MinOrder", "donToiThieu", "Đơn tối thiểu (VNĐ)", "Đơn tối thiểu"], /(minorder|toithieu|tối thiểu)/i);
-            if (!code) return null;
-            return {
-                code: code,
-                discount: discount,
-                minOrder: parseSheetPrice(minOrderRaw)
-            };
-        }
-
-        function syncCartWithProducts() {
-            if (!Array.isArray(cart) || cart.length === 0 || !Array.isArray(products) || products.length === 0) return;
-            let changed = false;
-            cart = cart.map(item => {
-                const latest = products.find(p => p.code.toUpperCase() === String(item.code || "").toUpperCase());
-                if (latest) {
-                    changed = true;
-                    return {
-                        ...item,
-                        ...latest,
-                        title: cleanProductTitle(latest.title || latest.rawTitle)
-                    };
-                }
-                return item;
-            });
-            if (changed) {
-                saveCartToStorage();
-            }
-        }
-
-        function loadCachedData() {
-            try {
-                const cachedProducts = localStorage.getItem(PRODUCTS_CACHE_KEY);
-                if (cachedProducts) {
-                    const parsedProducts = JSON.parse(cachedProducts);
-                    if (Array.isArray(parsedProducts)) {
-                        products = parsedProducts.map(normalizeProductRow).filter(item => item.code && item.title);
-                    }
-                }
-                const cachedVouchers = localStorage.getItem(VOUCHERS_CACHE_KEY);
-                if (cachedVouchers) {
-                    const parsedVouchers = JSON.parse(cachedVouchers);
-                    if (Array.isArray(parsedVouchers)) {
-                        globalVouchers = parsedVouchers.map(normalizeVoucherRow).filter(Boolean);
-                    }
-                }
-                syncCartWithProducts();
-            } catch (e) {
-                products = [];
-                globalVouchers = [];
-            }
-        }
-
-        async function fetchSheetData() {
-            const loadingEl = document.getElementById("loading-state");
-            if (loadingEl && products.length === 0) loadingEl.classList.remove("hidden");
-
-            try {
-                const url = `${SELLER_CONFIG.googleSheetWebhookUrl}?action=getProducts&t=${Date.now()}`;
-                const res = await fetch(url);
-                const data = await res.json();
-
-                if (data && data.status === "success" && Array.isArray(data.products)) {
-                    // Đồng bộ trực tiếp kể cả khi Google Sheets xóa sạch tài liệu (mảng rỗng)
-                    products = data.products
-                        .map(normalizeProductRow)
-                        .filter(item => item.code && item.title);
-
-                    // Khớp 100% trường globalVouchers trả về từ Code.gs
-                    const rawVoucherList = Array.isArray(data.globalVouchers)
-                        ? data.globalVouchers
-                        : (Array.isArray(data.vouchers) ? data.vouchers : (Array.isArray(data.promoCodes) ? data.promoCodes : []));
-                    globalVouchers = rawVoucherList.map(normalizeVoucherRow).filter(Boolean);
-
-                    try {
-                        localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify(products));
-                        localStorage.setItem(VOUCHERS_CACHE_KEY, JSON.stringify(globalVouchers));
-                    } catch (e) {}
-
-                    syncCartWithProducts();
-                    renderNewCarousel();
-                    filterProducts();
-                    updateCartUI();
-                }
-            } catch (err) {
-                if (products.length === 0) {
-                    products = FALLBACK_PRODUCTS.map(normalizeProductRow);
-                    renderNewCarousel();
-                    filterProducts();
-                }
-            } finally {
-                if (loadingEl) loadingEl.classList.add("hidden");
+            pauseNewCarousel();
+            const newItems = getNewProducts();
+            if (newItems.length > 1) {
+                newCarouselTimer = setInterval(() => {
+                    nextNewSlide();
+                }, 4200);
             }
         }
 
         // =========================================================================
-        // LỌC CHUYÊN MỤC, TÌM KIẾM & HIỂN THỊ THẺ TÀI LIỆU
+        // 6. LỌC CHUYÊN MỤC, RENDER THẺ TÀI LIỆU & XEM THỬ GOOGLE DRIVE
         // =========================================================================
-        function resolveComboItems(comboStr) {
-            if (!comboStr) return [];
-            const codes = String(comboStr)
-                .split(/[,;|]+/)
+        function resolveComboItems(comboProduct) {
+            if (!comboProduct || !comboProduct.comboItems) return [];
+            const codes = comboProduct.comboItems
+                .split(/[;,]/)
                 .map(c => c.trim().toUpperCase())
                 .filter(Boolean);
 
             return codes.map(code => {
                 const found = products.find(p => p.code.toUpperCase() === code);
-                if (found) {
-                    return {
-                        code: found.code,
-                        title: cleanProductTitle(found.title || found.rawTitle),
-                        previewUrl: found.previewUrl
-                    };
-                }
-                return { code: code, title: `Tài liệu mã ${code}`, previewUrl: "" };
+                if (found) return found;
+                return {
+                    code: code,
+                    title: `Tài liệu mã ${code}`,
+                    rawTitle: `Tài liệu mã ${code}`,
+                    price: 0,
+                    previewUrl: ""
+                };
             });
         }
 
         function selectCategory(cat) {
             currentCategory = cat;
-
-            const bar = document.getElementById("categoryBar");
-            if (bar) {
-                bar.querySelectorAll(".cat-btn").forEach(btn => {
-                    const isSelected = btn.getAttribute("data-cat") === cat;
-                    if (isSelected) {
-                        btn.className = "cat-btn shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold bg-blue-600 text-white shadow-lg shadow-blue-600/30 transition-all";
-                        const targetLeft = btn.offsetLeft - (bar.clientWidth / 2) + (btn.offsetWidth / 2);
-                        bar.scrollTo({ left: Math.max(0, targetLeft), behavior: "smooth" });
-                    } else {
-                        btn.className = "cat-btn shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-white text-slate-700 border border-slate-200/90 hover:border-blue-400 hover:text-blue-600 shadow-sm transition-all";
-                    }
-                });
-            }
+            document.querySelectorAll(".cat-btn").forEach(btn => {
+                const isSelected = btn.getAttribute("data-cat") === cat;
+                btn.className = isSelected
+                    ? "cat-btn shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold bg-blue-600 text-white shadow-lg shadow-blue-600/30 transition-all"
+                    : "cat-btn shrink-0 inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-white text-slate-700 border border-slate-200/90 hover:border-blue-400 hover:text-blue-600 shadow-sm transition-all";
+            });
 
             const titleEl = document.getElementById("category-display-title");
-            if (titleEl) titleEl.textContent = getCategoryLabel(cat).toUpperCase();
+            if (titleEl) {
+                titleEl.textContent = CATEGORY_TITLES[cat] || cat;
+            }
 
             filterProducts();
 
-            const anchor = document.getElementById("category-bar-anchor");
-            const header = document.querySelector("header");
-            if (anchor && header) {
-                const targetY = anchor.getBoundingClientRect().top + window.scrollY - header.offsetHeight;
-                window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
+            const searchContainer = document.getElementById("search-bar-container");
+            if (searchContainer) {
+                const targetScrollY = searchContainer.offsetTop + searchContainer.offsetHeight;
+                window.scrollTo({ top: targetScrollY, behavior: "smooth" });
             }
         }
 
@@ -1229,14 +1132,13 @@
             const grid = document.getElementById("products-grid");
             if (!grid) return;
 
-            const query = (document.getElementById("search-input")?.value || "").trim().toLowerCase();
-
+            const keyword = (document.getElementById("search-input")?.value || "").trim().toLowerCase();
             const filtered = products.filter(p => {
-                if (query) {
-                    const hay = `${p.code} ${p.title} ${p.rawTitle}`.toLowerCase();
-                    return hay.includes(query);
-                }
-                return p.category === currentCategory;
+                const matchCat = keyword ? true : (p.category === currentCategory);
+                const matchSearch = !keyword ||
+                    p.code.toLowerCase().includes(keyword) ||
+                    p.title.toLowerCase().includes(keyword);
+                return matchCat && matchSearch;
             });
 
             if (filtered.length === 0) {
@@ -1246,23 +1148,23 @@
                             <i class="fa-solid fa-folder-open"></i>
                         </div>
                         <p class="text-sm sm:text-base font-bold text-slate-700">Chưa có tài liệu nào trong mục này.</p>
-                        <p class="text-xs sm:text-sm text-slate-500 mt-1">Thầy/cô vui lòng chọn chuyên mục khác hoặc xóa từ khóa tìm kiếm nhé!</p>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">Thầy/cô vui lòng chọn chuyên mục khác hoặc thử từ khóa tìm kiếm khác ạ.</p>
                     </div>
                 `;
                 return;
             }
 
             grid.innerHTML = filtered.map(p => {
-                const cleanName = cleanProductTitle(p.title || p.rawTitle);
-                const comboList = p.category === "CB" ? resolveComboItems(p.comboItems) : [];
-                const comboHtml = comboList.length > 0 ? `
-                    <div class="mt-3.5 p-3 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-1.5">
-                        <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-900">BAO GỒM CÁC TÀI LIỆU:</div>
-                        <ul class="space-y-1.5 text-xs sm:text-[13px] text-slate-900 leading-snug">
-                            ${comboList.map(item => `
-                                <li class="flex items-start gap-2">
-                                    <i class="fa-solid fa-check text-slate-900 text-[11px] mt-1 shrink-0"></i>
-                                    <span class="font-bold text-slate-900">[${item.code}] ${item.title}</span>
+                const isCombo = p.category === "CB" || Boolean(p.comboItems);
+                const subItems = isCombo ? resolveComboItems(p) : [];
+                const comboListHtml = subItems.length > 0 ? `
+                    <div class="mt-3 p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                        <div class="text-xs font-extrabold uppercase tracking-wider text-slate-900">Bao gồm các tài liệu:</div>
+                        <ul class="space-y-1.5">
+                            ${subItems.map(sub => `
+                                <li class="flex items-start gap-2 text-xs sm:text-[13px] font-bold text-slate-900 leading-snug">
+                                    <i class="fa-solid fa-circle-check text-slate-900 mt-0.5 shrink-0 text-[11px]"></i>
+                                    <span class="text-slate-900">[${sub.code}] ${cleanProductTitle(sub.title || sub.rawTitle)}</span>
                                 </li>
                             `).join("")}
                         </ul>
@@ -1270,60 +1172,256 @@
                 ` : "";
 
                 return `
-                    <article class="bg-white rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between min-w-0">
+                    <div class="bg-white rounded-3xl border border-slate-200/90 hover:border-blue-300 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 p-5 sm:p-6 flex flex-col justify-between transition-all">
                         <div>
-                            <div class="flex items-center justify-between gap-2 mb-4">
-                                <span class="px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-blue-600 font-extrabold text-xs tracking-wide">${p.code}</span>
-                                <span class="px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 font-extrabold text-sm">${formatCurrency(p.price)}</span>
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-extrabold">${p.code}</span>
+                                <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs sm:text-sm font-extrabold">${formatCurrency(p.price)}</span>
                             </div>
-
-                            <h3 class="font-extrabold text-base sm:text-lg text-slate-900 uppercase leading-snug break-words">
-                                ${cleanName}
-                            </h3>
-
-                            ${comboHtml}
+                            <h4 class="font-extrabold text-base sm:text-lg text-slate-900 leading-snug">
+                                ${cleanProductTitle(p.title || p.rawTitle)}
+                            </h4>
+                            ${comboListHtml}
                         </div>
 
-                        <div class="mt-6">
-                            <!-- Hàng 1: Xem Thử + Đặt Mua Ngay -->
+                        <div class="pt-5 mt-5 border-t border-slate-100 space-y-2.5">
                             <div class="grid grid-cols-2 gap-2.5">
                                 <button type="button" onclick="openPreviewModal('${p.code}')" class="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5">
-                                    <i class="fa-solid fa-eye text-slate-600"></i>
+                                    <i class="fa-solid fa-eye"></i>
                                     <span>Xem Thử</span>
                                 </button>
-                                <button type="button" onclick="buyNow('${p.code}')" class="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition-colors flex items-center justify-center gap-1.5">
+                                <button type="button" onclick="buyNow('${p.code}')" class="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-600/20 transition-colors flex items-center justify-center gap-1.5">
                                     <i class="fa-solid fa-cart-shopping"></i>
                                     <span>Đặt Mua Ngay</span>
                                 </button>
                             </div>
-
-                            <!-- Hàng 2: Thêm vào giỏ hàng -->
-                            <button type="button" onclick="addToCart('${p.code}')" class="w-full mt-2.5 py-2.5 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5">
+                            <button type="button" onclick="addToCart('${p.code}')" class="w-full py-2.5 px-3 rounded-xl bg-blue-50/80 hover:bg-blue-100 text-blue-700 border border-blue-200/80 font-bold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5">
                                 <i class="fa-solid fa-cart-plus"></i>
                                 <span>Thêm vào giỏ hàng</span>
                             </button>
                         </div>
-                    </article>
+                    </div>
                 `;
             }).join("");
         }
 
-        // =========================================================================
-        // XEM THỬ TÀI LIỆU & DUYỆT THƯ MỤC GOOGLE DRIVE (ẨN ĐUÔI .PDF/.DOCX/.PPTX)
-        // =========================================================================
-        function extractDriveInfo(url) {
-            if (!url) return null;
-            const folderMatch = url.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+        function extractDriveIdInfo(url) {
+            const str = String(url || "").trim();
+            if (!str) return null;
+            const folderMatch = str.match(/\/folders\/([a-zA-Z0-9_-]+)/);
             if (folderMatch) return { type: "folder", id: folderMatch[1] };
-
-            const fileMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+            const fileMatch = str.match(/\/d\/([a-zA-Z0-9_-]+)/) || str.match(/[?&]id=([a-zA-Z0-9_-]+)/);
             if (fileMatch) return { type: "file", id: fileMatch[1] };
-
-            return null;
+            return { type: "external", url: str };
         }
 
-        function stripFileExtension(filename) {
-            return String(filename || "").replace(/\.(pdf|docx?|pptx?|xlsx?|rar|zip)$/i, "").trim();
+        function getDriveTargetContainer() {
+            if (viewingComboSubItem) {
+                return document.getElementById("combo-sub-drive-container");
+            }
+            return document.getElementById("preview-body");
+        }
+
+        function buildFileViewerHtml(fileId, cleanName, hasBackButton = false) {
+            const embedUrl = `https://drive.google.com/file/d/${fileId}/preview?rm=minimal`;
+            return `
+                <div class="space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-50 px-3.5 py-2.5 rounded-xl border border-slate-200">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <i class="fa-solid fa-file-lines text-blue-600 shrink-0"></i>
+                            <span class="text-xs sm:text-sm font-bold text-slate-800 truncate">${cleanName}</span>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            ${hasBackButton ? `
+                                <button type="button" onclick="goBackDriveFolder()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-xs font-bold transition-colors flex items-center gap-1">
+                                    <i class="fa-solid fa-arrow-left"></i>
+                                    <span>Danh sách tài liệu</span>
+                                </button>
+                            ` : ""}
+                            <button type="button" onclick="reloadFileIframe('drive-preview-iframe')" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors flex items-center gap-1">
+                                <i class="fa-solid fa-rotate-right"></i>
+                                <span>Tải lại</span>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-amber-800 bg-amber-50 border border-amber-200/80 px-3 py-2 rounded-xl">
+                        <i class="fa-solid fa-circle-info text-amber-600 mr-1"></i>
+                        Nếu mạng 4G chậm hoặc báo sự cố tải trang, thầy/cô bấm nút <strong>Tải lại</strong> nhiều lần để hiển thị đầy đủ nội dung nhé!
+                    </p>
+                    <div class="w-full h-[54vh] sm:h-[58vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
+                        <iframe id="drive-preview-iframe" src="${embedUrl}" class="w-full h-full border-0" allow="autoplay"></iframe>
+                    </div>
+                </div>
+            `;
+        }
+
+        function reloadFileIframe(iframeId) {
+            const iframe = document.getElementById(iframeId);
+            if (!iframe) return;
+            const base = iframe.src.split("&reload=")[0];
+            iframe.src = `${base}&reload=${Date.now()}`;
+        }
+
+        async function loadDriveFolderContents(folderId) {
+            const container = getDriveTargetContainer();
+            if (!container) return;
+
+            const canGoBack = driveNavHistory.length > 1;
+            const currentFolder = driveNavHistory[driveNavHistory.length - 1];
+
+            container.innerHTML = `
+                <div class="py-12 text-center space-y-2">
+                    <i class="fa-solid fa-circle-notch fa-spin text-2xl text-blue-600"></i>
+                    <p class="text-xs sm:text-sm font-semibold text-slate-600">Đang mở thư mục tài liệu...</p>
+                </div>
+            `;
+
+            try {
+                const res = await fetch(`${APPS_SCRIPT_URL}?action=browseDrive&folderId=${encodeURIComponent(folderId)}&t=${Date.now()}`);
+                const data = await res.json();
+
+                if (!data || data.status !== "success") {
+                    throw new Error("Lỗi tải thư mục");
+                }
+
+                const folders = data.folders || [];
+                const files = data.files || [];
+
+                let listHtml = `
+                    <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-50 px-3.5 py-2.5 rounded-xl border border-slate-200">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <i class="fa-solid fa-folder-open text-amber-500 shrink-0"></i>
+                            <span class="text-xs sm:text-sm font-bold text-slate-800 truncate">${currentFolder ? currentFolder.name : "Thư mục tài liệu"}</span>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            ${canGoBack ? `
+                                <button type="button" onclick="goBackDriveFolder()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-xs font-bold transition-colors flex items-center gap-1">
+                                    <i class="fa-solid fa-arrow-left"></i>
+                                    <span>Danh sách tài liệu</span>
+                                </button>
+                            ` : ""}
+                            <button type="button" onclick="reloadCurrentDriveFolder()" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors flex items-center gap-1">
+                                <i class="fa-solid fa-rotate-right"></i>
+                                <span>Tải lại</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                if (folders.length === 0 && files.length === 0) {
+                    listHtml += `<p class="py-8 text-center text-sm text-slate-500">Thư mục hiện chưa có tệp xem thử.</p>`;
+                } else {
+                    listHtml += `<div class="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-white">`;
+                    folders.forEach(f => {
+                        const cleanName = stripFileExtension(f.name);
+                        listHtml += `
+                            <button type="button" onclick="openSubDriveFolder('${f.id}', '${encodeURIComponent(cleanName)}')" class="w-full px-4 py-3 hover:bg-blue-50/60 flex items-center justify-between gap-3 text-left transition-colors">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <i class="fa-solid fa-folder text-amber-500 text-base shrink-0"></i>
+                                    <span class="text-xs sm:text-sm font-bold text-slate-800 truncate">${cleanName}</span>
+                                </div>
+                                <span class="text-xs font-bold text-blue-600 shrink-0">Mở thư mục <i class="fa-solid fa-chevron-right ml-1"></i></span>
+                            </button>
+                        `;
+                    });
+                    files.forEach(file => {
+                        const cleanName = stripFileExtension(file.name);
+                        listHtml += `
+                            <button type="button" onclick="openDriveFilePreview('${file.id}', '${encodeURIComponent(cleanName)}')" class="w-full px-4 py-3 hover:bg-blue-50/60 flex items-center justify-between gap-3 text-left transition-colors">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <i class="fa-solid fa-file-lines text-blue-600 text-base shrink-0"></i>
+                                    <span class="text-xs sm:text-sm font-semibold text-slate-800 truncate">${cleanName}</span>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold shrink-0">Xem thử</span>
+                            </button>
+                        `;
+                    });
+                    listHtml += `</div>`;
+                }
+
+                container.innerHTML = listHtml;
+            } catch (e) {
+                container.innerHTML = `
+                    <div class="py-10 text-center space-y-3 bg-slate-50 rounded-2xl border border-slate-200 p-4">
+                        <p class="text-sm font-bold text-slate-700">Chưa tải được danh sách tệp do mạng chậm.</p>
+                        <button type="button" onclick="reloadCurrentDriveFolder()" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700">
+                            <i class="fa-solid fa-rotate-right mr-1"></i>Tải lại
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function renderComboPreviewModal(comboProduct, selectedSubCode = null) {
+            const body = document.getElementById("preview-body");
+            const subItems = resolveComboItems(comboProduct);
+
+            if (!selectedSubCode) {
+                viewingComboSubItem = false;
+                driveNavHistory = [];
+                body.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="text-xs font-extrabold uppercase tracking-wider text-slate-700">
+                            Danh sách tài liệu trong Combo (bấm vào từng bộ để xem thử):
+                        </div>
+                        <div class="space-y-2.5">
+                            ${subItems.map(sub => `
+                                <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3">
+                                    <div class="min-w-0">
+                                        <span class="text-xs font-extrabold text-blue-600 block">${sub.code}</span>
+                                        <div class="text-xs sm:text-sm font-extrabold text-slate-900 leading-snug mt-0.5">${cleanProductTitle(sub.title || sub.rawTitle)}</div>
+                                    </div>
+                                    <button type="button" onclick="previewComboSubItem('${sub.code}')" class="shrink-0 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
+                                        Xem thử
+                                    </button>
+                                </div>
+                            `).join("")}
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const subProduct = subItems.find(s => s.code === selectedSubCode);
+            if (!subProduct) return;
+
+            viewingComboSubItem = true;
+            body.innerHTML = `
+                <div class="space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2 bg-blue-50/80 px-3.5 py-2.5 rounded-xl border border-blue-200">
+                        <div class="min-w-0">
+                            <span class="text-[11px] font-bold text-blue-600 block">Đang xem tài liệu trong Combo:</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-900 truncate block">[${subProduct.code}] ${cleanProductTitle(subProduct.title || subProduct.rawTitle)}</span>
+                        </div>
+                        <button type="button" onclick="backToComboList()" class="shrink-0 px-3.5 py-1.5 rounded-lg bg-white hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-300 text-xs font-bold transition-colors flex items-center gap-1.5">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Danh sách Combo</span>
+                        </button>
+                    </div>
+                    <div id="combo-sub-drive-container"></div>
+                </div>
+            `;
+
+            const info = extractDriveIdInfo(subProduct.previewUrl);
+            const subContainer = document.getElementById("combo-sub-drive-container");
+            if (!info) {
+                subContainer.innerHTML = `<p class="py-8 text-center text-sm text-slate-500">Tài liệu này chưa cập nhật link xem thử.</p>`;
+            } else if (info.type === "folder") {
+                driveNavHistory = [{ id: info.id, name: cleanProductTitle(subProduct.title || subProduct.rawTitle) }];
+                loadDriveFolderContents(info.id);
+            } else if (info.type === "file") {
+                subContainer.innerHTML = buildFileViewerHtml(info.id, cleanProductTitle(subProduct.title || subProduct.rawTitle), false);
+            }
+        }
+
+        function previewComboSubItem(subCode) {
+            if (!activeComboProduct) return;
+            renderComboPreviewModal(activeComboProduct, subCode);
+        }
+
+        function backToComboList() {
+            if (!activeComboProduct) return;
+            renderComboPreviewModal(activeComboProduct, null);
         }
 
         function openPreviewModal(code) {
@@ -1331,264 +1429,84 @@
             if (!product) return;
 
             const cleanName = cleanProductTitle(product.title || product.rawTitle);
-            document.getElementById("preview-tag").textContent = `${product.code} • ${getCategoryLabel(product.category).toUpperCase()}`;
+            document.getElementById("preview-tag").textContent = `${product.code} • ${CATEGORY_TITLES[product.category] || product.category}`;
             document.getElementById("preview-title").textContent = cleanName;
             document.getElementById("preview-price").textContent = formatCurrency(product.price);
-
-            driveNavHistory = [];
-            activeComboProduct = null;
-            viewingComboSubItem = false;
-
-            if (product.category === "CB") {
-                const comboList = resolveComboItems(product.comboItems);
-                if (comboList.length > 0) {
-                    activeComboProduct = product;
-                    renderComboListScreen(product);
-                } else {
-                    renderDrivePreviewInBody(product.previewUrl, cleanName);
-                }
-            } else {
-                renderDrivePreviewInBody(product.previewUrl, cleanName);
-            }
 
             toggleFloatingContactButtons(true);
             document.getElementById("preview-modal").classList.remove("hidden");
             document.body.classList.add("overflow-hidden");
-        }
 
-        function renderComboListScreen(product) {
+            const isCombo = product.category === "CB" || Boolean(product.comboItems);
+            if (isCombo) {
+                activeComboProduct = product;
+                renderComboPreviewModal(product, null);
+                return;
+            }
+
+            activeComboProduct = null;
             viewingComboSubItem = false;
-            driveNavHistory = [];
             const body = document.getElementById("preview-body");
-            const comboList = resolveComboItems(product.comboItems);
-            body.innerHTML = `
-                <div class="space-y-3">
-                    <div class="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-900">
-                        Combo bao gồm ${comboList.length} tài liệu (bấm vào từng mục để xem thử):
-                    </div>
-                    <div class="space-y-2.5">
-                        ${comboList.map(item => `
-                            <button type="button" onclick="openComboSubItem('${item.code}')" class="w-full p-4 rounded-2xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-left transition-all flex items-center justify-between gap-3">
-                                <div class="flex items-center gap-3 min-w-0">
-                                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                                        <i class="fa-solid fa-folder-open"></i>
-                                    </div>
-                                    <div class="min-w-0">
-                                        <span class="text-xs font-extrabold text-blue-600 block">${item.code}</span>
-                                        <span class="text-sm sm:text-base font-extrabold text-slate-900 block leading-snug break-words">${item.title}</span>
-                                    </div>
-                                </div>
-                                <span class="shrink-0 px-3.5 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold shadow-sm">
-                                    Xem thử <i class="fa-solid fa-chevron-right ml-1"></i>
-                                </span>
-                            </button>
-                        `).join("")}
-                    </div>
-                </div>
-            `;
+            const info = extractDriveIdInfo(product.previewUrl);
+
+            if (!info) {
+                body.innerHTML = `<p class="py-12 text-center text-sm text-slate-500">Tài liệu này đang được cập nhật bản xem thử.</p>`;
+            } else if (info.type === "folder") {
+                driveNavHistory = [{ id: info.id, name: cleanName }];
+                loadDriveFolderContents(info.id);
+            } else if (info.type === "file") {
+                body.innerHTML = buildFileViewerHtml(info.id, cleanName, false);
+            } else {
+                body.innerHTML = `<iframe src="${info.url}" class="w-full h-[60vh] rounded-2xl border border-slate-200"></iframe>`;
+            }
         }
 
-        function openComboSubItem(subCode) {
-            if (!activeComboProduct) return;
-            const comboList = resolveComboItems(activeComboProduct.comboItems);
-            const found = comboList.find(i => i.code === subCode);
-            if (!found) return;
-            viewingComboSubItem = true;
-            driveNavHistory = [];
-            renderDrivePreviewInBody(found.previewUrl, `[${found.code}] ${found.title}`);
-        }
+        function renderQuickBuyPriceBadge(originalPrice, discountAmount) {
+            const box = document.getElementById("qr-header-price-box");
+            if (!box) return;
+            const orig = Number(originalPrice) || 0;
+            const disc = Math.max(0, Number(discountAmount) || 0);
+            const finalPrice = Math.max(0, orig - disc);
 
-        function getBackToComboBtnHtml() {
-            if (!activeComboProduct || !viewingComboSubItem) return "";
-            return `
-                <button type="button" onclick="renderComboListScreen(activeComboProduct)" class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11px] sm:text-xs font-bold shadow-sm transition-colors">
-                    <i class="fa-solid fa-arrow-left"></i>
-                    <span>Danh sách tài liệu</span>
-                </button>
-            `;
-        }
-
-        function renderDrivePreviewInBody(url, title) {
-            const body = document.getElementById("preview-body");
-            renderDrivePreviewIntoContainer(body, url, title);
-        }
-
-        function renderDrivePreviewIntoContainer(container, url, title) {
-            if (!container) return;
-            const driveInfo = extractDriveInfo(url);
-
-            if (!driveInfo) {
-                container.innerHTML = `
-                    ${getBackToComboBtnHtml() ? `<div class="pb-3 border-b border-slate-100 flex justify-end">${getBackToComboBtnHtml()}</div>` : ""}
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-slate-800 text-sm">
-                        ${url ? url : `Liên hệ Zalo <strong>0843 589 647</strong> để xem thử trích đoạn chi tiết bộ tài liệu này.`}
-                    </div>
+            if (disc > 0) {
+                box.innerHTML = `
+                    <span class="inline-flex flex-wrap items-center gap-1.5 px-2.5 py-1 rounded-xl bg-blue-50/90 border border-blue-200/80 text-xs sm:text-sm">
+                        <span class="text-slate-400 line-through font-semibold">${formatCurrency(orig)}</span>
+                        <span class="text-blue-700 font-extrabold">${formatCurrency(finalPrice)}</span>
+                        <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[11px] font-extrabold">Tiết kiệm ${formatCurrency(disc)}</span>
+                    </span>
                 `;
-                return;
-            }
-
-            if (driveInfo.type === "file") {
-                container.innerHTML = buildFileViewerHtml(driveInfo.id, title || "Tài liệu xem thử", false);
-                return;
-            }
-
-            driveNavHistory = [{ id: driveInfo.id, name: title || "Thư mục gốc" }];
-            loadDriveFolderContents(driveInfo.id);
-        }
-
-        function buildFileViewerHtml(fileId, fileName, showBackBtn) {
-            const standardUrl = `https://drive.google.com/file/d/${fileId}/preview`;
-            const comboBackBtn = getBackToComboBtnHtml();
-
-            return `
-                <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
-                    <div class="text-xs font-bold text-slate-700 truncate max-w-full sm:max-w-[55%]">
-                        <i class="fa-solid fa-file-lines text-blue-600 mr-1.5"></i>${fileName}
-                    </div>
-                    <div class="flex flex-wrap items-center gap-1.5">
-                        <button type="button" onclick="reloadDriveIframe('${fileId}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition-colors">
-                            <i class="fa-solid fa-rotate-right"></i>
-                            <span>Tải lại</span>
-                        </button>
-                        ${showBackBtn ? `
-                            <button type="button" onclick="reloadCurrentDriveFolder()" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 text-white text-[11px] font-bold transition-colors">
-                                <i class="fa-solid fa-arrow-left"></i>
-                                <span>Danh sách tài liệu</span>
-                            </button>
-                        ` : comboBackBtn}
-                    </div>
-                </div>
-                <div class="flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] text-slate-600 mt-2">
-                    <span><i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>Nếu mạng 4G chậm hoặc báo sự cố tải trang, thầy/cô bấm nút <strong>Tải lại</strong> nhiều lần để hệ thống nạp lại nhé.</span>
-                </div>
-                <div class="w-full h-[54vh] rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 mt-2 relative">
-                    <iframe id="drive-preview-iframe-${fileId}" src="${standardUrl}" class="w-full h-full border-0" allow="autoplay"></iframe>
-                </div>
-            `;
-        }
-
-        function reloadDriveIframe(fileId) {
-            const iframe = document.getElementById(`drive-preview-iframe-${fileId}`);
-            if (!iframe) return;
-            const currentSrc = iframe.src;
-            iframe.src = "about:blank";
-            setTimeout(() => {
-                iframe.src = currentSrc;
-            }, 120);
-            showToast("Đang tải lại trang xem thử...");
-        }
-
-        function getDriveTargetContainer() {
-            return document.getElementById("preview-body");
-        }
-
-        async function loadDriveFolderContents(folderId) {
-            const body = getDriveTargetContainer();
-            if (!body) return;
-            const folderBackBtn = driveNavHistory.length > 1 ? `
-                <button type="button" onclick="goBackDriveFolder()" class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] sm:text-xs font-bold transition-colors">
-                    <i class="fa-solid fa-arrow-left"></i>
-                    <span>Danh sách tài liệu</span>
-                </button>
-            ` : "";
-            const backBtnHtml = (getBackToComboBtnHtml() || folderBackBtn) ? `
-                <div class="flex items-center gap-1.5 shrink-0">
-                    ${getBackToComboBtnHtml()}
-                    ${folderBackBtn}
-                </div>
-            ` : "";
-
-            const currentFolderName = driveNavHistory[driveNavHistory.length - 1]?.name || "Thư mục tài liệu";
-
-            body.innerHTML = `
-                <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
-                    <div class="text-xs font-bold text-slate-700 flex items-center gap-2 min-w-0">
-                        <i class="fa-solid fa-folder-open text-amber-500 shrink-0"></i>
-                        <span class="truncate">${currentFolderName}</span>
-                    </div>
-                    ${backBtnHtml}
-                </div>
-                <div class="py-12 text-center text-slate-500 text-sm">
-                    <i class="fa-solid fa-circle-notch fa-spin text-xl text-blue-600 mb-2"></i>
-                    <p>Đang mở danh sách tệp trong Google Drive...</p>
-                </div>
-            `;
-
-            try {
-                const apiUrl = `${SELLER_CONFIG.googleSheetWebhookUrl}?action=browseDrive&folderId=${encodeURIComponent(folderId)}`;
-                const res = await fetch(apiUrl);
-                const data = await res.json();
-
-                if (data && data.status === "success") {
-                    const folders = data.folders || [];
-                    const files = data.files || [];
-
-                    if (folders.length === 0 && files.length === 0) {
-                        body.innerHTML = `
-                            <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
-                                <span class="text-xs font-bold text-slate-700 truncate">${currentFolderName}</span>
-                                ${backBtnHtml}
-                            </div>
-                            <div class="py-10 text-center text-sm text-slate-500">Thư mục này hiện chưa có tệp xem thử.</div>
-                        `;
-                        return;
-                    }
-
-                    body.innerHTML = `
-                        <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
-                            <div class="text-xs font-bold text-slate-700 flex items-center gap-2 min-w-0">
-                                <i class="fa-solid fa-folder-open text-amber-500 shrink-0"></i>
-                                <span class="truncate">${currentFolderName}</span>
-                            </div>
-                            ${backBtnHtml}
-                        </div>
-                        <div class="space-y-2 pt-2">
-                            ${folders.map(f => `
-                                <button type="button" onclick="openSubDriveFolder('${f.id}', '${encodeURIComponent(f.name)}')" class="w-full p-3.5 rounded-2xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 flex items-center justify-between gap-3 text-left transition-all">
-                                    <div class="flex items-center gap-3 min-w-0">
-                                        <i class="fa-solid fa-folder text-amber-500 text-lg shrink-0"></i>
-                                        <span class="font-bold text-sm text-slate-800 truncate">${f.name}</span>
-                                    </div>
-                                    <span class="text-xs font-semibold text-blue-600 shrink-0">Mở <i class="fa-solid fa-chevron-right ml-1"></i></span>
-                                </button>
-                            `).join("")}
-
-                            ${files.map(file => {
-                                const displayFileName = stripFileExtension(file.name);
-                                return `
-                                <button type="button" onclick="openDriveFilePreview('${file.id}', '${encodeURIComponent(displayFileName)}')" class="w-full p-3.5 rounded-2xl bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 flex items-center justify-between gap-3 text-left transition-all">
-                                    <div class="flex items-center gap-3 min-w-0">
-                                        <i class="fa-solid fa-file-lines text-blue-600 text-lg shrink-0"></i>
-                                        <span class="font-semibold text-sm text-slate-800 truncate">${displayFileName}</span>
-                                    </div>
-                                    <span class="px-3 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold shrink-0">Xem file</span>
-                                </button>
-                                `;
-                            }).join("")}
-                        </div>
-                    `;
-                } else {
-                    body.innerHTML = `
-                        <div class="w-full h-[60vh] rounded-2xl overflow-hidden border border-slate-200">
-                            <iframe src="https://drive.google.com/embeddedfolderview?id=${folderId}#list" class="w-full h-full border-0"></iframe>
-                        </div>
-                    `;
-                }
-            } catch (err) {
-                body.innerHTML = `
-                    <div class="w-full h-[60vh] rounded-2xl overflow-hidden border border-slate-200">
-                        <iframe src="https://drive.google.com/embeddedfolderview?id=${folderId}#list" class="w-full h-full border-0"></iframe>
-                    </div>
+            } else {
+                box.innerHTML = `
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-blue-50/90 border border-blue-200/80 text-xs sm:text-sm">
+                        <span class="text-slate-500 font-semibold">Giá tài liệu:</span>
+                        <span class="text-blue-700 font-extrabold">${formatCurrency(orig)}</span>
+                    </span>
                 `;
             }
         }
 
         function openSubDriveFolder(folderId, encodedName) {
-            driveNavHistory.push({ id: folderId, name: decodeURIComponent(encodedName) });
+            const name = decodeURIComponent(encodedName || "Thư mục");
+            driveNavHistory.push({ id: folderId, name: name });
             loadDriveFolderContents(folderId);
         }
 
+        function openDriveFilePreview(fileId, encodedName) {
+            const name = decodeURIComponent(encodedName || "Tài liệu xem thử");
+            const container = getDriveTargetContainer();
+            if (!container) return;
+            container.innerHTML = buildFileViewerHtml(fileId, name, true);
+        }
+
         function goBackDriveFolder() {
+            if (driveNavHistory.length === 0) return;
+            const container = getDriveTargetContainer();
+            if (container && container.querySelector("#drive-preview-iframe")) {
+                const current = driveNavHistory[driveNavHistory.length - 1];
+                loadDriveFolderContents(current.id);
+                return;
+            }
             if (driveNavHistory.length > 1) {
                 driveNavHistory.pop();
                 const prev = driveNavHistory[driveNavHistory.length - 1];
@@ -1596,18 +1514,10 @@
             }
         }
 
-        function openDriveFilePreview(fileId, encodedName) {
-            const body = getDriveTargetContainer();
-            if (!body) return;
-            const fileName = stripFileExtension(decodeURIComponent(encodedName));
-            body.innerHTML = buildFileViewerHtml(fileId, fileName, true);
-        }
-
         function reloadCurrentDriveFolder() {
-            if (driveNavHistory.length > 0) {
-                const curr = driveNavHistory[driveNavHistory.length - 1];
-                loadDriveFolderContents(curr.id);
-            }
+            if (driveNavHistory.length === 0) return;
+            const current = driveNavHistory[driveNavHistory.length - 1];
+            loadDriveFolderContents(current.id);
         }
 
         function closePreviewModal() {
@@ -1621,220 +1531,20 @@
         }
 
         // =========================================================================
-        // LOGIC TÍNH MÃ ƯU ĐÃI & GIAO DIỆN VOUCHER KIỂU SHOPEE
+        // 7. QUẢN LÝ GIỎ HÀNG & HIỂN THỊ GIÁ TÀI LIỆU
         // =========================================================================
-        function formatDiscountLabel(rawDiscount) {
-            if (rawDiscount === null || rawDiscount === undefined) return "";
-            if (typeof rawDiscount === "number" && !isNaN(rawDiscount)) {
-                if (rawDiscount > 0 && rawDiscount <= 1) {
-                    return `Giảm ${Math.round(rawDiscount * 100)}%`;
-                }
-                return `Giảm ${formatCurrency(rawDiscount)}`;
-            }
-            const str = String(rawDiscount).trim();
-            if (!str) return "";
-            if (str.includes("%")) return `Giảm ${str}`;
-            const numVal = parseFloat(str.replace(",", "."));
-            if (!isNaN(numVal) && numVal > 0 && numVal <= 1) {
-                return `Giảm ${Math.round(numVal * 100)}%`;
-            }
-            const fixed = Number(str.replace(/[^\d]/g, "")) || 0;
-            return fixed > 0 ? `Giảm ${formatCurrency(fixed)}` : "";
-        }
-
-        function parseDiscountValue(rawDiscount, baseAmount) {
-            if (rawDiscount === null || rawDiscount === undefined) return 0;
-            if (typeof rawDiscount === "number" && !isNaN(rawDiscount)) {
-                if (rawDiscount > 0 && rawDiscount <= 1) {
-                    return Math.round(baseAmount * rawDiscount);
-                }
-                return Math.min(baseAmount, Math.round(rawDiscount));
-            }
-            const str = String(rawDiscount).trim();
-            if (!str) return 0;
-            if (str.includes("%")) {
-                const pct = parseFloat(str.replace(",", ".").replace("%", "").trim()) || 0;
-                return Math.round((baseAmount * pct) / 100);
-            }
-            const numVal = parseFloat(str.replace(",", "."));
-            if (!isNaN(numVal) && numVal > 0 && numVal <= 1) {
-                return Math.round(baseAmount * numVal);
-            }
-            const fixed = Number(str.replace(/[^\d]/g, "")) || 0;
-            return Math.min(baseAmount, fixed);
-        }
-
-        function evaluateVoucherForItems(rawCode, targetItems) {
-            const code = String(rawCode || "").trim().toUpperCase();
-            if (!code) {
-                return { valid: false, discount: 0, message: "Thầy/cô vui lòng nhập mã ưu đãi." };
-            }
-
-            const subtotal = targetItems.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
-
-            // 1. Kiểm tra trong danh sách mã ưu đãi chung (Ma_Uu_Dai_Chung)
-            const gVoucher = globalVouchers.find(v => String(v.code || "").trim().toUpperCase() === code);
-            if (gVoucher) {
-                if (subtotal < (Number(gVoucher.minOrder) || 0)) {
-                    return {
-                        valid: false,
-                        discount: 0,
-                        message: `Mã ${code} áp dụng cho đơn từ ${formatCurrency(gVoucher.minOrder)} trở lên.`
-                    };
-                }
-                const discountAmt = parseDiscountValue(gVoucher.discount, subtotal);
-                return {
-                    valid: true,
-                    code: code,
-                    discount: discountAmt,
-                    message: `Áp dụng thành công mã ${code}: giảm ${formatCurrency(discountAmt)}!`
-                };
-            }
-
-            // 2. Kiểm tra mã ưu đãi riêng từng tài liệu (Danh_Muc_Tai_Lieu)
-            let totalItemDiscount = 0;
-            let matchedCount = 0;
-            targetItems.forEach(item => {
-                if (item.voucherCode && String(item.voucherCode).trim().toUpperCase() === code) {
-                    matchedCount++;
-                    totalItemDiscount += parseDiscountValue(item.voucherDiscount, Number(item.price) || 0);
-                }
-            });
-
-            if (matchedCount > 0 && totalItemDiscount > 0) {
-                return {
-                    valid: true,
-                    code: code,
-                    discount: totalItemDiscount,
-                    message: `Áp dụng thành công mã ${code}: giảm ${formatCurrency(totalItemDiscount)}!`
-                };
-            }
-
-            return {
-                valid: false,
-                discount: 0,
-                message: `Mã "${code}" không hợp lệ hoặc không áp dụng cho tài liệu này.`
-            };
-        }
-
-        function getAvailableVouchersForItems(targetItems) {
-            const map = new Map();
-            globalVouchers.forEach(gv => {
-                if (gv && gv.code) {
-                    const label = formatDiscountLabel(gv.discount);
-                    const minStr = gv.minOrder > 0 ? ` • Đơn từ ${formatCurrency(gv.minOrder)}` : " • Mọi tài liệu";
-                    map.set(gv.code.toUpperCase(), {
-                        code: gv.code.toUpperCase(),
-                        desc: `${label}${minStr}`
-                    });
-                }
-            });
-            targetItems.forEach(item => {
-                const vCode = String(item.voucherCode || "").trim().toUpperCase();
-                if (vCode && !map.has(vCode)) {
-                    const label = formatDiscountLabel(item.voucherDiscount);
-                    map.set(vCode, {
-                        code: vCode,
-                        desc: `${label} • Áp dụng cho ${item.code}`
-                    });
-                }
-            });
-            return Array.from(map.values());
-        }
-
-        function renderVoucherSuggestions(containerId, targetItems, appliedCode, selectCallbackName) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            const list = getAvailableVouchersForItems(targetItems);
-            if (list.length === 0) {
-                container.innerHTML = "";
-                return;
-            }
-
-            container.innerHTML = `
-                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 pt-1">Mã ưu đãi hiện có:</div>
-                <div class="space-y-1.5">
-                    ${list.map(v => {
-                        const isApplied = appliedCode && appliedCode.toUpperCase() === v.code;
-                        return `
-                            <div class="p-2.5 rounded-xl bg-white border ${isApplied ? "border-emerald-400 bg-emerald-50/40" : "border-slate-200"} flex items-center justify-between gap-2">
-                                <div class="min-w-0">
-                                    <span class="text-xs font-extrabold text-orange-600 block">${v.code}</span>
-                                    <span class="text-[11px] font-medium text-slate-600 block truncate">${v.desc}</span>
-                                </div>
-                                <button type="button" onclick="${selectCallbackName}('${v.code}')" class="shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-colors ${isApplied ? "bg-emerald-600 text-white" : "bg-orange-500 hover:bg-orange-600 text-white"}">
-                                    ${isApplied ? "Đang dùng" : "Dùng ngay"}
-                                </button>
-                            </div>
-                        `;
-                    }).join("")}
-                </div>
-            `;
-        }
-
-        function toggleCartVoucherBox() {
-            const drawer = document.getElementById("cart-voucher-drawer");
-            const chevron = document.getElementById("cart-voucher-chevron");
-            if (!drawer) return;
-            const isHidden = drawer.classList.contains("hidden");
-            if (isHidden) {
-                drawer.classList.remove("hidden");
-                if (chevron) chevron.classList.add("rotate-90");
-                renderVoucherSuggestions("cart-voucher-suggestions", cart, activeVoucher, "selectCartSuggestionVoucher");
-                const input = document.getElementById("voucher-input");
-                if (input) input.focus();
-            } else {
-                drawer.classList.add("hidden");
-                if (chevron) chevron.classList.remove("rotate-90");
-            }
-        }
-
-        function selectCartSuggestionVoucher(code) {
-            const input = document.getElementById("voucher-input");
-            if (input) input.value = code;
-            applyVoucher();
-        }
-
-        function toggleDirectVoucherBox() {
-            const drawer = document.getElementById("direct-voucher-drawer");
-            const chevron = document.getElementById("direct-voucher-chevron");
-            if (!drawer) return;
-            const isHidden = drawer.classList.contains("hidden");
-            if (isHidden) {
-                drawer.classList.remove("hidden");
-                if (chevron) chevron.classList.add("rotate-90");
-                if (directBuyProduct) {
-                    renderVoucherSuggestions("direct-voucher-suggestions", [directBuyProduct], directActiveVoucher, "selectDirectSuggestionVoucher");
-                }
-                const input = document.getElementById("direct-voucher-input");
-                if (input) input.focus();
-            } else {
-                drawer.classList.add("hidden");
-                if (chevron) chevron.classList.remove("rotate-90");
-            }
-        }
-
-        function selectDirectSuggestionVoucher(code) {
-            const input = document.getElementById("direct-voucher-input");
-            if (input) input.value = code;
-            applyDirectVoucher();
-        }
-
-        // =========================================================================
-        // QUẢN LÝ GIỎ HÀNG
-        // =========================================================================
-        function loadCartFromStorage() {
+        function loadCart() {
             try {
-                const raw = localStorage.getItem(CART_STORAGE_KEY);
-                cart = raw ? JSON.parse(raw) : [];
+                const saved = localStorage.getItem(CART_STORAGE_KEY);
+                cart = saved ? JSON.parse(saved) : [];
+                if (!Array.isArray(cart)) cart = [];
             } catch (e) {
                 cart = [];
             }
             updateCartBadge();
         }
 
-        function saveCartToStorage() {
+        function saveCart() {
             try {
                 localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
             } catch (e) {}
@@ -1846,56 +1556,324 @@
             if (badge) badge.textContent = cart.length;
         }
 
+        function syncCartWithProducts() {
+            if (!Array.isArray(products) || products.length === 0) return;
+            let changed = false;
+            cart = cart.map(item => {
+                const fresh = products.find(p => p.code === item.code);
+                if (fresh) {
+                    changed = true;
+                    return {
+                        code: fresh.code,
+                        title: fresh.title,
+                        rawTitle: fresh.rawTitle,
+                        price: fresh.price,
+                        category: fresh.category,
+                        voucherCode: fresh.voucherCode,
+                        voucherDiscount: fresh.voucherDiscount
+                    };
+                }
+                return item;
+            });
+            if (changed) saveCart();
+        }
+
         function addToCart(code) {
             const product = products.find(p => p.code === code);
             if (!product) return;
 
-            if (cart.some(item => item.code === code)) {
-                showCenterCartPopup("Tài liệu đã có trong Giỏ hàng", true);
+            const exists = cart.some(item => item.code === code);
+            if (exists) {
+                showCenterCartPopup("Tài liệu này đã có trong Giỏ hàng của thầy/cô!", true);
                 return;
             }
 
             cart.push({
-                ...product,
-                title: cleanProductTitle(product.title || product.rawTitle)
+                code: product.code,
+                title: product.title,
+                rawTitle: product.rawTitle,
+                price: product.price,
+                category: product.category,
+                voucherCode: product.voucherCode,
+                voucherDiscount: product.voucherDiscount
             });
-            saveCartToStorage();
+            saveCart();
             showCenterCartPopup("Sản phẩm đã được thêm vào Giỏ hàng", false);
         }
 
         function removeFromCart(code) {
             cart = cart.filter(item => item.code !== code);
-            saveCartToStorage();
+            saveCart();
             updateCartUI();
         }
 
         function clearCart() {
             cart = [];
             activeVoucher = null;
-            saveCartToStorage();
+            saveCart();
             updateCartUI();
+        }
+
+        // =========================================================================
+        // 8. LOGIC TÍNH MÃ ƯU ĐÃI (HỖ TRỢ CẢ 20%, 0.2 TỪ SHEETS & SỐ TIỀN VNĐ)
+        // =========================================================================
+        function parseDiscountValue(rawDiscount, baseAmount) {
+            const base = Number(baseAmount) || 0;
+            if (base <= 0 || rawDiscount === null || rawDiscount === undefined) return 0;
+
+            const str = String(rawDiscount).trim();
+            if (!str) return 0;
+
+            // Trường hợp ghi rõ dấu % (VD: "20%", "15.5%")
+            if (str.includes("%")) {
+                const pct = parseFloat(str.replace("%", "").replace(",", ".").trim());
+                if (isNaN(pct) || pct <= 0) return 0;
+                return Math.min(base, Math.round(base * (pct / 100)));
+            }
+
+            // Trường hợp Google Sheets xuất số thập phân (VD: 0.2 tương ứng 20%)
+            const numVal = Number(str.replace(",", "."));
+            if (!isNaN(numVal) && numVal > 0 && numVal < 1) {
+                return Math.min(base, Math.round(base * numVal));
+            }
+
+            // Trường hợp giảm số tiền cố định (VD: "50000" hoặc "50.000đ")
+            const fixedMoney = Number(str.replace(/[^\d]/g, ""));
+            if (!isNaN(fixedMoney) && fixedMoney > 0) {
+                return Math.min(base, fixedMoney);
+            }
+
+            return 0;
+        }
+
+        function findBestVoucherForItems(codeInput, itemsList) {
+            const cleanCode = String(codeInput || "").trim().toUpperCase();
+            if (!cleanCode) {
+                return { valid: false, message: "Vui lòng nhập mã giảm giá." };
+            }
+
+            const subtotal = itemsList.reduce((sum, it) => sum + (Number(it.price) || 0), 0);
+            if (subtotal <= 0) {
+                return { valid: false, message: "Giỏ hàng đang trống hoặc chưa có giá trị thanh toán." };
+            }
+
+            // 1. Kiểm tra mã ưu đãi chung từ sheet Ma_Uu_Dai_Chung
+            const gVoucher = globalVouchers.find(v => String(v.code || "").trim().toUpperCase() === cleanCode);
+            if (gVoucher) {
+                const minOrder = Number(gVoucher.minOrder) || 0;
+                if (subtotal < minOrder) {
+                    return {
+                        valid: false,
+                        message: `Mã "${cleanCode}" áp dụng cho đơn từ ${formatCurrency(minOrder)} trở lên.`
+                    };
+                }
+                const totalDiscount = parseDiscountValue(gVoucher.discount, subtotal);
+                if (totalDiscount > 0) {
+                    // Phân bổ mức giảm theo tỷ lệ giá từng tài liệu để hiển thị giá sau giảm trên từng thẻ
+                    let allocated = 0;
+                    const itemDiscounts = {};
+                    itemsList.forEach((it, idx) => {
+                        const itemPrice = Number(it.price) || 0;
+                        if (idx === itemsList.length - 1) {
+                            itemDiscounts[it.code] = Math.max(0, totalDiscount - allocated);
+                        } else {
+                            const part = Math.round((itemPrice / subtotal) * totalDiscount);
+                            itemDiscounts[it.code] = part;
+                            allocated += part;
+                        }
+                    });
+
+                    return {
+                        valid: true,
+                        code: cleanCode,
+                        discountAmount: totalDiscount,
+                        itemDiscounts: itemDiscounts
+                    };
+                }
+            }
+
+            // 2. Kiểm tra mã ưu đãi riêng từng tài liệu trong Danh_Muc_Tai_Lieu
+            let itemSpecificTotal = 0;
+            const itemDiscounts = {};
+            itemsList.forEach(it => {
+                const fullProd = products.find(p => p.code === it.code) || it;
+                if (String(fullProd.voucherCode || "").trim().toUpperCase() === cleanCode) {
+                    const disc = parseDiscountValue(fullProd.voucherDiscount, fullProd.price);
+                    if (disc > 0) {
+                        itemDiscounts[it.code] = disc;
+                        itemSpecificTotal += disc;
+                    }
+                }
+            });
+
+            if (itemSpecificTotal > 0) {
+                return {
+                    valid: true,
+                    code: cleanCode,
+                    discountAmount: itemSpecificTotal,
+                    itemDiscounts: itemDiscounts
+                };
+            }
+
+            return {
+                valid: false,
+                message: `Mã "${cleanCode}" không hợp lệ hoặc không áp dụng cho tài liệu này.`
+            };
+        }
+
+        function toggleCartVoucherBox() {
+            const drawer = document.getElementById("cart-voucher-drawer");
+            const chevron = document.getElementById("cart-voucher-chevron");
+            if (!drawer) return;
+            const isHidden = drawer.classList.contains("hidden");
+            if (isHidden) {
+                drawer.classList.remove("hidden");
+                if (chevron) chevron.classList.add("rotate-90");
+                document.getElementById("voucher-input")?.focus();
+            } else {
+                drawer.classList.add("hidden");
+                if (chevron) chevron.classList.remove("rotate-90");
+            }
         }
 
         function applyVoucher() {
             const input = document.getElementById("voucher-input");
             const msgEl = document.getElementById("voucher-message");
-            const res = evaluateVoucherForItems(input.value, cart);
+            if (!input || !msgEl) return;
 
-            msgEl.classList.remove("hidden", "text-emerald-600", "text-rose-600");
-            if (!res.valid) {
+            const result = findBestVoucherForItems(input.value, cart);
+            if (!result.valid) {
                 activeVoucher = null;
-                msgEl.textContent = res.message;
-                msgEl.classList.add("text-rose-600");
-            } else {
-                activeVoucher = res.code;
-                msgEl.textContent = res.message;
-                msgEl.classList.add("text-emerald-600");
+                msgEl.textContent = result.message;
+                msgEl.className = "text-xs font-semibold text-rose-600 block";
+                updateCartUI();
+                return;
             }
+
+            activeVoucher = result;
+            msgEl.classList.add("hidden");
+            document.getElementById("cart-voucher-drawer")?.classList.add("hidden");
+            document.getElementById("cart-voucher-chevron")?.classList.remove("rotate-90");
             updateCartUI();
-            renderVoucherSuggestions("cart-voucher-suggestions", cart, activeVoucher, "selectCartSuggestionVoucher");
+            showToast(`Đã áp dụng mã ${result.code} (-${formatCurrency(result.discountAmount)})`);
         }
 
-        function isValidVietnamPhone(phone) {
+        function removeCartVoucher() {
+            activeVoucher = null;
+            const input = document.getElementById("voucher-input");
+            if (input) input.value = "";
+            const msgEl = document.getElementById("voucher-message");
+            if (msgEl) msgEl.classList.add("hidden");
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById("cart-items-container");
+            const countEl = document.getElementById("cart-page-count");
+            const clearBtn = document.getElementById("clear-cart-btn");
+            const subtotalEl = document.getElementById("cart-subtotal");
+            const discountRow = document.getElementById("voucher-discount-row");
+            const discountLabel = document.getElementById("voucher-discount-label");
+            const discountAmtEl = document.getElementById("voucher-discount-amount");
+            const totalEl = document.getElementById("cart-total");
+
+            if (!container) return;
+            if (countEl) countEl.textContent = cart.length;
+
+            if (cart.length === 0) {
+                activeVoucher = null;
+                if (clearBtn) clearBtn.classList.add("hidden");
+                container.innerHTML = `
+                    <div class="py-10 text-center space-y-3">
+                        <div class="w-14 h-14 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto text-2xl">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </div>
+                        <p class="text-sm font-bold text-slate-700">Giỏ hàng của thầy/cô đang trống</p>
+                        <button type="button" onclick="switchTab('danh-muc')" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
+                            Chọn tài liệu ngay
+                        </button>
+                    </div>
+                `;
+            } else {
+                if (clearBtn) clearBtn.classList.remove("hidden");
+
+                // Tính lại voucher nếu giỏ hàng thay đổi
+                if (activeVoucher) {
+                    const recheck = findBestVoucherForItems(activeVoucher.code, cart);
+                    activeVoucher = recheck.valid ? recheck : null;
+                }
+
+                container.innerHTML = cart.map(item => {
+                    const origPrice = Number(item.price) || 0;
+                    const itemDisc = activeVoucher && activeVoucher.itemDiscounts ? (activeVoucher.itemDiscounts[item.code] || 0) : 0;
+                    const finalItemPrice = Math.max(0, origPrice - itemDisc);
+
+                    const priceBlockHtml = itemDisc > 0
+                        ? `
+                            <div class="mt-1.5 flex flex-wrap items-center gap-2">
+                                <span class="text-xs text-slate-400 line-through font-semibold">${formatCurrency(origPrice)}</span>
+                                <span class="text-sm font-extrabold text-blue-600">${formatCurrency(finalItemPrice)}</span>
+                                <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold">Giảm ${formatCurrency(itemDisc)}</span>
+                            </div>
+                        `
+                        : `
+                            <div class="mt-1.5 text-sm font-extrabold text-blue-600">${formatCurrency(origPrice)}</div>
+                        `;
+
+                    return `
+                        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start justify-between gap-3">
+                            <div class="min-w-0 flex-1">
+                                <span class="text-xs font-extrabold text-blue-600 block">${item.code}</span>
+                                <div class="text-xs sm:text-sm font-extrabold text-slate-900 leading-snug mt-0.5 break-words">
+                                    ${cleanProductTitle(item.title || item.rawTitle)}
+                                </div>
+                                ${priceBlockHtml}
+                            </div>
+                            <button type="button" onclick="removeFromCart('${item.code}')" aria-label="Xóa tài liệu" class="w-8 h-8 rounded-xl bg-white hover:bg-rose-50 text-slate-400 hover:text-rose-600 border border-slate-200 flex items-center justify-center shrink-0 transition-colors">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+                    `;
+                }).join("");
+            }
+
+            const subtotal = cart.reduce((sum, it) => sum + (Number(it.price) || 0), 0);
+            const discountAmt = activeVoucher ? activeVoucher.discountAmount : 0;
+            const finalTotal = Math.max(0, subtotal - discountAmt);
+
+            if (subtotalEl) subtotalEl.textContent = formatCurrency(subtotal);
+            if (totalEl) totalEl.textContent = formatCurrency(finalTotal);
+
+            const pill = document.getElementById("cart-applied-voucher-pill");
+            const pillText = document.getElementById("cart-applied-voucher-text");
+            const triggerBadge = document.getElementById("cart-voucher-trigger-badge");
+
+            if (activeVoucher && discountAmt > 0) {
+                if (discountRow) discountRow.classList.remove("hidden");
+                if (discountLabel) discountLabel.textContent = `Mã ưu đãi (${activeVoucher.code}):`;
+                if (discountAmtEl) discountAmtEl.textContent = `-${formatCurrency(discountAmt)}`;
+                if (pill) pill.classList.remove("hidden");
+                if (pillText) pillText.textContent = `Mã ${activeVoucher.code} • Giảm ${formatCurrency(discountAmt)}`;
+                if (triggerBadge) {
+                    triggerBadge.textContent = "Đã áp dụng";
+                    triggerBadge.className = "px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-700 text-[11px] font-bold";
+                }
+            } else {
+                if (discountRow) discountRow.classList.add("hidden");
+                if (pill) pill.classList.add("hidden");
+                if (triggerBadge) {
+                    triggerBadge.textContent = "Nhập mã";
+                    triggerBadge.className = "text-xs font-semibold text-orange-600";
+                }
+            }
+
+            validateCartForm();
+        }
+
+        // =========================================================================
+        // 9. KIỂM TRA HỢP LỆ FORM THÔNG TIN GIÁO VIÊN
+        // =========================================================================
+        function isValidPhone(phone) {
             return /^0\d{9}$/.test(String(phone || "").trim());
         }
 
@@ -1903,370 +1881,305 @@
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").trim());
         }
 
-        function handlePhoneInput(el) {
-            el.value = el.value.replace(/\D/g, "").slice(0, 10);
+        function handlePhoneInput(input) {
+            input.value = input.value.replace(/\D/g, "").slice(0, 10);
             const err = document.getElementById("phone-error-msg");
-            if (el.value.length > 0 && !isValidVietnamPhone(el.value)) {
-                err.classList.remove("hidden");
-            } else {
-                err.classList.add("hidden");
+            if (err) {
+                if (input.value.length > 0 && !isValidPhone(input.value)) {
+                    err.classList.remove("hidden");
+                } else {
+                    err.classList.add("hidden");
+                }
             }
             validateCartForm();
         }
 
-        function handleEmailInput(el) {
+        function handleEmailInput(input) {
             const err = document.getElementById("email-error-msg");
-            if (el.value.length > 0 && !isValidEmail(el.value)) {
-                err.classList.remove("hidden");
-            } else {
-                err.classList.add("hidden");
+            if (err) {
+                if (input.value.trim().length > 0 && !isValidEmail(input.value.trim())) {
+                    err.classList.remove("hidden");
+                } else {
+                    err.classList.add("hidden");
+                }
             }
             validateCartForm();
         }
 
         function validateCartForm() {
+            const btn = document.getElementById("checkout-btn");
+            if (!btn) return;
             const name = (document.getElementById("customer-name")?.value || "").trim();
             const phone = (document.getElementById("customer-zalo")?.value || "").trim();
             const school = (document.getElementById("customer-school")?.value || "").trim();
             const email = (document.getElementById("customer-email")?.value || "").trim();
-            const btn = document.getElementById("checkout-btn");
-            if (!btn) return;
 
-            const isValid = cart.length > 0 && name.length >= 2 && isValidVietnamPhone(phone) && school.length >= 2 && isValidEmail(email);
-            btn.disabled = !isValid;
+            const ok = cart.length > 0 && name.length >= 2 && isValidPhone(phone) && school.length >= 2 && isValidEmail(email);
+            btn.disabled = !ok;
         }
 
-        function updateCartUI() {
-            syncCartWithProducts();
-            const container = document.getElementById("cart-items-container");
-            const countEl = document.getElementById("cart-page-count");
-            const clearBtn = document.getElementById("clear-cart-btn");
-            if (!container) return;
-
-            if (countEl) countEl.textContent = cart.length;
-
-            if (cart.length === 0) {
-                if (clearBtn) clearBtn.classList.add("hidden");
-                container.innerHTML = `
-                    <div class="py-10 text-center space-y-3">
-                        <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto text-xl">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                        </div>
-                        <p class="text-sm font-semibold text-slate-600">Giỏ hàng của thầy/cô đang trống.</p>
-                        <button type="button" onclick="switchTab('danh-muc')" class="px-4 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition-colors">
-                            Chọn tài liệu ngay
-                        </button>
-                    </div>
-                `;
-            } else {
-                if (clearBtn) clearBtn.classList.remove("hidden");
-                container.innerHTML = cart.map(item => `
-                    <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-start justify-between gap-2.5 min-w-0">
-                        <div class="min-w-0 flex-1">
-                            <span class="text-xs font-extrabold text-blue-600 block">${item.code}</span>
-                            <div class="break-words text-sm font-bold text-slate-800 leading-snug mt-0.5">${cleanProductTitle(item.title || item.rawTitle)}</div>
-                            <div class="text-xs sm:text-sm font-extrabold text-blue-600 mt-1.5">${formatCurrency(item.price)}</div>
-                        </div>
-                        <button type="button" onclick="removeFromCart('${item.code}')" class="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-rose-50 hover:text-rose-600 text-slate-400 flex items-center justify-center shrink-0 transition-colors" title="Xóa">
-                            <i class="fa-solid fa-trash-can text-xs"></i>
-                        </button>
-                    </div>
-                `).join("");
-            }
-
-            const subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
-            let discount = 0;
-
-            if (activeVoucher && cart.length > 0) {
-                const res = evaluateVoucherForItems(activeVoucher, cart);
-                if (res.valid) {
-                    discount = res.discount;
+        function handleDirectPhoneInput(input) {
+            input.value = input.value.replace(/\D/g, "").slice(0, 10);
+            const err = document.getElementById("direct-phone-err");
+            if (err) {
+                if (input.value.length > 0 && !isValidPhone(input.value)) {
+                    err.classList.remove("hidden");
                 } else {
-                    activeVoucher = null;
+                    err.classList.add("hidden");
                 }
             }
+        }
 
-            const total = Math.max(0, subtotal - discount);
-
-            document.getElementById("cart-subtotal").textContent = formatCurrency(subtotal);
-            const discountRow = document.getElementById("voucher-discount-row");
-            const triggerBadge = document.getElementById("cart-voucher-trigger-badge");
-
-            if (discount > 0 && activeVoucher) {
-                discountRow.classList.remove("hidden");
-                document.getElementById("voucher-discount-label").textContent = `Mã ưu đãi (${activeVoucher}):`;
-                document.getElementById("voucher-discount-amount").textContent = `-${formatCurrency(discount)}`;
-                if (triggerBadge) {
-                    triggerBadge.textContent = `-${formatCurrency(discount)} (${activeVoucher})`;
-                    triggerBadge.className = "px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-700 text-xs font-extrabold";
-                }
-            } else {
-                discountRow.classList.add("hidden");
-                if (triggerBadge) {
-                    triggerBadge.textContent = "Chọn hoặc nhập mã";
-                    triggerBadge.className = "text-xs font-semibold text-orange-600";
+        function handleDirectEmailInput(input) {
+            const err = document.getElementById("direct-email-err");
+            if (err) {
+                if (input.value.trim().length > 0 && !isValidEmail(input.value.trim())) {
+                    err.classList.remove("hidden");
+                } else {
+                    err.classList.add("hidden");
                 }
             }
-            document.getElementById("cart-total").textContent = formatCurrency(total);
-
-            renderVoucherSuggestions("cart-voucher-suggestions", cart, activeVoucher, "selectCartSuggestionVoucher");
-            validateCartForm();
         }
 
         // =========================================================================
-        // ĐẶT MUA NGAY TRỰC TIẾP & TẠO MÃ VIETQR (MB BANK 0338844985 - TRAN GIA BAO)
+        // 10. ĐẶT MUA NGAY & THANH TOÁN VIETQR
         // =========================================================================
         function buyNow(code) {
             const product = products.find(p => p.code === code);
             if (!product) return;
 
-            const cleanName = cleanProductTitle(product.title || product.rawTitle);
-            directBuyProduct = { ...product, title: cleanName };
+            directBuyProduct = product;
             directActiveVoucher = null;
 
+            const cleanName = cleanProductTitle(product.title || product.rawTitle);
             document.getElementById("qr-order-subtitle").textContent = `${product.code} – ${cleanName}`;
-            document.getElementById("direct-buy-form").classList.remove("hidden");
+            renderQuickBuyPriceBadge(product.price, 0);
 
-            // Đặt lại trạng thái nút voucher Shopee trong modal
-            const drawer = document.getElementById("direct-voucher-drawer");
-            const chevron = document.getElementById("direct-voucher-chevron");
-            const triggerBadge = document.getElementById("direct-voucher-trigger-badge");
-            if (drawer) drawer.classList.add("hidden");
-            if (chevron) chevron.classList.remove("rotate-90");
-            if (triggerBadge) {
-                triggerBadge.textContent = "Chọn hoặc nhập mã";
-                triggerBadge.className = "text-xs font-semibold text-orange-600";
+            // Reset voucher drawer trong Đặt Mua Ngay
+            document.getElementById("direct-voucher-drawer")?.classList.add("hidden");
+            document.getElementById("direct-voucher-chevron")?.classList.remove("rotate-90");
+            const vInput = document.getElementById("direct-voucher-input");
+            if (vInput) vInput.value = "";
+            document.getElementById("direct-voucher-msg")?.classList.add("hidden");
+            document.getElementById("direct-applied-voucher-pill")?.classList.add("hidden");
+            const badge = document.getElementById("direct-voucher-trigger-badge");
+            if (badge) {
+                badge.textContent = "Nhập mã";
+                badge.className = "text-xs font-semibold text-orange-600";
             }
-            document.getElementById("direct-voucher-input").value = "";
-            document.getElementById("direct-voucher-msg").classList.add("hidden");
-            renderVoucherSuggestions("direct-voucher-suggestions", [directBuyProduct], null, "selectDirectSuggestionVoucher");
 
-            document.getElementById("webhook-status-box").classList.add("hidden");
-
-            const submitBtn = document.getElementById("direct-submit-btn");
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = `<i class="fa-solid fa-qrcode mr-1.5"></i>Xác nhận thông tin & Hiện mã QR`;
-
-            const savedName = document.getElementById("customer-name")?.value || "";
-            const savedZalo = document.getElementById("customer-zalo")?.value || "";
-            const savedSchool = document.getElementById("customer-school")?.value || "";
-            const savedEmail = document.getElementById("customer-email")?.value || "";
-
-            if (savedName) document.getElementById("direct-name").value = savedName;
-            if (savedZalo) document.getElementById("direct-zalo").value = savedZalo;
-            if (savedSchool) document.getElementById("direct-school").value = savedSchool;
-            if (savedEmail) document.getElementById("direct-email").value = savedEmail;
-
-            document.getElementById("qr-amount").textContent = formatCurrency(product.price);
-            document.getElementById("vietqr-img").src = "";
+            // Hiện form nhập thông tin + khung chờ QR
+            document.getElementById("direct-buy-form").classList.remove("hidden");
             document.getElementById("qrWaitingBox").classList.remove("hidden");
             document.getElementById("qrActiveBox").classList.add("hidden");
+            document.getElementById("webhook-status-box").classList.add("hidden");
 
             toggleFloatingContactButtons(true);
             document.getElementById("checkout-modal").classList.remove("hidden");
             document.body.classList.add("overflow-hidden");
         }
 
-        function handleDirectPhoneInput(el) {
-            el.value = el.value.replace(/\D/g, "").slice(0, 10);
-            const err = document.getElementById("direct-phone-err");
-            if (el.value.length > 0 && !isValidVietnamPhone(el.value)) {
-                err.classList.remove("hidden");
+        function toggleDirectVoucherBox() {
+            const drawer = document.getElementById("direct-voucher-drawer");
+            const chevron = document.getElementById("direct-voucher-chevron");
+            if (!drawer) return;
+            const isHidden = drawer.classList.contains("hidden");
+            if (isHidden) {
+                drawer.classList.remove("hidden");
+                if (chevron) chevron.classList.add("rotate-90");
+                document.getElementById("direct-voucher-input")?.focus();
             } else {
-                err.classList.add("hidden");
-            }
-        }
-
-        function handleDirectEmailInput(el) {
-            const err = document.getElementById("direct-email-err");
-            if (el.value.length > 0 && !isValidEmail(el.value)) {
-                err.classList.remove("hidden");
-            } else {
-                err.classList.add("hidden");
+                drawer.classList.add("hidden");
+                if (chevron) chevron.classList.remove("rotate-90");
             }
         }
 
         function applyDirectVoucher() {
             if (!directBuyProduct) return;
-            const codeInput = document.getElementById("direct-voucher-input").value;
+            const input = document.getElementById("direct-voucher-input");
             const msgEl = document.getElementById("direct-voucher-msg");
-            const triggerBadge = document.getElementById("direct-voucher-trigger-badge");
-            const zalo = (document.getElementById("direct-zalo").value || "").trim();
-            const isUnlocked = document.getElementById("qrWaitingBox").classList.contains("hidden");
-            const transferNote = `${zalo} ${directBuyProduct.code}`.trim();
+            if (!input || !msgEl) return;
 
-            const res = evaluateVoucherForItems(codeInput, [directBuyProduct]);
-            msgEl.classList.remove("hidden", "text-emerald-600", "text-rose-600");
-
-            if (!res.valid) {
+            const result = findBestVoucherForItems(input.value, [directBuyProduct]);
+            if (!result.valid) {
                 directActiveVoucher = null;
-                msgEl.textContent = res.message;
-                msgEl.classList.add("text-rose-600");
-                if (triggerBadge) {
-                    triggerBadge.textContent = "Chọn hoặc nhập mã";
-                    triggerBadge.className = "text-xs font-semibold text-orange-600";
-                }
-                document.getElementById("qr-amount").textContent = formatCurrency(directBuyProduct.price);
-                if (isUnlocked) {
-                    document.getElementById("vietqr-img").src = buildVietQrUrl(directBuyProduct.price, transferNote);
-                }
-                renderVoucherSuggestions("direct-voucher-suggestions", [directBuyProduct], null, "selectDirectSuggestionVoucher");
+                msgEl.textContent = result.message;
+                msgEl.className = "text-xs font-semibold text-rose-600 block";
+                renderQuickBuyPriceBadge(directBuyProduct.price, 0);
                 return;
             }
 
-            directActiveVoucher = res.code;
-            const finalPrice = Math.max(0, directBuyProduct.price - res.discount);
-            msgEl.textContent = res.message;
-            msgEl.classList.add("text-emerald-600");
-            if (triggerBadge) {
-                triggerBadge.textContent = `-${formatCurrency(res.discount)} (${res.code})`;
-                triggerBadge.className = "px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-700 text-xs font-extrabold";
-            }
-            document.getElementById("qr-amount").textContent = formatCurrency(finalPrice);
+            directActiveVoucher = result;
+            msgEl.classList.add("hidden");
+            document.getElementById("direct-voucher-drawer")?.classList.add("hidden");
+            document.getElementById("direct-voucher-chevron")?.classList.remove("rotate-90");
 
-            if (isUnlocked) {
-                document.getElementById("vietqr-img").src = buildVietQrUrl(finalPrice, transferNote);
+            const pill = document.getElementById("direct-applied-voucher-pill");
+            const pillText = document.getElementById("direct-applied-voucher-text");
+            const badge = document.getElementById("direct-voucher-trigger-badge");
+            if (pill) pill.classList.remove("hidden");
+            if (pillText) pillText.textContent = `Mã ${result.code} • Giảm ${formatCurrency(result.discountAmount)}`;
+            if (badge) {
+                badge.textContent = "Đã áp dụng";
+                badge.className = "px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-700 text-[11px] font-bold";
             }
-            renderVoucherSuggestions("direct-voucher-suggestions", [directBuyProduct], directActiveVoucher, "selectDirectSuggestionVoucher");
+
+            renderQuickBuyPriceBadge(directBuyProduct.price, result.discountAmount);
+            showToast(`Đã áp dụng mã ${result.code} (-${formatCurrency(result.discountAmount)})`);
+        }
+
+        function removeDirectVoucher() {
+            directActiveVoucher = null;
+            const input = document.getElementById("direct-voucher-input");
+            if (input) input.value = "";
+            document.getElementById("direct-voucher-msg")?.classList.add("hidden");
+            document.getElementById("direct-applied-voucher-pill")?.classList.add("hidden");
+            const badge = document.getElementById("direct-voucher-trigger-badge");
+            if (badge) {
+                badge.textContent = "Nhập mã";
+                badge.className = "text-xs font-semibold text-orange-600";
+            }
+            if (directBuyProduct) {
+                renderQuickBuyPriceBadge(directBuyProduct.price, 0);
+            }
+        }
+
+        function generateOrderCode() {
+            const rand = Math.floor(1000 + Math.random() * 9000);
+            return `TP${rand}`;
         }
 
         async function sendOrderToGoogleSheets(payload) {
             const statusBox = document.getElementById("webhook-status-box");
             if (statusBox) {
-                statusBox.classList.remove("hidden");
                 statusBox.textContent = "Đang ghi nhận thông tin đơn hàng lên hệ thống...";
+                statusBox.classList.remove("hidden");
             }
             try {
                 await fetch(SELLER_CONFIG.googleSheetWebhookUrl, {
                     method: "POST",
                     mode: "no-cors",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
                     body: JSON.stringify(payload)
                 });
                 if (statusBox) {
-                    statusBox.textContent = "✓ Hệ thống đã ghi nhận thông tin nhận Drive của thầy/cô!";
+                    statusBox.textContent = "Hệ thống đã ghi nhận đơn hàng! Thầy/cô vui lòng quét mã QR bên trên để hoàn tất.";
                 }
-            } catch (err) {
+            } catch (e) {
                 if (statusBox) {
-                    statusBox.textContent = "Đã tạo mã QR thanh toán. Nếu cần hỗ trợ cấp quyền nhanh, thầy/cô nhắn Zalo 0843 589 647.";
+                    statusBox.classList.add("hidden");
                 }
             }
         }
 
-        async function confirmDirectOrder() {
+        function renderActiveQrSection(finalAmount, orderCode, phone, codeSummary) {
+            const transferNote = `${orderCode} ${phone} ${codeSummary}`.trim().slice(0, 50);
+            document.getElementById("vietqr-img").src = buildVietQrUrl(finalAmount, transferNote);
+            document.getElementById("qr-amount").textContent = formatCurrency(finalAmount);
+            document.getElementById("qr-transfer-note").textContent = transferNote;
+
+            document.getElementById("qrWaitingBox").classList.add("hidden");
+            document.getElementById("qrActiveBox").classList.remove("hidden");
+
+            const modalBody = document.getElementById("checkout-modal-body");
+            if (modalBody) {
+                setTimeout(() => {
+                    modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: "smooth" });
+                }, 120);
+            }
+        }
+
+        function confirmDirectOrder() {
             if (!directBuyProduct) return;
 
-            const name = (document.getElementById("direct-name").value || "").trim();
-            const zalo = (document.getElementById("direct-zalo").value || "").trim();
-            const school = (document.getElementById("direct-school").value || "").trim();
-            const email = (document.getElementById("direct-email").value || "").trim();
+            const name = (document.getElementById("direct-name")?.value || "").trim();
+            const phone = (document.getElementById("direct-zalo")?.value || "").trim();
+            const school = (document.getElementById("direct-school")?.value || "").trim();
+            const email = (document.getElementById("direct-email")?.value || "").trim();
 
             if (name.length < 2) {
-                showToast("Thầy/cô vui lòng nhập Họ và tên!");
-                document.getElementById("direct-name").focus();
+                showToast("Thầy/cô vui lòng nhập Họ và tên.");
+                document.getElementById("direct-name")?.focus();
                 return;
             }
-            if (!isValidVietnamPhone(zalo)) {
-                document.getElementById("direct-phone-err").classList.remove("hidden");
-                document.getElementById("direct-zalo").focus();
+            if (!isValidPhone(phone)) {
+                document.getElementById("direct-phone-err")?.classList.remove("hidden");
+                showToast("Vui lòng nhập đúng SĐT Zalo 10 số.");
+                document.getElementById("direct-zalo")?.focus();
                 return;
             }
             if (school.length < 2) {
-                showToast("Thầy/cô vui lòng nhập Tên trường đang dạy!");
-                document.getElementById("direct-school").focus();
+                showToast("Thầy/cô vui lòng nhập Trường đang giảng dạy.");
+                document.getElementById("direct-school")?.focus();
                 return;
             }
             if (!isValidEmail(email)) {
-                document.getElementById("direct-email-err").classList.remove("hidden");
-                document.getElementById("direct-email").focus();
+                document.getElementById("direct-email-err")?.classList.remove("hidden");
+                showToast("Vui lòng nhập đúng địa chỉ Gmail nhận Drive.");
+                document.getElementById("direct-email")?.focus();
                 return;
             }
 
-            let discount = 0;
-            if (directActiveVoucher) {
-                const vRes = evaluateVoucherForItems(directActiveVoucher, [directBuyProduct]);
-                if (vRes.valid) discount = vRes.discount;
-            }
-            const finalPrice = Math.max(0, directBuyProduct.price - discount);
-            const transferNote = `${zalo} ${directBuyProduct.code}`;
+            const origPrice = Number(directBuyProduct.price) || 0;
+            const discountAmt = directActiveVoucher ? directActiveVoucher.discountAmount : 0;
+            const finalAmount = Math.max(0, origPrice - discountAmt);
+            const orderCode = generateOrderCode();
+            const cleanName = cleanProductTitle(directBuyProduct.title || directBuyProduct.rawTitle);
 
-            const submitBtn = document.getElementById("direct-submit-btn");
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i class="fa-solid fa-check mr-1.5"></i>Đã xác nhận thông tin`;
+            renderActiveQrSection(finalAmount, orderCode, phone, directBuyProduct.code);
 
-            document.getElementById("qrWaitingBox").classList.add("hidden");
-            const qrPanel = document.getElementById("qrActiveBox");
-            qrPanel.classList.remove("hidden");
-            document.getElementById("qr-amount").textContent = formatCurrency(finalPrice);
-            document.getElementById("qr-transfer-note").textContent = transferNote;
-            document.getElementById("vietqr-img").src = buildVietQrUrl(finalPrice, transferNote);
-
-            setTimeout(() => {
-                qrPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            }, 120);
-
-            const orderCode = "TP" + Math.floor(100000 + Math.random() * 900000);
-            await sendOrderToGoogleSheets({
+            sendOrderToGoogleSheets({
                 orderCode: orderCode,
-                teacherName: `${name} (${school})`,
-                teacherZalo: zalo,
+                teacherName: `${name} - ${school}`,
+                teacherZalo: phone,
                 teacherEmail: email,
                 sttList: directBuyProduct.code,
-                itemsDetail: `[${directBuyProduct.code}] ${directBuyProduct.title}`,
-                voucherUsed: directActiveVoucher || "Không",
-                finalTotal: finalPrice
+                itemsDetail: `[${directBuyProduct.code}] ${cleanName}`,
+                voucherUsed: directActiveVoucher ? `${directActiveVoucher.code} (-${formatCurrency(discountAmt)})` : "",
+                finalTotal: finalAmount
             });
         }
 
-        async function openCheckoutModal() {
+        function openCheckoutModal() {
             if (cart.length === 0) return;
 
-            const name = (document.getElementById("customer-name").value || "").trim();
-            const zalo = (document.getElementById("customer-zalo").value || "").trim();
-            const school = (document.getElementById("customer-school").value || "").trim();
-            const email = (document.getElementById("customer-email").value || "").trim();
+            const name = (document.getElementById("customer-name")?.value || "").trim();
+            const phone = (document.getElementById("customer-zalo")?.value || "").trim();
+            const school = (document.getElementById("customer-school")?.value || "").trim();
+            const email = (document.getElementById("customer-email")?.value || "").trim();
 
-            if (!name || !isValidVietnamPhone(zalo) || !school || !isValidEmail(email)) {
-                showToast("Thầy/cô vui lòng điền đầy đủ thông tin nhận file!");
+            if (name.length < 2 || !isValidPhone(phone) || school.length < 2 || !isValidEmail(email)) {
+                showToast("Thầy/cô vui lòng điền đầy đủ thông tin hợp lệ trước khi tạo mã QR.");
                 return;
             }
 
             directBuyProduct = null;
+            const subtotal = cart.reduce((sum, it) => sum + (Number(it.price) || 0), 0);
+            const discountAmt = activeVoucher ? activeVoucher.discountAmount : 0;
+            const finalAmount = Math.max(0, subtotal - discountAmt);
+            const orderCode = generateOrderCode();
+            const codeList = cart.map(it => it.code).join(", ");
+            const itemsDetail = cart.map(it => `[${it.code}] ${cleanProductTitle(it.title || it.rawTitle)}`).join(" ; ");
+
+            document.getElementById("qr-order-subtitle").textContent = `Đơn gồm ${cart.length} tài liệu (${codeList})`;
+            renderQuickBuyPriceBadge(subtotal, discountAmt);
+
             document.getElementById("direct-buy-form").classList.add("hidden");
-            document.getElementById("qrWaitingBox").classList.add("hidden");
-            document.getElementById("qrActiveBox").classList.remove("hidden");
-
-            const subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
-            let discount = 0;
-            if (activeVoucher) {
-                const vRes = evaluateVoucherForItems(activeVoucher, cart);
-                if (vRes.valid) discount = vRes.discount;
-            }
-            const finalTotal = Math.max(0, subtotal - discount);
-
-            const codesStr = cart.map(i => i.code).join(", ");
-            const detailsStr = cart.map(i => `[${i.code}] ${cleanProductTitle(i.title || i.rawTitle)}`).join(" | ");
-            const transferNote = `${zalo} ${cart.map(i => i.code).join(" ")}`;
-
-            document.getElementById("qr-order-subtitle").textContent = `Đơn gồm ${cart.length} tài liệu (${codesStr})`;
-            document.getElementById("qr-amount").textContent = formatCurrency(finalTotal);
-            document.getElementById("qr-transfer-note").textContent = transferNote;
-            document.getElementById("vietqr-img").src = buildVietQrUrl(finalTotal, transferNote);
-
             toggleFloatingContactButtons(true);
             document.getElementById("checkout-modal").classList.remove("hidden");
             document.body.classList.add("overflow-hidden");
 
-            const orderCode = "TP" + Math.floor(100000 + Math.random() * 900000);
-            await sendOrderToGoogleSheets({
+            renderActiveQrSection(finalAmount, orderCode, phone, codeList);
+
+            sendOrderToGoogleSheets({
                 orderCode: orderCode,
-                teacherName: `${name} (${school})`,
-                teacherZalo: zalo,
+                teacherName: `${name} - ${school}`,
+                teacherZalo: phone,
                 teacherEmail: email,
-                sttList: codesStr,
-                itemsDetail: detailsStr,
-                voucherUsed: activeVoucher || "Không",
-                finalTotal: finalTotal
+                sttList: codeList,
+                itemsDetail: itemsDetail,
+                voucherUsed: activeVoucher ? `${activeVoucher.code} (-${formatCurrency(discountAmt)})` : "",
+                finalTotal: finalAmount
             });
         }
 
@@ -2277,23 +2190,26 @@
         }
 
         function completeOrder() {
+            if (!directBuyProduct && cart.length > 0 && !document.getElementById("qrActiveBox").classList.contains("hidden")) {
+                clearCart();
+            }
             closeCheckoutModal();
-            showToast("Cảm ơn thầy/cô! Quyền truy cập Drive sẽ được gửi qua Gmail.");
+            showToast("Cảm ơn thầy/cô! Tài liệu sẽ được cấp quyền qua Gmail trong thời gian sớm nhất.");
         }
 
         // =========================================================================
-        // KHỞI TẠO TRANG WEB
+        // 11. KHỞI TẠO ỨNG DỤNG KHI TẢI TRANG
         // =========================================================================
-        document.addEventListener("DOMContentLoaded", () => {
-            ["customer-name", "customer-school"].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.addEventListener("input", validateCartForm);
-            });
-
-            loadCartFromStorage();
+        window.addEventListener("DOMContentLoaded", () => {
             loadCachedData();
+            loadCart();
             renderNewCarousel();
             filterProducts();
+
+            ["customer-name", "customer-school"].forEach(id => {
+                document.getElementById(id)?.addEventListener("input", validateCartForm);
+            });
+
             fetchSheetData();
         });
     </script>
