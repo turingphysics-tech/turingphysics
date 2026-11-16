@@ -999,14 +999,14 @@
         }
 
         function normalizeProductRow(raw) {
-            const code = String(extractFlexibleField(raw, ["code", "Code", "CODE", "id", "ID", "ma", "Ma", "stt", "STT"], /^(code|id|ma|stt)$/i)).trim();
-            const rawTitle = String(extractFlexibleField(raw, ["title", "Title", "TITLE", "name", "Name", "ten", "Ten", "Tên"], /^(title|name|ten|tên)/i)).trim();
-            const rawCategory = String(extractFlexibleField(raw, ["category", "Category", "CATEGORY", "khoi", "Khoi", "nhom", "Nhom", "danhMuc"], /^(category|khoi|khối|nhom|nhóm|danhmuc)/i) || "K10").trim().toUpperCase();
-            const rawPreview = String(extractFlexibleField(raw, ["previewUrl", "PreviewUrl", "preview", "Preview", "link", "Link", "url", "URL", "drive"], /(preview|link|url|drive)/i)).trim();
-            const rawPrice = extractFlexibleField(raw, ["price", "Price", "PRICE", "gia", "Gia", "Giá", "GIÁ", "giaBan", "donGia", "amount", "cost"], /^(price|gia|giá|giaban|dongia|amount|cost)$/i);
-            const rawCombo = String(extractFlexibleField(raw, ["comboItems", "ComboItems", "combo", "Combo", "COMBO", "baoGom"], /(combo|baogom)/i)).trim();
-            const rawVoucherCode = String(extractFlexibleField(raw, ["voucherCode", "VoucherCode", "maGiamGia"], /(vouchercode|magiamgia)/i)).trim();
-            const rawVoucherDiscount = String(extractFlexibleField(raw, ["voucherDiscount", "VoucherDiscount", "giamGia"], /(voucherdiscount|giamgia)/i)).trim();
+            const code = String(extractFlexibleField(raw, ["code", "Code", "CODE", "id", "ID", "ma", "Ma", "stt", "STT", "Mã tài liệu", "Mã"], /(code|id|ma|mã|stt)/i)).trim();
+            const rawTitle = String(extractFlexibleField(raw, ["title", "Title", "TITLE", "name", "Name", "ten", "Ten", "Tên", "Tên tài liệu"], /(title|name|ten|tên)/i)).trim();
+            const rawCategory = String(extractFlexibleField(raw, ["category", "Category", "CATEGORY", "khoi", "Khoi", "nhom", "Nhom", "danhMuc", "Danh mục", "Khối"], /(category|khoi|khối|nhom|nhóm|danhmuc|danh mục)/i) || "K10").trim().toUpperCase();
+            const rawPreview = String(extractFlexibleField(raw, ["previewUrl", "PreviewUrl", "preview", "Preview", "link", "Link", "url", "URL", "drive", "Link xem thử"], /(preview|link|url|drive)/i)).trim();
+            const rawPrice = extractFlexibleField(raw, ["price", "Price", "PRICE", "gia", "Gia", "Giá", "GIÁ", "Giá bán (VNĐ)", "Giá bán", "giaBan", "donGia", "amount", "cost"], /(price|gia|giá|giaban|dongia|amount|cost)/i);
+            const rawCombo = String(extractFlexibleField(raw, ["comboItems", "ComboItems", "combo", "Combo", "COMBO", "baoGom", "Mã lẻ trong Combo (cách dấu ;)"], /(combo|baogom|mã lẻ)/i)).trim();
+            const rawVoucherCode = String(extractFlexibleField(raw, ["voucherCode", "VoucherCode", "maGiamGia", "Mã ưu đãi riêng", "Mã ưu đãi"], /(vouchercode|magiamgia|mã ưu đãi|ưu đãi)/i)).trim();
+            const rawVoucherDiscount = extractFlexibleField(raw, ["voucherDiscount", "VoucherDiscount", "giamGia", "Mức giảm (% hoặc VNĐ)", "Mức giảm"], /(voucherdiscount|giamgia|mức giảm|giảm)/i);
 
             const rawIsNew = raw.isNew === true || String(raw.isNew || "").trim().toLowerCase() === "true" || String(raw.isNew || "").trim().toUpperCase() === "CO";
             const isNew = rawIsNew || hasNewTag(rawTitle);
@@ -1025,21 +1025,58 @@
             };
         }
 
+        function normalizeVoucherRow(raw) {
+            if (!raw || typeof raw !== "object") return null;
+            const code = String(extractFlexibleField(raw, ["code", "Code", "CODE", "ma", "Mã", "Mã ưu đãi"], /(code|ma|mã)/i)).trim().toUpperCase();
+            const discount = extractFlexibleField(raw, ["discount", "Discount", "giam", "Mức giảm", "Mức giảm (% hoặc VNĐ)"], /(discount|giam|giảm)/i);
+            const minOrderRaw = extractFlexibleField(raw, ["minOrder", "MinOrder", "donToiThieu", "Đơn tối thiểu"], /(minorder|toithieu|tối thiểu)/i);
+            if (!code) return null;
+            return {
+                code: code,
+                discount: discount,
+                minOrder: parseSheetPrice(minOrderRaw)
+            };
+        }
+
+        function syncCartWithProducts() {
+            if (!Array.isArray(cart) || cart.length === 0 || !Array.isArray(products) || products.length === 0) return;
+            let changed = false;
+            cart = cart.map(item => {
+                const latest = products.find(p => p.code.toUpperCase() === String(item.code || "").toUpperCase());
+                if (latest) {
+                    changed = true;
+                    return {
+                        ...item,
+                        ...latest,
+                        title: cleanProductTitle(latest.title || latest.rawTitle)
+                    };
+                }
+                return item;
+            });
+            if (changed) {
+                saveCartToStorage();
+            }
+        }
+
         function loadCachedData() {
             try {
                 const cachedProducts = localStorage.getItem(PRODUCTS_CACHE_KEY);
+                if (cachedProducts) {
+                    const parsedProducts = JSON.parse(cachedProducts);
+                    if (Array.isArray(parsedProducts)) {
+                        products = parsedProducts.map(normalizeProductRow).filter(item => item.code && item.title);
+                    }
+                }
                 const cachedVouchers = localStorage.getItem(VOUCHERS_CACHE_KEY);
-                if (cachedProducts !== null) {
-                    const parsed = JSON.parse(cachedProducts);
-                    products = Array.isArray(parsed) ? parsed.map(normalizeProductRow) : [];
-                } else {
-                    products = FALLBACK_PRODUCTS.map(normalizeProductRow);
+                if (cachedVouchers) {
+                    const parsedVouchers = JSON.parse(cachedVouchers);
+                    if (Array.isArray(parsedVouchers)) {
+                        globalVouchers = parsedVouchers.map(normalizeVoucherRow).filter(Boolean);
+                    }
                 }
-                if (cachedVouchers !== null) {
-                    globalVouchers = JSON.parse(cachedVouchers) || [];
-                }
+                syncCartWithProducts();
             } catch (e) {
-                products = FALLBACK_PRODUCTS.map(normalizeProductRow);
+                products = [];
                 globalVouchers = [];
             }
         }
@@ -1057,15 +1094,19 @@
                     products = data.products
                         .map(normalizeProductRow)
                         .filter(item => item.code && item.title);
-                    globalVouchers = Array.isArray(data.vouchers) ? data.vouchers : [];
+                    globalVouchers = Array.isArray(data.vouchers)
+                        ? data.vouchers.map(normalizeVoucherRow).filter(Boolean)
+                        : [];
 
                     try {
                         localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify(products));
                         localStorage.setItem(VOUCHERS_CACHE_KEY, JSON.stringify(globalVouchers));
                     } catch (e) {}
 
+                    syncCartWithProducts();
                     renderNewCarousel();
                     filterProducts();
+                    updateCartUI();
                 }
             } catch (err) {
                 if (products.length === 0) {
@@ -1716,6 +1757,7 @@
         }
 
         function updateCartUI() {
+            syncCartWithProducts();
             const container = document.getElementById("cart-items-container");
             const countEl = document.getElementById("cart-page-count");
             const clearBtn = document.getElementById("clear-cart-btn");
