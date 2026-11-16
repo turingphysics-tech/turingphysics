@@ -703,11 +703,11 @@
         // CÁC HÀM TIỆN ÍCH CƠ BẢN & ĐIỀU HƯỚNG TAB
         // =========================================================================
         function hasNewTag(title) {
-            return /\(new\)\s*$/i.test(String(title || "").trim());
+            return /(\(\s*new\s*\)|\[\s*new\s*\])/i.test(String(title || "").trim());
         }
 
         function cleanProductTitle(title) {
-            return String(title || "").replace(/\s*\(new\)\s*$/i, "").trim();
+            return String(title || "").replace(/\s*(\(\s*new\s*\)|\[\s*new\s*\])\s*/gi, " ").replace(/\s+/g, " ").trim();
         }
 
         function formatCurrency(amount) {
@@ -848,7 +848,7 @@
         // TRÌNH CHIẾU TỰ ĐỘNG TÀI LIỆU MỚI NHẤT (CHỈ HIỆN KHI CÓ GẮN NHÃN (new))
         // =========================================================================
         function getNewDocuments() {
-            return products.filter(p => hasNewTag(p.rawTitle));
+            return products.filter(p => Boolean(p.isNew) || hasNewTag(p.rawTitle) || hasNewTag(p.title));
         }
 
         function renderNewCarousel() {
@@ -1008,7 +1008,8 @@
             const rawVoucherCode = String(extractFlexibleField(raw, ["voucherCode", "VoucherCode", "maGiamGia"], /(vouchercode|magiamgia)/i)).trim();
             const rawVoucherDiscount = String(extractFlexibleField(raw, ["voucherDiscount", "VoucherDiscount", "giamGia"], /(voucherdiscount|giamgia)/i)).trim();
 
-            const isNew = Boolean(raw.isNew) || hasNewTag(rawTitle);
+            const rawIsNew = raw.isNew === true || String(raw.isNew || "").trim().toLowerCase() === "true" || String(raw.isNew || "").trim().toUpperCase() === "CO";
+            const isNew = rawIsNew || hasNewTag(rawTitle);
             return {
                 id: code,
                 code: code,
